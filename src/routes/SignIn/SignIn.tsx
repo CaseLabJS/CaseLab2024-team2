@@ -17,7 +17,6 @@ const SignIn = () => {
       }}>
         <button onClick={() => devSignIn('user')}>Войти как пользователь</button>
         <button onClick={() => devSignIn('admin')}>Войти как админ</button>
-        <button onClick={() => devLogOut()}>Выйти</button>
       </div>
       {/* Для разработки */}
     </div>

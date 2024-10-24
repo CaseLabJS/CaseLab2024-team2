@@ -1,7 +1,6 @@
 import { StrictMode, ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.tsx";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -12,20 +11,26 @@ import SignUp from "./routes/SignUp/SignUp.tsx";
 import User from "./routes/User/User.tsx";
 import Admin from "./routes/Admin/Admin.tsx";
 import ErrorRoute from "./routes/ErrorRoute/ErrorRoute.tsx";
-import { devCheckUserAuth } from "./utils/dev-utils.ts";
+import { devCheckIsAdmin, devCheckUserAuth } from "./utils/dev-utils.ts";
 
-const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+const ProtectedUserRoute = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = devCheckUserAuth();
   return isAuthenticated ? children : <Navigate to="/signin" />;
+};
+
+const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
+  const isAuthenticated = devCheckUserAuth();
+  const isAdmin = devCheckIsAdmin()
+  return isAuthenticated && isAdmin ? children : <Navigate to="/user" />;
 };
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute>
+      <ProtectedUserRoute>
         <User />
-      </ProtectedRoute>
+      </ProtectedUserRoute>
     ),
     errorElement: <ErrorRoute />,
   },
@@ -40,17 +45,17 @@ const router = createBrowserRouter([
   {
     path: "user/",
     element: (
-      <ProtectedRoute>
+      <ProtectedUserRoute>
         <User />
-      </ProtectedRoute>
+      </ProtectedUserRoute>
     ),
   },
   {
     path: "admin/",
     element: (
-      <ProtectedRoute>
+      <ProtectedAdminRoute>
         <Admin />
-      </ProtectedRoute>
+      </ProtectedAdminRoute>
     ),
   },
 ]);
