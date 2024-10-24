@@ -1,8 +1,9 @@
 const User = () => {
-    return (
+  return (
     <div>
-        <h1>User</h1>
-    </div>)
-}
+      <h1>Страница пользователя</h1>
+    </div>
+  );
+};
 
-export default User
+export default User;

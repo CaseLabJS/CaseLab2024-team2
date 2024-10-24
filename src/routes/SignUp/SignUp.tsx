@@ -1,8 +1,15 @@
-const SignUp = () => {
-    return (
-    <div>
-        <h1>SignUp</h1>
-    </div>)
-}
+import { NavLink } from "react-router-dom";
 
-export default SignUp
+const SignUp = () => {
+  return (
+    <div>
+      <h1>Регистрация</h1>
+      <button>Зарегистрироваться</button>
+      <p>
+        Уже зарегистрированы? Нажмите <NavLink to={"/signin"}>здесь</NavLink>
+      </p>
+    </div>
+  );
+};
+
+export default SignUp;

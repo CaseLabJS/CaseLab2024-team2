@@ -1,11 +1,11 @@
 import { useRouteError } from "react-router-dom";
 
 type RouterError = {
-    statusText: string,
-    message: string
-}
+  statusText: string;
+  message: string;
+};
 
-export const ErrorRoute = () =>  {
+export const ErrorRoute = () => {
   const error = useRouteError() as RouterError;
   console.error(error);
   return (
@@ -17,6 +17,6 @@ export const ErrorRoute = () =>  {
       </p>
     </div>
   );
-}
+};
 
-export default ErrorRoute
+export default ErrorRoute;
