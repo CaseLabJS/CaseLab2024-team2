@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { devLogOut } from "../../utils/dev-utils";
+import { devLogOut } from "../../shared/utils/dev/dev-utils";
 
 const Admin = () => {
   return (
