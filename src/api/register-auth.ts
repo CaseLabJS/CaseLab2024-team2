@@ -19,8 +19,7 @@ export const registerUser = async (user: UserRegister) => {
     "/auth/register",
     user
   );
-  localStorage.setItem("token", response.data.token);
-  return response.data.token;
+  return response.data;
 };
 
 // аутентификация пользователя
@@ -29,6 +28,5 @@ export const authUser = async (user: UserLogin) => {
     "/auth/authenticate",
     user
   );
-  localStorage.setItem("token", response.data.token);
-  return response.data.token;
+  return response.data;
 };

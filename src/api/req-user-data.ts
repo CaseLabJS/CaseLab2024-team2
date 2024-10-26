@@ -30,5 +30,8 @@ export const editUserData = async (user: {
 // удаление пользователя
 export const deleteUserData = async () => {
   const response = await api.delete("/users");
+  if (response.status === 204) {
+    localStorage.removeItem("token");
+  }
   return response.data;
 };

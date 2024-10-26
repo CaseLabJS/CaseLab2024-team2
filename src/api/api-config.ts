@@ -1,13 +1,11 @@
 import axios from "axios";
 
 const URL = "http://172.18.27.102:8080/api/v1";
-const TOKEN = localStorage.getItem("token");
 
 export const api = axios.create({
   baseURL: URL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${TOKEN}`,
   },
   withCredentials: true,
 });
@@ -32,6 +30,9 @@ api.interceptors.response.use(
 
 api.interceptors.request.use(
   (config) => {
+    const TOKEN = localStorage.getItem("token");
+    config.headers.Authorization = `Bearer ${TOKEN}`;
+
     return config;
   },
   (error) => {
@@ -41,7 +42,9 @@ api.interceptors.request.use(
 
 apiAuth.interceptors.response.use(
   (response) => {
-    console.log(response.status);
+    console.log(response.data);
+    if (response.status === 200)
+      localStorage.setItem("token", response.data.token);
     return response;
   },
   (error) => {
