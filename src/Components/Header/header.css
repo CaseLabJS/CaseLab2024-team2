@@ -1,0 +1,28 @@
+
+.user-header {
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.user-header__link {
+    display: flex;
+    align-items: center;
+}
+
+.user-header__logo {
+    width: 70px;
+}
+
+.user-header__icons {
+    display: flex;
+    gap: 5px;
+}
+
+.user-header__user-icon {
+    width: 20px;
+    border-radius: 50%;
+}
