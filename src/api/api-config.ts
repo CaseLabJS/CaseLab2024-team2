@@ -24,6 +24,7 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
+    console.log("Error: ", error.response.data.detail);
     return Promise.reject(error);
   }
 );
@@ -36,6 +37,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.log("Error: ", error.response.data.detail);
     return Promise.reject(error);
   }
 );
@@ -48,6 +50,7 @@ apiAuth.interceptors.response.use(
     return response;
   },
   (error) => {
+    console.log("Error: ", error.response.data.detail);
     return Promise.reject(error);
   }
 );
@@ -57,6 +60,7 @@ apiAuth.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.log("Error: ", error.response.data.detail);
     return Promise.reject(error);
   }
 );
