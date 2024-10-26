@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { devSignIn, devLogOut } from "../../shared/utils/dev/dev-utils";
+import { devSignIn } from "@/shared/utils/dev/dev-utils";
 
 const SignIn = () => {
   return (

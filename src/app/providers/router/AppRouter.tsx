@@ -7,12 +7,12 @@ import {
 import {
   devCheckUserAuth,
   devCheckIsAdmin,
-} from "../../../shared/utils/dev/dev-utils";
-import ErrorPage from "../../../widgets/ErrorPage/ErrorPage";
-import User from "../../../pages/User/User";
-import Admin from "../../../pages/Admin/Admin";
-import SignIn from "../../../pages/SignIn/SignIn";
-import SignUp from "../../../pages/SignUp/SignUp";
+} from "@/shared/utils/dev/dev-utils";
+import ErrorPage from "@/widgets/ErrorPage/ErrorPage";
+import User from "@/pages/User/User";
+import Admin from "@/pages/Admin/Admin";
+import SignIn from "@/pages/SignIn/SignIn";
+import SignUp from "@/pages/SignUp/SignUp";
 import { ROUTE_CONSTANTS } from "./config/constants";
 
 const AppRouter = () => {
