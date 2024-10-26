@@ -1,31 +1,34 @@
-import { ReactNode } from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-} from "react-router-dom";
-import {
-  devCheckUserAuth,
-  devCheckIsAdmin,
-} from "@/shared/utils/dev/dev-utils";
-import ErrorPage from "@/widgets/ErrorPage/ErrorPage";
-import User from "@/pages/User/User";
-import Admin from "@/pages/Admin/Admin";
-import SignIn from "@/pages/SignIn/SignIn";
-import SignUp from "@/pages/SignUp/SignUp";
-import { ROUTE_CONSTANTS } from "./config/constants";
+import type { ReactNode } from 'react';
 
-const AppRouter = () => {
-  const ProtectedUserRoute = ({ children }: { children: ReactNode }) => {
-    const isAuthenticated = devCheckUserAuth();
-    return isAuthenticated ? children : <Navigate to="/signin" />;
-  };
+import Admin from '@/pages/Admin/Admin';
+import ErrorPage from '@/pages/ErrorPage/ErrorPage';
+import SignIn from '@/pages/SignIn/SignIn';
+import SignUp from '@/pages/SignUp/SignUp';
+import User from '@/pages/User/User';
+import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
+import { useEffect, useState } from 'react';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
-  const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
-    const isAuthenticated = devCheckUserAuth();
+import { ROUTE_CONSTANTS } from './config/constants';
+
+const AppRouter = (): JSX.Element => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    const isAuth = devCheckUserAuth();
     const isAdmin = devCheckIsAdmin();
-    return isAuthenticated && isAdmin ? children : <Navigate to="/user" />;
+    setIsAuthenticated(isAuth);
+    setIsAdmin(isAdmin);
+  }, []);
+
+  const ProtectedUserRoute = ({ children }: { children: ReactNode }): JSX.Element => {
+    return isAuthenticated ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN} replace />;
   };
+
+  const ProtectedAdminRoute = ({ children }: { children: ReactNode }): JSX.Element => {
+    return isAuthenticated && isAdmin ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.USER} replace />;
+  };
+
   const router = createBrowserRouter([
     {
       path: ROUTE_CONSTANTS.ROOT,
@@ -38,11 +41,11 @@ const AppRouter = () => {
     },
     {
       path: ROUTE_CONSTANTS.SIGN_IN,
-      element: devCheckUserAuth() ? <User /> : <SignIn />,
+      element: isAuthenticated ? <Navigate to={ROUTE_CONSTANTS.USER} /> : <SignIn />,
     },
     {
       path: ROUTE_CONSTANTS.SIGN_UP,
-      element: devCheckUserAuth() ? <User /> : <SignUp />,
+      element: isAuthenticated ? <Navigate to={ROUTE_CONSTANTS.USER} /> : <SignUp />,
     },
     {
       path: ROUTE_CONSTANTS.USER,
@@ -61,6 +64,7 @@ const AppRouter = () => {
       ),
     },
   ]);
+
   return <RouterProvider router={router} />;
 };
 

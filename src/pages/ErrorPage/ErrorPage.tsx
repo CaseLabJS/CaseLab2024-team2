@@ -1,6 +1,6 @@
-import { useRouteError, isRouteErrorResponse } from "react-router-dom";
+import { useRouteError, isRouteErrorResponse } from 'react-router-dom';
 
-export const ErrorRoute = () => {
+export const ErrorRoute = (): JSX.Element => {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
     return (
@@ -19,7 +19,7 @@ export const ErrorRoute = () => {
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
-        <i>{error instanceof Error ? error.message : "Неизвестная ошибка"}</i>
+        <i>{error instanceof Error ? error.message : 'Неизвестная ошибка'}</i>
       </p>
     </div>
   );
