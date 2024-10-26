@@ -1,4 +1,4 @@
-import { apiAuth } from "./api-config";
+import { apiAuth } from './api-config';
 
 // Работа с регистрацией и аутентификацией
 
@@ -14,19 +14,13 @@ type UserLogin = {
 };
 
 // регистрация пользователя
-export const registerUser = async (user: UserRegister) => {
-  const response = await apiAuth.post<{ token: string }>(
-    "/auth/register",
-    user
-  );
+export const registerUser = async (user: UserRegister): Promise<{ token: string }> => {
+  const response = await apiAuth.post<{ token: string }>('/auth/register', user);
   return response.data;
 };
 
 // аутентификация пользователя
-export const authUser = async (user: UserLogin) => {
-  const response = await apiAuth.post<{ token: string }>(
-    "/auth/authenticate",
-    user
-  );
+export const authUser = async (user: UserLogin): Promise<{ token: string }> => {
+  const response = await apiAuth.post<{ token: string }>('/auth/authenticate', user);
   return response.data;
 };

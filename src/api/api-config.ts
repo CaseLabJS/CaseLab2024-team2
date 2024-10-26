@@ -1,11 +1,17 @@
-import axios from "axios";
+import type { AxiosResponse } from 'axios';
 
-const URL = "http://172.18.27.102:8080/api/v1";
+import axios from 'axios';
+
+const URL = 'http://172.18.27.102:8080/api/v1';
+
+type ResponseData = {
+  token: string;
+};
 
 export const api = axios.create({
   baseURL: URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
   withCredentials: true,
 });
@@ -13,7 +19,7 @@ export const api = axios.create({
 export const apiAuth = axios.create({
   baseURL: URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
   withCredentials: true,
 });
@@ -23,44 +29,43 @@ api.interceptors.response.use(
     console.log(response.status);
     return response;
   },
-  (error) => {
-    console.log("Error: ", error.response.data.detail);
-    return Promise.reject(error);
-  }
+  (error: { response: { data: { detail: string } } }) => {
+    console.log('Error: ', error.response.data.detail);
+    return Promise.reject(new Error(error.response.data.detail));
+  },
 );
 
 api.interceptors.request.use(
   (config) => {
-    const TOKEN = localStorage.getItem("token");
+    const TOKEN = localStorage.getItem('token');
     config.headers.Authorization = `Bearer ${TOKEN}`;
 
     return config;
   },
-  (error) => {
-    console.log("Error: ", error.response.data.detail);
-    return Promise.reject(error);
-  }
+  (error: { response: { data: { detail: string } } }) => {
+    console.log('Error: ', error.response.data.detail);
+    return Promise.reject(new Error(error.response.data.detail));
+  },
 );
 
 apiAuth.interceptors.response.use(
-  (response) => {
-    console.log(response.data);
-    if (response.status === 200)
-      localStorage.setItem("token", response.data.token);
+  (response: AxiosResponse<ResponseData>) => {
+    const token = response.data.token;
+    if (response.status === 200 && token) localStorage.setItem('token', token);
     return response;
   },
-  (error) => {
-    console.log("Error: ", error.response.data.detail);
-    return Promise.reject(error);
-  }
+  (error: { response: { data: { detail: string } } }) => {
+    console.log('Error: ', error.response.data.detail);
+    return Promise.reject(new Error(error.response.data.detail));
+  },
 );
 
 apiAuth.interceptors.request.use(
   (config) => {
     return config;
   },
-  (error) => {
-    console.log("Error: ", error.response.data.detail);
-    return Promise.reject(error);
-  }
+  (error: { response: { data: { detail: string } } }) => {
+    console.log('Error: ', error.response.data.detail);
+    return Promise.reject(new Error(error.response.data.detail));
+  },
 );
