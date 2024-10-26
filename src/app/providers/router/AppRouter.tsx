@@ -13,6 +13,7 @@ import User from "../../../pages/User/User";
 import Admin from "../../../pages/Admin/Admin";
 import SignIn from "../../../pages/SignIn/SignIn";
 import SignUp from "../../../pages/SignUp/SignUp";
+import { ROUTE_CONSTANTS } from "./config/constants";
 
 const AppRouter = () => {
   const ProtectedUserRoute = ({ children }: { children: ReactNode }) => {
@@ -27,7 +28,7 @@ const AppRouter = () => {
   };
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: ROUTE_CONSTANTS.ROOT,
       element: (
         <ProtectedUserRoute>
           <User />
@@ -36,15 +37,15 @@ const AppRouter = () => {
       errorElement: <ErrorPage />,
     },
     {
-      path: "signin/",
+      path: ROUTE_CONSTANTS.SIGN_IN,
       element: devCheckUserAuth() ? <User /> : <SignIn />,
     },
     {
-      path: "signup/",
+      path: ROUTE_CONSTANTS.SIGN_UP,
       element: devCheckUserAuth() ? <User /> : <SignUp />,
     },
     {
-      path: "user/",
+      path: ROUTE_CONSTANTS.USER,
       element: (
         <ProtectedUserRoute>
           <User />
@@ -52,7 +53,7 @@ const AppRouter = () => {
       ),
     },
     {
-      path: "admin/",
+      path: ROUTE_CONSTANTS.ADMIN,
       element: (
         <ProtectedAdminRoute>
           <Admin />
