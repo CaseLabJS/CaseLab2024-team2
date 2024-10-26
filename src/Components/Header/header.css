@@ -6,11 +6,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    position: relative;
 }
 
 .user-header__link {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .user-header__logo {
@@ -25,4 +27,21 @@
 .user-header__user-icon {
     width: 20px;
     border-radius: 50%;
+}
+
+.user-menu {
+    background: #fff;
+    margin: 1px 0 0;
+    padding: 5px;
+    border: 1px solid #bebebe;
+    max-height: 100px;
+    overflow-y: auto;
+    position: absolute;
+    top: 32px;
+    right: -10px;
+    z-index: 10;
+
+    font-weight: normal;
+    font-size: 12px;
+    text-align: left;
 }
