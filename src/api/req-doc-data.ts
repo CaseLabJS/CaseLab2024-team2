@@ -39,11 +39,7 @@ export const getAllDocumentsData = async () => {
 
 // создание документа
 export const createDocumentData = async (createDocument: CreateDocument) => {
-  const response = await api.post<Document>("/documents", {
-    document_type_id: createDocument.document_type_id,
-    name: createDocument.name,
-    users_permissions: createDocument.users_permissions,
-  });
+  const response = await api.post<Document>("/documents", createDocument);
   return response.data;
 };
 
@@ -52,11 +48,7 @@ export const updateDocumentData = async (
   id: number,
   updeteDocument: CreateDocument
 ) => {
-  const response = await api.put<Document>(`/documents/${id}`, {
-    document_type_id: updeteDocument.document_type_id,
-    name: updeteDocument.name,
-    users_permissions: updeteDocument.users_permissions,
-  });
+  const response = await api.put<Document>(`/documents/${id}`, updeteDocument);
   return response.data;
 };
 

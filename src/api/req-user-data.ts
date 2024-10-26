@@ -19,11 +19,11 @@ export const getAllUserData = async () => {
 };
 
 // редактирование данных пользователя
-export const editUserData = async (email: string, display_name: string) => {
-  const response = await api.put<UserData>("/users", {
-    email,
-    display_name,
-  });
+export const editUserData = async (user: {
+  email: string;
+  display_name: string;
+}) => {
+  const response = await api.put<UserData>("/users", user);
   return response.data;
 };
 
