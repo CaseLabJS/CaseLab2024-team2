@@ -1,7 +1,9 @@
+import type { ReactElement } from 'react';
+
 import { devSignIn } from '@/shared/utils/dev/dev-utils';
 import { NavLink } from 'react-router-dom';
 
-const SignIn = (): JSX.Element => {
+const SignIn = (): ReactElement => {
   return (
     <div>
       <h1>Вход</h1>

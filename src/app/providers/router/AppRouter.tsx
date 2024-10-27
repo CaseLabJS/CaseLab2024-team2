@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 import Admin from '@/pages/Admin/Admin';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
@@ -11,7 +11,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 
 import { ROUTE_CONSTANTS } from './config/constants';
 
-const AppRouter = (): JSX.Element => {
+const AppRouter = (): ReactElement => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {

@@ -1,6 +1,8 @@
+import type { ReactElement } from 'react';
+
 import { devLogOut } from '@/shared/utils/dev/dev-utils';
 import { NavLink } from 'react-router-dom';
-const User = (): JSX.Element => {
+const User = (): ReactElement=> {
   return (
     <div>
       <h1>Страница пользователя</h1>

@@ -1,7 +1,9 @@
+import type { ReactElement } from 'react';
+
 import { devLogOut } from '@/shared/utils/dev/dev-utils';
 import { NavLink } from 'react-router-dom';
 
-const Admin = (): JSX.Element => {
+const Admin = (): ReactElement => {
   return (
     <div>
       <h1>Страница администратора</h1>

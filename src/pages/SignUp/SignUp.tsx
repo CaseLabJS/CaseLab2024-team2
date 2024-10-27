@@ -1,6 +1,8 @@
+import type { ReactElement } from 'react';
+
 import { NavLink } from 'react-router-dom';
 
-const SignUp = (): JSX.Element => {
+const SignUp = (): ReactElement => {
   return (
     <div>
       <h1>Регистрация</h1>
