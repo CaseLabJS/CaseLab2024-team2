@@ -7,14 +7,6 @@ import bellIcon from './images/bell.png';
 
 export const Header = () => {
 
-    // const userMenu = () => {
-    //     console.log('кликнут');
-    //     return (
-    //         <ul className='user-menu'>
-    //             <li>Переключиться на администратра</li>
-    //         </ul>
-    //     )
-    // }
     /**Функционал выпадающего меню пользователя: */
     const [isOpen, setOpen] = useState(false);
     const handleOpen = () => setOpen(!isOpen);

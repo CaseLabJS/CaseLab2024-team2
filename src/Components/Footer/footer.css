@@ -1,0 +1,15 @@
+
+.user-footer {
+    width: 100%;
+    background-color: #353232;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.user-footer__links{
+    display: flex;
+    gap: 5px;
+}

@@ -29,6 +29,10 @@
     border-radius: 50%;
 }
 
+.user-header__user-icon:hover {
+    transform: scale(1.2);
+}
+
 .user-menu {
     background: #fff;
     margin: 1px 0 0;
