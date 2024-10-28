@@ -9,7 +9,12 @@
     font-size: 12px;
 }
 
-.user-footer__links{
+.user-footer__links {
     display: flex;
     gap: 5px;
+    color: #fff !important;
+}
+
+.user-footer__text {
+    color: #c8ebb4;
 }
