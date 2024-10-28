@@ -41,7 +41,7 @@ const AppRouter = (): ReactElement => {
     },
     {
       path: ROUTE_CONSTANTS.SIGN_IN,
-      element: isAuthenticated ? <Navigate to={ROUTE_CONSTANTS.USER} /> : <SignIn />,
+      element: isAuthenticated ? <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} /> : <SignIn />,
     },
     {
       path: ROUTE_CONSTANTS.SIGN_UP,
