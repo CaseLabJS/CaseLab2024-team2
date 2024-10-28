@@ -1,15 +1,21 @@
-import { useState } from 'react';
-import reactLogo from '@/assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import type { ReactElement } from 'react';
 
-function App() {
+import reactLogo from '@/assets/react.svg';
+import { useState } from 'react';
+
+import './App.css';
+import { Footer } from './components/Footer/Footer';
+import { Header } from './components/Header/Header';
+
+import viteLogo from '/vite.svg';
+
+function App(): ReactElement {
   const [count, setCount] = useState(0);
 
   return (
     <>
       <Header />
-      {/* <div>
+      <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -25,6 +31,7 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <Footer />
     </>
   );
 }
