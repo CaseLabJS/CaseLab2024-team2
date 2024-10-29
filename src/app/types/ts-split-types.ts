@@ -3,126 +3,178 @@ import path from 'path';
 import fs from 'fs';
 import url from 'url';
 
-// Получение пути к текущей директории
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-
-// URL вашего API для получения схем
 const apiUrl = 'http://172.18.27.102:8080/v3/api-docs';
-
-// Путь к папке, где вы хотите сохранить файлы
 const outputDir = path.join(__dirname, 'schemas');
 
-// Убедитесь, что директория существует
-if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir);
+// Удаление директории и ее содержимого
+async function deleteDirectory(directory: string) {
+  if (fs.existsSync(directory)) {
+    await fs.promises.rmdir(directory, { recursive: true });
+    console.log(`Удалена директория: ${directory}`);
+  }
 }
 
-// Функция для генерации интерфейса TypeScript
+// Создание директории
+async function ensureDirectoryExists(directory: string) {
+  if (!fs.existsSync(directory)) {
+    await fs.promises.mkdir(directory, { recursive: true });
+    console.log(`Создана директория для схем: ${directory}`);
+  }
+}
+
+// Интерфейсы для схем
 interface SchemaProperty {
   type: string;
   description?: string;
-  items?: SchemaProperty; // Для обработки массивов
+  items?: SchemaProperty;
+  title?: string;
+  $ref?: string;
 }
 
 interface Schema {
   properties: Record<string, SchemaProperty>;
+  required?: string[];
+  $ref?: string;
 }
 
-// Основная функция для получения схем и генерации файлов
+// Генерация файлов по группам
 async function generateSchemas() {
   try {
+    console.log('Получение схем из API...');
     const response = await axios.get(apiUrl);
     const schemas: Record<string, Schema> = response.data.components.schemas;
+    console.log('Получено схем:', Object.keys(schemas).length);
 
-    // Объединяем интерфейсы в группы по первому слову
     const groupedSchemas: Record<string, { name: string; schema: Schema }[]> = {};
 
     for (const [name, schema] of Object.entries(schemas)) {
-      const groupName = name.split(/(?=[A-Z])/)[0]; // Получаем первое слово для группировки
-
-      if (!groupedSchemas[groupName]) {
-        groupedSchemas[groupName] = [];
-      }
+      const groupName = name.split(/(?=[A-Z])/)[0];
+      groupedSchemas[groupName] = groupedSchemas[groupName] || [];
       groupedSchemas[groupName].push({ name, schema });
     }
 
-    // Создание файлов по группам
+    const nestedSchemas: Record<string, { place: string; nameRef: string }> = {};
     for (const [groupName, interfaces] of Object.entries(groupedSchemas)) {
       const groupDir = path.join(outputDir, groupName);
-      
-      // Убедимся, что директория группы существует
-      if (!fs.existsSync(groupDir)) {
-        fs.mkdirSync(groupDir);
-      }
+      if (!fs.existsSync(groupDir)) fs.mkdirSync(groupDir);
 
-      // Генерация файла для импорта
       const importFilePath = path.join(groupDir, `${groupName}.ts`);
       const importStatements: string[] = [];
 
       for (const { name, schema } of interfaces) {
-        const interfaceContent = generateInterface(name, schema);
+        const interfaceImportStatements: string[] = [];
+        const interfaceContent = generateInterface(name, schema, nestedSchemas, interfaceImportStatements);
+
         const filePath = path.join(groupDir, `${name}.ts`);
-        
+        const dirPath = path.posix.dirname(filePath);
+
+        if (!fs.existsSync(dirPath)) {
+          await fs.promises.mkdir(dirPath, { recursive: true });
+        }
+
         fs.writeFileSync(filePath, interfaceContent, 'utf8');
         console.log(`Создан файл: ${filePath}`);
 
         importStatements.push(`export * from './${name}';`);
+
+        if (schema.properties) {
+          for (const [, value] of Object.entries(schema.properties)) {
+            const refType = value.items?.$ref
+              ? value.items.$ref.split('/').pop()
+              : value.$ref
+              ? value.$ref.split('/').pop()
+              : undefined;
+
+            if (refType) {
+              const firstWord = refType.split(/(?=[A-Z])/)[0];
+              const relativePath = path.join(firstWord, `${refType}.ts`).replace(/\\/g, '/');
+              const key = `${groupName}/${name}`;
+              nestedSchemas[key] = { place: relativePath, nameRef: refType };
+            }
+          }
+        }
       }
 
-      // Запись в файл импорта
       fs.writeFileSync(importFilePath, importStatements.join('\n'), 'utf8');
       console.log(`Создан файл импорта: ${importFilePath}`);
+    }
+
+    const valueFilePath = path.join(outputDir, 'value.json');
+    await fs.promises.writeFile(valueFilePath, JSON.stringify(nestedSchemas, null, 2), 'utf8');
+    console.log(`Типы с вложенными типами успешно сохранены в ${valueFilePath}`);
+
+    const valueData = JSON.parse(await fs.promises.readFile(valueFilePath, 'utf8'));
+
+    for (const parentName in valueData) {
+      const { place, nameRef } = valueData[parentName];
+      const parentFilePath = path.join(outputDir, `${parentName}.ts`);
+
+      if (fs.existsSync(parentFilePath)) {
+        const parentFileContent = await fs.promises.readFile(parentFilePath, 'utf8');
+        const importStatement = `import { ${nameRef} } from '../${place}';\n`;
+
+        if (!parentFileContent.includes(importStatement)) {
+          const updatedContent = importStatement + parentFileContent;
+          await fs.promises.writeFile(parentFilePath, updatedContent, 'utf8');
+          console.log(`Добавлен импорт в файл: ${parentFilePath}`);
+        }
+      } else {
+        console.warn(`Файл родительского интерфейса не найден: ${parentFilePath}`);
+      }
     }
   } catch (error) {
     console.error('Ошибка при получении схем:', error);
   }
 }
 
-// Функция для генерации интерфейса TypeScript
-function generateInterface(name: string, schema: Schema): string {
+function generateInterface(name: string, schema: Schema, nestedSchemas: Record<string, { place: string; nameRef: string }>, importStatements: string[]): string {
   const properties = Object.entries(schema.properties).map(([key, value]: [string, SchemaProperty]) => {
     let type: string;
 
-    switch (value.type) {
-      case 'string':
-        type = 'string';
-        break;
-      case 'integer':
-        type = 'number'; // В TypeScript используем number для целых чисел
-        break;
-      case 'boolean':
-        type = 'boolean';
-        break;
-      case 'array':
-        type = `${generateTypeForArray(value.items)}[]`; // Обработка массивов
-        break;
-      case 'object':
-        type = `{ [key: string]: any }`; // Или создайте интерфейс для вложенных объектов
-        break;
-      default:
-        type = 'unknown'; // На случай, если тип неизвестен
+    if (value.$ref) {
+      const refName = value.$ref.split('/').pop()!;
+      type = refName;
+    } else {
+      type = getTypeFromSchemaProperty(value);
     }
 
-    return `  ${key}: ${type}; // ${value.description || ''}`;
+    return `${key}: ${type}; // ${value.description || ''}`;
   }).join('\n');
 
-  return `export interface ${name} {\n${properties}\n}`;
+  if (nestedSchemas[name]) {
+    const { place, nameRef } = nestedSchemas[name];
+    const importPath = `../${place}`;
+    importStatements.push(`import { ${nameRef} } from '${importPath}';`);
+  }
+
+  const importSection = importStatements.length > 0 ? `${importStatements.join('\n')}\n\n` : '';
+  
+  return `${importSection}export interface ${name} {\n${properties}\n}`;
 }
 
-// Вспомогательная функция для обработки типов массивов
-function generateTypeForArray(item?: SchemaProperty): string {
-  if (!item) return 'unknown'; // Если элемент не определен, возвращаем unknown
-
-  switch (item.type) {
-    case 'string':
-      return 'string';
-    case 'integer':
-      return 'number';
-    // Добавьте другие типы по необходимости
-    default:
-      return 'unknown';
+function getTypeFromSchemaProperty(value: SchemaProperty): string {
+  switch (value.type) {
+    case 'string': return 'string';
+    case 'integer': return 'number';
+    case 'boolean': return 'boolean';
+    case 'array': return `${generateTypeForArray(value.items)}[]`;
+    case 'object': return '{ [key: string]: any }';
+    default: return 'unknown';
   }
 }
 
-// Запустите генерацию схем
-generateSchemas();
+function generateTypeForArray(item?: SchemaProperty): string {
+  if (!item) return 'unknown';
+  return item.$ref ? item.$ref.split('/').pop()! : getTypeFromSchemaProperty(item);
+}
+
+async function main() {
+  await deleteDirectory(outputDir); // Удаляем директорию перед созданием новой
+  await ensureDirectoryExists(outputDir);
+  await generateSchemas();
+}
+
+main().catch(error => {
+  console.error('Ошибка при запуске основного скрипта:', error);
+});

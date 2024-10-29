@@ -1,0 +1,22 @@
+{
+  "User/UserToDocumentResponse": {
+    "place": "Document/DocumentPermissionResponse.ts",
+    "nameRef": "DocumentPermissionResponse"
+  },
+  "Document/DocumentRequest": {
+    "place": "User/UserToDocumentRequest.ts",
+    "nameRef": "UserToDocumentRequest"
+  },
+  "Document/DocumentResponse": {
+    "place": "User/UserToDocumentResponse.ts",
+    "nameRef": "UserToDocumentResponse"
+  },
+  "Document/DocumentTypeRequest": {
+    "place": "Document/DocumentTypeToAttributeRequest.ts",
+    "nameRef": "DocumentTypeToAttributeRequest"
+  },
+  "Document/DocumentTypeResponse": {
+    "place": "Document/DocumentTypeToAttributeResponse.ts",
+    "nameRef": "DocumentTypeToAttributeResponse"
+  }
+}
