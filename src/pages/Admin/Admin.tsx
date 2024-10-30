@@ -3,11 +3,12 @@ import type { ReactElement } from 'react';
 import { devLogOut } from '@/shared/utils/dev/dev-utils';
 import { NavLink } from 'react-router-dom';
 
+import { AdminHeader, AdminFooter} from './HeaderAndFooter.tsx';
+
 const Admin = (): ReactElement => {
   return (
     <div>
-      <h1>Страница администратора</h1>
-      {/* Для разработки */}
+      <AdminHeader/>
       <div
         style={{
           backgroundColor: 'rgba(255, 205, 210, 0.8)',
@@ -19,6 +20,7 @@ const Admin = (): ReactElement => {
       </div>
       {/* Для разработки */}
       <NavLink to={'/user'}>Панель пользователя</NavLink>
+      <AdminFooter/>
     </div>
   );
 };
