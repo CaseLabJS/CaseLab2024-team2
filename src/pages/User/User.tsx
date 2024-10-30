@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 
 import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
 import { NavLink } from 'react-router-dom';
-const User = (): ReactElement=> {
+const User = (): ReactElement => {
   return (
     <div>
       <h1>Страница пользователя</h1>
