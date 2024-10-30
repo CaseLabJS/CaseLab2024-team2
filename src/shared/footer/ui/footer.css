@@ -1,7 +1,7 @@
 
 .user-footer {
     width: 100%;
-    background-color: #353232;
+    background-color: #a09b9b;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -16,5 +16,5 @@
 }
 
 .user-footer__text {
-    color: #c8ebb4;
+    color: #fff;
 }
