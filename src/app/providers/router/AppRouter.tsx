@@ -5,6 +5,7 @@ import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import SignIn from '@/pages/SignIn/SignIn';
 import SignUp from '@/pages/SignUp/SignUp';
 import User from '@/pages/User/User';
+import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
 import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
@@ -60,6 +61,14 @@ const AppRouter = (): ReactElement => {
       element: (
         <ProtectedAdminRoute>
           <Admin />
+        </ProtectedAdminRoute>
+      ),
+    },
+    {
+      path: ROUTE_CONSTANTS.CREATE_ATTRIBUTE,
+      element: (
+        <ProtectedAdminRoute>
+          <CreateAttributePage />
         </ProtectedAdminRoute>
       ),
     },
