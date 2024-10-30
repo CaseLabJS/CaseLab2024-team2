@@ -1,4 +1,4 @@
-import { UserToDocumentResponse } from '../User/UserToDocumentResponse.ts';
+import { UserToDocumentResponse } from '../../User/model/UserToDocumentResponse.ts';
 export interface DocumentResponse {
 id: number; // ID документа
 document_type_id: number; // ID типа документа

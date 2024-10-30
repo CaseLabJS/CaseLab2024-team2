@@ -5,15 +5,7 @@ import url from 'url';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const apiUrl = 'http://172.18.27.102:8080/v3/api-docs';
-const outputDir = path.join(__dirname, 'schemas');
-
-// Удаление директории и ее содержимого
-async function deleteDirectory(directory: string) {
-  if (fs.existsSync(directory)) {
-    await fs.promises.rmdir(directory, { recursive: true });
-    console.log(`Удалена директория: ${directory}`);
-  }
-}
+const outputDir = path.join(__dirname, '');
 
 // Создание директории
 async function ensureDirectoryExists(directory: string) {
@@ -38,6 +30,8 @@ interface Schema {
   $ref?: string;
 }
 
+const pathToSharedTypes = path.join(__dirname, '..', 'shared', 'types')
+
 // Генерация файлов по группам
 async function generateSchemas() {
   try {
@@ -49,17 +43,35 @@ async function generateSchemas() {
     const groupedSchemas: Record<string, { name: string; schema: Schema }[]> = {};
 
     for (const [name, schema] of Object.entries(schemas)) {
-      const groupName = name.split(/(?=[A-Z])/)[0];
+      console.log(`Обрабатываем схему: ${name}`); // Лог для каждого имени схемы
+    
+        if (name === 'ProblemDetail') {
+          console.log(`Создаем схему: ${name} в ${pathToSharedTypes}`); // Лог для создания схемы ProblemDetail
+          const interfaceContent = generateInterface(name, schema, {}, []);
+          const filePath = path.join(pathToSharedTypes, `${name}.ts`); // Путь к файлу в shared/types
+          await fs.promises.writeFile(filePath, interfaceContent, 'utf8');
+          console.log(`Создан файл: ${filePath}`);
+          continue; // Пропускаем дальнейшую обработку для этой схемы
+        }
+    
+      let groupName = name.split(/(?=[A-Z])/)[0];
+      if (['Authentication', 'Register', 'AuthenticationRequest', 'RegisterRequest', 'AuthenticationResponse'].includes(name)) {
+        groupName = 'User';  // Установим группу "User" для Authentication и Register
+        console.log(`Схема ${name} попадает в группу ${groupName}`); // Лог о группировке
+      } else {
+        console.log(`Схема ${name} попадает в группу ${groupName}`); // Лог для других схем
+      }
+    
       groupedSchemas[groupName] = groupedSchemas[groupName] || [];
       groupedSchemas[groupName].push({ name, schema });
     }
 
     const nestedSchemas: Record<string, { place: string; nameRef: string }> = {};
     for (const [groupName, interfaces] of Object.entries(groupedSchemas)) {
-      const groupDir = path.join(outputDir, groupName);
-      if (!fs.existsSync(groupDir)) fs.mkdirSync(groupDir);
+      const groupDir = path.join(outputDir, groupName, 'model'); // Создание подпапки model в каждой группе
+      if (!fs.existsSync(groupDir)) fs.mkdirSync(groupDir, { recursive: true });
 
-      const importFilePath = path.join(groupDir, `${groupName}.ts`);
+      const importFilePath = path.join(outputDir, groupName, `index.ts`);
       const importStatements: string[] = [];
 
       for (const { name, schema } of interfaces) {
@@ -76,7 +88,7 @@ async function generateSchemas() {
         fs.writeFileSync(filePath, interfaceContent, 'utf8');
         console.log(`Создан файл: ${filePath}`);
 
-        importStatements.push(`export * from './${name}';`);
+        importStatements.push(`export * from './model/${name}';`);
 
         if (schema.properties) {
           for (const [, value] of Object.entries(schema.properties)) {
@@ -88,8 +100,8 @@ async function generateSchemas() {
 
             if (refType) {
               const firstWord = refType.split(/(?=[A-Z])/)[0];
-              const relativePath = path.join(firstWord, `${refType}.ts`).replace(/\\/g, '/');
-              const key = `${groupName}/${name}`;
+              const relativePath = path.join(firstWord, 'model', `${refType}.ts`).replace(/\\/g, '/');
+              const key = `${groupName}/model/${name}`;
               nestedSchemas[key] = { place: relativePath, nameRef: refType };
             }
           }
@@ -112,7 +124,7 @@ async function generateSchemas() {
 
       if (fs.existsSync(parentFilePath)) {
         const parentFileContent = await fs.promises.readFile(parentFilePath, 'utf8');
-        const importStatement = `import { ${nameRef} } from '../${place}';\n`;
+        const importStatement = `import { ${nameRef} } from '../../${place}';\n`;
 
         if (!parentFileContent.includes(importStatement)) {
           const updatedContent = importStatement + parentFileContent;
@@ -144,7 +156,8 @@ function generateInterface(name: string, schema: Schema, nestedSchemas: Record<s
 
   if (nestedSchemas[name]) {
     const { place, nameRef } = nestedSchemas[name];
-    const importPath = `../${place}`;
+    const importPath = `${place}`;
+
     importStatements.push(`import { ${nameRef} } from '${importPath}';`);
   }
 
@@ -170,7 +183,6 @@ function generateTypeForArray(item?: SchemaProperty): string {
 }
 
 async function main() {
-  await deleteDirectory(outputDir); // Удаляем директорию перед созданием новой
   await ensureDirectoryExists(outputDir);
   await generateSchemas();
 }
