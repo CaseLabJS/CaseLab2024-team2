@@ -17,4 +17,4 @@ const RootStoreProvider = ({ children }: { children: React.ReactNode }): ReactEl
   return <RootStoreContext.Provider value={rootStore}>{children}</RootStoreContext.Provider>;
 };
 
-export { RootStoreProvider, RootStoreContext };
+export { RootStoreProvider, RootStoreContext, RootStore };
