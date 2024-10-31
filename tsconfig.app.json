@@ -25,5 +25,5 @@
     "noUncheckedSideEffectImports": true,
     "noImplicitAny": true
   },
-  "include": ["src"]
+  "include": ["src", "src/entities/ts-split-types.tssrc/entities/ts-split-types.jss.js"]
 }
