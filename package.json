@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "compile:splitjs": "tsc -P tsconfig.types.json",
+    "gen:types": "node src/entities/ts-split-types.js"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@types/node": "^22.8.0",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/parser": "^8.11.0",
@@ -36,6 +39,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.13",
     "globals": "^15.11.0",
+    "ts-node": "^10.9.2",
     "prettier": "^3.3.3",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.10.0",
