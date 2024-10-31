@@ -12,9 +12,11 @@
   "dependencies": {
     "@esbuild/darwin-arm64": "^0.24.0",
     "axios": "^1.7.7",
+    "formik": "^2.4.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.27.0"
+    "react-router-dom": "^6.27.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
