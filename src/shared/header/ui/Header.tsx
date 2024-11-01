@@ -1,9 +1,10 @@
 import type { ReactElement } from "react";
 
 import { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import './header.css';
+import { ROUTE_CONSTANTS } from '../../../app/providers/router/config/constants';
 import bellIcon from './images/bell.svg';
 import logo from './images/logo.svg';
 import chatIcon from './images/messenger.svg';
@@ -23,17 +24,17 @@ export const Header = (): ReactElement => {
     {
       id: 1,
       note: 'Получено уведомление',
-      isRead: false,
+      isRead: true,
     },
     {
       id: 2,
       note: 'Нужно проголосовать',
-      isRead: false,
+      isRead: true,
     },
     {
       id: 3,
       note: 'Новый сотрудник',
-      isRead: false,
+      isRead: true,
     },
     // {
     //   id: 4,
@@ -78,28 +79,22 @@ export const Header = (): ReactElement => {
   const [isOpen, setOpen] = useState(false);
   const handleOpen = (): void => setOpen(!isOpen);
 
-  /**Счетчик уведомлений */
-  // const [countNotices, setCountNotices] = useState(0);
-  // if (notices.length !== 0) {
-  //   setCountNotices(notices.length);
-  // }
-
   /**Массив пунктов выпадающего меню пользователя: */
-  const itemsAdmin = [ // в случае администратора
+  const itemsAdmin = [ // пункты меню в случае администратора
     {
       name: 'Администратор',
-      link: 'admin',
+      link: ROUTE_CONSTANTS.ADMIN,
     },
     {
       name: 'Выход',
-      link: 'signin',
+      link: ROUTE_CONSTANTS.SIGN_IN,
     }
   ];
 
-  const itemsUser = [ // в случае простого пользователя
+  const itemsUser = [ // пункты меню в случае простого пользователя
     {
       name: 'Выход',
-      link: 'signin',
+      link: ROUTE_CONSTANTS.SIGN_IN,
     }
   ];
 
@@ -112,24 +107,26 @@ export const Header = (): ReactElement => {
 
   return (
     <header className="user-header">
-      <NavLink className="user-header__link" to={'/'}><img className="user-header__logo" src={logo} alt="user-header-logo" /></NavLink>
+      <NavLink className="user-header__link" to={ROUTE_CONSTANTS.SIGN_IN}>
+        <img className="user-header__logo" src={logo} alt="user-header-logo" />
+      </NavLink>
       <nav className='user-header__icons'>
-        <NavLink className="user-header__link" to={'/'}>
+        <NavLink className="user-header__link" to={'#'}>
           <img className="user-header__user-icon user-header__user-icon_chat" src={chatIcon} alt="chat-icon" />
         </NavLink>
-        <NavLink className="user-header__link" to={'/'}>
+        <NavLink className="user-header__link" to={'#'}>
           <img className="user-header__user-icon user-header__user-icon_bell" src={bellIcon} alt="bell-icon" />
           {
             isRead.length > 0 &&
             (<p className="user-header__notifications">{isRead.length}</p>)
           }
         </NavLink>
-        <NavLink className="user-header__link" to={'/'}>
+        <NavLink className="user-header__link" to={'#'}>
           <img onClick={handleOpen} className="user-header__user-icon user-header__user-icon_user" src={userIcon} alt="user-icon" />
           {
             isOpen && (<ul className="user-menu">
               {items.map((item, i) => (
-                <NavLink to={item.link} key={i}><li>{item.name}</li></NavLink>
+                <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
               ))}
             </ul>)
           }
