@@ -6,7 +6,10 @@ export const SignupSchema = Yup.object().shape({
     .max(50, 'Имя должно содержать не более 50 символов')
     .required('Имя обязательно для заполнения'),
 
-  email: Yup.string().email('Введите корректный email').required('Email обязателен для заполнения'),
+  email: Yup.string()
+    .email('Введите корректный email')
+    .matches(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, 'Введите корректный email')
+    .required('Email обязателен для заполнения'),
 
   password: Yup.string()
     .min(8, 'Пароль должен содержать не менее 8 символов')
