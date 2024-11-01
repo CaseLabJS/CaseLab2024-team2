@@ -1,3 +1,5 @@
+import type { RegisterRequest } from '@/entities/User';
+
 import { api } from './api-config';
 
 type UserData = {
@@ -19,7 +21,7 @@ export const getAllUserData = async (): Promise<UserData[]> => {
 };
 
 // редактирование данных пользователя
-export const editUserData = async (user: Omit<UserData, 'document_ids'>): Promise<UserData> => {
+export const editUserData = async (user: Omit<RegisterRequest, 'email'>): Promise<UserData> => {
   const response = await api.put<UserData>('/users', user);
   return response.data;
 };

@@ -2,6 +2,7 @@ import { registerUser } from '@/api/register-auth';
 import { deleteUserData, editUserData, getAllUserData, getUserData } from '@/api/req-user-data';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
+import type { RegisterRequest } from './RegisterRequest';
 import type { UserResponse } from './UserResponse';
 
 class UserStore {
@@ -31,9 +32,9 @@ class UserStore {
     }
   }
 
-  async createUser({ email, name, password }: { email: string; name: string; password: string }): Promise<void> {
+  async createUser({ email, display_name, password }: RegisterRequest): Promise<void> {
     try {
-      await registerUser({ email, display_name: name, password });
+      await registerUser({ email, display_name, password });
       const user = await getUserData(email);
       runInAction(() => {
         this.users.push(user);
@@ -55,15 +56,7 @@ class UserStore {
     }
   }
 
-  async editUserData({
-    password,
-    display_name,
-    email,
-  }: {
-    password: string;
-    display_name: string;
-    email: string;
-  }): Promise<void> {
+  async editUserData({ password, display_name, email }: RegisterRequest): Promise<void> {
     try {
       const response = await editUserData({ password, display_name });
       const user = this.users.find((user) => user.email === email);
