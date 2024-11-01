@@ -5,6 +5,8 @@ import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import SignIn from '@/pages/SignIn/SignIn';
 import SignUp from '@/pages/SignUp/SignUp';
 import User from '@/pages/User/User';
+import { Footer } from '@/shared/footer/ui/Footer';
+import { Header } from '@/shared/header/ui/Header';
 import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
@@ -34,7 +36,9 @@ const AppRouter = (): ReactElement => {
       path: ROUTE_CONSTANTS.ROOT,
       element: (
         <ProtectedUserRoute>
+          <Header />
           <User />
+          <Footer />
         </ProtectedUserRoute>
       ),
       errorElement: <ErrorPage />,
@@ -51,7 +55,9 @@ const AppRouter = (): ReactElement => {
       path: ROUTE_CONSTANTS.USER,
       element: (
         <ProtectedUserRoute>
+          <Header />
           <User />
+          <Footer />
         </ProtectedUserRoute>
       ),
     },

@@ -1,7 +1,7 @@
 
 .user-header {
-    width: 100%;
-    background-color: #a09b9b;
+    /* width: 100%; */
+    background-color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,6 +32,18 @@
 .user-header__user-icon:hover {
     transform: scale(1.2);
 }
+
+.user-header__user-icon_bell {
+    position: relative;
+}
+
+.user-header__user-icon_bell-notes {
+    width: 5px;
+    left: 5px;
+    border-radius: 50%;
+    background-color: red;
+}
+
 
 .user-menu {
     background: #fff;
