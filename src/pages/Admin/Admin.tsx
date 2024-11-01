@@ -19,6 +19,7 @@ const Admin = (): ReactElement => {
       </div>
       {/* Для разработки */}
       <NavLink to={'/user'}>Панель пользователя</NavLink>
+      <NavLink to={'/create-attribute'}>Страница создания аттрибута</NavLink>
     </div>
   );
 };
