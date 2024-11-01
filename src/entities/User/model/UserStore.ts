@@ -77,15 +77,15 @@ class UserStore {
     }
   }
 
-  async deleteUser(): Promise<void> {
+  async deleteUser({ email }: { email: string }): Promise<void> {
     // TODO надо дождаться правок бэка, чтобы удалять можно было по почте
-    await deleteUserData();
+    await deleteUserData(email);
   }
 
   async load(): Promise<void> {
     try {
       const user = await getUserData('admin@gmail.com');
-      // TODO надо продумать логику хранения мейла
+      // TODO надо продумать логику хранения мейла или токена
 
       runInAction(() => {
         this.email = user.email;

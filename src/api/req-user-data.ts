@@ -25,8 +25,9 @@ export const editUserData = async (user: { display_name: string; password: strin
 };
 
 // удаление пользователя
-export const deleteUserData = async (): Promise<void> => {
-  const response = await api.delete('/users');
+export const deleteUserData = async (email: string): Promise<void> => {
+  // TODO надо дождаться правок бэка, чтобы удалять можно было по почте, если эндпоинт не правильный, но внести изменения
+  const response = await api.delete(`/users/${email}`);
   if (response.status === 204) {
     localStorage.removeItem('token');
   }
