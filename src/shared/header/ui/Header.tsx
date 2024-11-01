@@ -11,31 +11,68 @@ import userIcon from './images/user.svg';
 
 export const Header = (): ReactElement => {
 
-  /**Пример данных о пользователе (для разработки) */
+  /**Пример данных о пользователе - должно приходить с backend (для разработки) */
   const user = {
     id: 1,
     email: 'user@mail.ru',
     isAdmin: true,
   }
 
-  /**Пример уведомлений (для разработки) */
-  const notices = [
+  /**Пример уведомлений - должно приходить с backend (для разработки) */
+  const notifications = [ // уведомления
     {
       id: 1,
       note: 'Получено уведомление',
-      isRead: false
+      isRead: false,
     },
     {
       id: 2,
       note: 'Нужно проголосовать',
-      isRead: false
+      isRead: false,
     },
     {
       id: 3,
       note: 'Новый сотрудник',
-      isRead: false
+      isRead: false,
     },
-  ]
+    // {
+    //   id: 4,
+    //   note: 'Новый сотрудник',
+    //   isRead: false,
+    // },
+    // {
+    //   id: 5,
+    //   note: 'Новый сотрудник',
+    //   isRead: false,
+    // },
+    // {
+    //   id: 6,
+    //   note: 'Новый сотрудник',
+    //   isRead: false,
+    // },
+    // {
+    //   id: 7,
+    //   note: 'Новый сотрудник',
+    //   isRead: true,
+    // },
+    // {
+    //   id: 8,
+    //   note: 'Новый сотрудник',
+    //   isRead: false,
+    // },
+    // {
+    //   id: 9,
+    //   note: 'Новый сотрудник',
+    //   isRead: false,
+    // },
+    // {
+    //   id: 10,
+    //   note: 'Новый сотрудник',
+    //   isRead: false,
+    // },
+  ];
+
+  const isRead = notifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
 
   /**Функционал выпадающего меню пользователя: */
   const [isOpen, setOpen] = useState(false);
@@ -82,10 +119,10 @@ export const Header = (): ReactElement => {
         </NavLink>
         <NavLink className="user-header__link" to={'/'}>
           <img className="user-header__user-icon user-header__user-icon_bell" src={bellIcon} alt="bell-icon" />
-          {/* {
-            countNotices > 0 &&
-            (<p className="user-header__user-icon_bell-notes">{countNotices}</p>)
-          } */}
+          {
+            isRead.length > 0 &&
+            (<p className="user-header__notifications">{isRead.length}</p>)
+          }
         </NavLink>
         <NavLink className="user-header__link" to={'/'}>
           <img onClick={handleOpen} className="user-header__user-icon user-header__user-icon_user" src={userIcon} alt="user-icon" />

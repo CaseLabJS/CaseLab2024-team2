@@ -37,11 +37,16 @@
     position: relative;
 }
 
-.user-header__user-icon_bell-notes {
-    width: 5px;
-    left: 5px;
+.user-header__notifications {
+    width: 15px;
+    left: 15px;
     border-radius: 50%;
-    background-color: red;
+    background-color: rgb(245, 103, 103);
+    position: absolute;
+    font-size: 10px;
+    text-align: center;
+    top: -15px;
+    left: 10px;
 }
 
 
