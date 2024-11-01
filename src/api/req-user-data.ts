@@ -19,7 +19,7 @@ export const getAllUserData = async (): Promise<UserData[]> => {
 };
 
 // редактирование данных пользователя
-export const editUserData = async (user: { display_name: string; password: string }): Promise<UserData> => {
+export const editUserData = async (user: Omit<UserData, 'document_ids'>): Promise<UserData> => {
   const response = await api.put<UserData>('/users', user);
   return response.data;
 };
