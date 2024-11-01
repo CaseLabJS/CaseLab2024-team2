@@ -62,6 +62,10 @@ apiAuth.interceptors.response.use(
 
 apiAuth.interceptors.request.use(
   (config) => {
+    const TOKEN = localStorage.getItem('token');
+    if (TOKEN) {
+      config.headers.Authorization = `Bearer ${TOKEN}`;
+    }
     return config;
   },
   (error: { response: { data: { detail: string } } }) => {

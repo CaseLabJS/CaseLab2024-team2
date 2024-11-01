@@ -2,7 +2,7 @@ import { apiAuth } from './api-config';
 
 // Работа с регистрацией и аутентификацией
 
-export type UserRegister = {
+type UserRegister = {
   display_name: string;
   email: string;
   password: string;

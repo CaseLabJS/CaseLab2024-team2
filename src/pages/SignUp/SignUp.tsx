@@ -1,67 +1,50 @@
-import { registerUser, UserRegister } from '@/api/register-auth';
+import { registerUser } from '@/api/register-auth';
+import { RegisterRequest } from '@/entities/User';
 import { SignupSchema } from '@/features/auth';
-import { Field, Formik, Form } from 'formik';
+import { Field, Formik, Form, FormikHelpers } from 'formik';
 import type { ReactElement } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const SignUp = (): ReactElement => {
-  const initialValues: UserRegister = { display_name: '', email: '', password: '' };
-  // const formik = useFormik({
-  //   initialValues: {
-  //     firstName: '',
-  //     lastName: '',
-  //     email: '',
-  //   },
-  //   onSubmit: (values) => {
-  //     alert(JSON.stringify(values, null, 2));
-  //   },
-  // });
+  const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
+
+  const submitFormHandler = async (values: RegisterRequest, { setSubmitting }: FormikHelpers<RegisterRequest>) => {
+    // localStorage.setItem(
+    //   'token',
+    //   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3MzA0MDc0NDMsImV4cCI6MTczMDQwOTI0M30.FbIjdDftn9walcxOPq2VtOFCS4aTEnZRdkimvO6SGv4',
+    // );
+    const body: RegisterRequest = { ...values };
+    await registerUser(body);
+    setSubmitting(false);
+  };
+
   return (
     <div>
       <h1>Регистрация</h1>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={SignupSchema}
-        onSubmit={(values, actions) => {
-          registerUser(values);
-        }}
-      >
+      <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
         {({ errors, touched }) => (
           <Form>
             <label htmlFor="display_name">Отображаемое имя</label>
-            <Field id="firstName" name="display_name" placeholder="Иван Иванов" />
-            {errors.display_name && touched.display_name ? <div>{errors.display_name}</div> : null}
+            <Field id="display_name" name="display_name" placeholder="Иван Иванов" />
+            {errors.display_name && touched.display_name && <div>{errors.display_name}</div>}
+
             <label htmlFor="email">Email</label>
-            <Field id="email" name="email" placeholder="ivanivanov@mail.ru" />
-            {errors.email && touched.email ? <div>{errors.email}</div> : null}
-            <label htmlFor="password">password</label>
-            <Field type="password" id="password" name="password" placeholder="Пароль" />
-            {errors.password && touched.password ? <div>{errors.password}</div> : null}
+            <Field id="email" name="email" type="email" placeholder="ivanivanov@mail.ru" />
+            {errors.email && touched.email && <div>{errors.email}</div>}
+
+            <label htmlFor="password">Пароль</label>
+            <Field id="password" name="password" type="password" placeholder="Пароль" />
+            {errors.password && touched.password && <div>{errors.password}</div>}
+
             <button type="submit">Зарегистрироваться</button>
           </Form>
         )}
       </Formik>
       <p>
-        Уже зарегистрированы? Нажмите <NavLink to={'/signin'}>здесь</NavLink>
+        Уже зарегистрированы? Нажмите <NavLink to="/signin">здесь</NavLink>
       </p>
     </div>
   );
 };
-
-// {({ errors, touched }) => (
-//   <Form>
-//     <Field name="firstName" />
-//     {errors.firstName && touched.firstName ? (
-//       <div>{errors.firstName}</div>
-//     ) : null}
-//     <Field name="lastName" />
-//     {errors.lastName && touched.lastName ? (
-//       <div>{errors.lastName}</div>
-//     ) : null}
-//     <Field name="email" type="email" />
-//     {errors.email && touched.email ? <div>{errors.email}</div> : null}
-//     <button type="submit">Submit</button>
-//   </Form>
-// )}
 
 export default SignUp;
