@@ -1,9 +1,19 @@
 import type { ReactElement } from 'react';
 
 import { devLogOut } from '@/shared/utils/dev/dev-utils';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const Admin = (): ReactElement => {
+  return (
+    <div>
+      <DevAdminHeader />
+      <Outlet />
+      <DevAdminFooter />
+    </div>
+  );
+};
+
+const DevAdminHeader = (): ReactElement => {
   return (
     <div>
       <h1>Страница администратора</h1>
@@ -19,9 +29,15 @@ const Admin = (): ReactElement => {
       </div>
       {/* Для разработки */}
       <NavLink to={'/user'}>Панель пользователя</NavLink>
-      <NavLink to={'/create-attribute'}>Страница создания аттрибута</NavLink>
+      <NavLink to={'create-attribute'}>Страница создания аттрибута</NavLink>
     </div>
   );
 };
-
+const DevAdminFooter = (): ReactElement => {
+  return (
+    <div>
+      <h1>DevAdminFooter</h1>
+    </div>
+  );
+};
 export default Admin;

@@ -1,8 +1,19 @@
 import type { ReactElement } from 'react';
 
 import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
+
 const User = (): ReactElement => {
+  return (
+    <div>
+      <DevUserHeader />
+      <Outlet />
+      <DevUserFooter />
+    </div>
+  );
+};
+
+const DevUserHeader = (): ReactElement => {
   return (
     <div>
       <h1>Страница пользователя</h1>
@@ -18,6 +29,14 @@ const User = (): ReactElement => {
       </div>
       {/* Для разработки */}
       {devCheckIsAdmin() && <NavLink to={'/admin'}>Панель администратора</NavLink>}
+    </div>
+  );
+};
+
+const DevUserFooter = (): ReactElement => {
+  return (
+    <div>
+      <h1>DevUserFooter</h1>
     </div>
   );
 };
