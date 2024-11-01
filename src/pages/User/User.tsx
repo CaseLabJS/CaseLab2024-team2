@@ -18,6 +18,7 @@ const User = (): ReactElement => {
       </div>
       {/* Для разработки */}
       {devCheckIsAdmin() && <NavLink to={'/admin'}>Панель администратора</NavLink>}
+      <NavLink to={'/fill-document'}>Заполнить документ</NavLink>
     </div>
   );
 };

@@ -10,6 +10,8 @@ import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils'
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
+import DocumentMetaModels from '@/pages/DocumentMetaModels';
+
 import { ROUTE_CONSTANTS } from './config/constants';
 
 const AppRouter = (): ReactElement => {
@@ -70,6 +72,14 @@ const AppRouter = (): ReactElement => {
         <ProtectedAdminRoute>
           <CreateAttributePage />
         </ProtectedAdminRoute>
+      ),
+    },
+    {
+      path: ROUTE_CONSTANTS.FILL_DOCUMENT,
+      element: (
+        <ProtectedUserRoute>
+          <DocumentMetaModels />
+        </ProtectedUserRoute>
       ),
     },
   ]);

@@ -5,4 +5,5 @@ export const ROUTE_CONSTANTS = {
   USER: '/user',
   ADMIN: '/admin',
   CREATE_ATTRIBUTE: '/create-attribute',
+  FILL_DOCUMENT: '/fill-document',
 };
