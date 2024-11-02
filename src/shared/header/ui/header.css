@@ -1,11 +1,9 @@
-
 .user-header {
     background-color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    /* position: relative; */
 }
 
 .user-header__link {
