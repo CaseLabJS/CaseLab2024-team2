@@ -48,6 +48,10 @@ const DocumentFiller = (props: DocumentFillerProps): ReactElement => {
   }
 
   return <form style={{display:"flex", flexDirection: "column"}}>
+    <TextField
+      required
+      placeholder={"Название документа"}
+    />
     {
       props.documentType.attributes.map((attribute, index) => {
         return <TextField
