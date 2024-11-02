@@ -1,15 +1,16 @@
 import type { ReactElement, ReactNode } from 'react';
 
 import Admin from '@/pages/Admin/Admin';
+import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import SignIn from '@/pages/SignIn/SignIn';
 import { SignUp } from '@/pages/SignUp';
 import User from '@/pages/User/User';
-import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
 import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
+import Layout from '../layout/Layout';
 import { ROUTE_CONSTANTS } from './config/constants';
 
 const AppRouter = (): ReactElement => {
@@ -22,12 +23,16 @@ const AppRouter = (): ReactElement => {
     setIsAdmin(isAdmin);
   }, []);
 
-  const ProtectedUserRoute = ({ children }: { children: ReactNode }): JSX.Element => {
+  const ProtectedUserRoute = ({ children }: { children: ReactNode }): ReactElement => {
     return isAuthenticated ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN} replace />;
   };
 
-  const ProtectedAdminRoute = ({ children }: { children: ReactNode }): JSX.Element => {
-    return isAuthenticated && isAdmin ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.USER} replace />;
+  const ProtectedAdminRoute = ({ children }: { children: ReactNode }): ReactElement => {
+    return isAuthenticated && isAdmin ? (
+      <>{children}</>
+    ) : (
+      <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} replace />
+    );
   };
 
   const router = createBrowserRouter([
@@ -35,42 +40,37 @@ const AppRouter = (): ReactElement => {
       path: ROUTE_CONSTANTS.ROOT,
       element: (
         <ProtectedUserRoute>
-          <User />
+          <Layout />
         </ProtectedUserRoute>
       ),
+      children: [
+        {
+          path: ROUTE_CONSTANTS.USER,
+          element: (
+              <User />
+          ),
+          children: [],
+        },
+        {
+          path: ROUTE_CONSTANTS.ADMIN,
+          element: (
+            <ProtectedAdminRoute>
+              <Admin />
+            </ProtectedAdminRoute>
+          ),
+          children: [
+            {
+              path: ROUTE_CONSTANTS.CREATE_ATTRIBUTE,
+              element: <CreateAttributePage />,
+            },
+          ],
+        },
+      ],
       errorElement: <ErrorPage />,
     },
     {
       path: ROUTE_CONSTANTS.SIGN_IN,
       element: isAuthenticated ? <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} /> : <SignIn />,
-    },
-    {
-      path: ROUTE_CONSTANTS.SIGN_UP,
-      element: isAuthenticated ? <Navigate to={ROUTE_CONSTANTS.USER} /> : <SignUp />,
-    },
-    {
-      path: ROUTE_CONSTANTS.USER,
-      element: (
-        <ProtectedUserRoute>
-          <User />
-        </ProtectedUserRoute>
-      ),
-    },
-    {
-      path: ROUTE_CONSTANTS.ADMIN,
-      element: (
-        <ProtectedAdminRoute>
-          <Admin />
-        </ProtectedAdminRoute>
-      ),
-    },
-    {
-      path: ROUTE_CONSTANTS.CREATE_ATTRIBUTE,
-      element: (
-        <ProtectedAdminRoute>
-          <CreateAttributePage />
-        </ProtectedAdminRoute>
-      ),
     },
   ]);
 
