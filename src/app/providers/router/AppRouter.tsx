@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 import Admin from '@/pages/Admin/Admin';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import SignIn from '@/pages/SignIn/SignIn';
-import SignUp from '@/pages/SignUp/SignUp';
+import { SignUp } from '@/pages/SignUp';
 import User from '@/pages/User/User';
 import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
 import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';

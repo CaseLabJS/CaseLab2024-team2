@@ -5,7 +5,7 @@ import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { useState, type ReactElement } from 'react';
 
-const SignUp = (): ReactElement => {
+export const SignUp = (): ReactElement => {
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
 
   const [agree, setAgree] = useState<boolean>(false);
@@ -99,5 +99,3 @@ const SignUp = (): ReactElement => {
     </div>
   );
 };
-
-export default SignUp;
