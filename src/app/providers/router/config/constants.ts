@@ -4,5 +4,5 @@ export const ROUTE_CONSTANTS = {
   SIGN_UP: '/signup',
   USER: '/user',
   ADMIN: '/admin',
-  CREATE_ATTRIBUTE: 'create-attribute',
+  CREATE_ATTRIBUTE: '/admin/create-attribute',
 };
