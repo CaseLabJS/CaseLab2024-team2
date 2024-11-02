@@ -23,61 +23,49 @@ export const Header = (): ReactElement => {
   const notifications = [ // уведомления
     {
       id: 1,
-      note: 'Получено уведомление',
+      note: 'Уведомление',
+      content: 'Все будет хорошо!',
       isRead: true,
     },
     {
       id: 2,
-      note: 'Нужно проголосовать',
-      isRead: true,
+      note: 'Голосование',
+      content: 'Пройдите в кабинет №112',
+      isRead: false,
     },
     {
       id: 3,
       note: 'Новый сотрудник',
+      content: 'Теперь Иосиф Виссарионович с нами',
       isRead: true,
     },
-    // {
-    //   id: 4,
-    //   note: 'Новый сотрудник',
-    //   isRead: false,
-    // },
-    // {
-    //   id: 5,
-    //   note: 'Новый сотрудник',
-    //   isRead: false,
-    // },
-    // {
-    //   id: 6,
-    //   note: 'Новый сотрудник',
-    //   isRead: false,
-    // },
-    // {
-    //   id: 7,
-    //   note: 'Новый сотрудник',
-    //   isRead: true,
-    // },
-    // {
-    //   id: 8,
-    //   note: 'Новый сотрудник',
-    //   isRead: false,
-    // },
-    // {
-    //   id: 9,
-    //   note: 'Новый сотрудник',
-    //   isRead: false,
-    // },
-    // {
-    //   id: 10,
-    //   note: 'Новый сотрудник',
-    //   isRead: false,
-    // },
+    {
+      id: 4,
+      note: 'Анекдот',
+      content: 'Не могу пройти мимо безобразия. Так и хочется принять участие!',
+      isRead: false,
+    },
   ];
 
   const isRead = notifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
 
   /**Функционал выпадающего меню пользователя: */
-  const [isOpen, setOpen] = useState(false);
-  const handleOpen = (): void => setOpen(!isOpen);
+  const [isOpenMenu, setOpenMenu] = useState(false);
+  const handleOpenMenu = (): void => setOpenMenu(!isOpenMenu);
+
+  /**Функционал выпадающего меню уведомлений */
+  const [isOpenNotes, setOpenNotes] = useState(false);
+  const handleOpenNotes = (): void => setOpenNotes(!isOpenNotes);
+
+  /**Функционал клика по уведомлениям */
+  // const noteIsRead = (note:any, event:any): ReactElement => {
+  //   const notification = note.content;
+  //   const tegP = <p>{notification}</p>;
+  //   const noteEl = event.target.child(tegP);
+  //   return (
+  //     noteEl
+  //   )
+  // }
 
   /**Массив пунктов выпадающего меню пользователя: */
   const itemsAdmin = [ // пункты меню в случае администратора
@@ -111,26 +99,33 @@ export const Header = (): ReactElement => {
         <img className="user-header__logo" src={logo} alt="user-header-logo" />
       </NavLink>
       <nav className='user-header__icons'>
-        <NavLink className="user-header__link" to={'#'}>
+        <button className="user-header__button">
           <img className="user-header__user-icon user-header__user-icon_chat" src={chatIcon} alt="chat-icon" />
-        </NavLink>
-        <NavLink className="user-header__link" to={'#'}>
-          <img className="user-header__user-icon user-header__user-icon_bell" src={bellIcon} alt="bell-icon" />
+        </button>
+        <button className="user-header__button">
+          <img onClick={handleOpenNotes} className="user-header__user-icon user-header__user-icon_bell" src={bellIcon} alt="bell-icon" />
           {
             isRead.length > 0 &&
             (<p className="user-header__notifications">{isRead.length}</p>)
           }
-        </NavLink>
-        <NavLink className="user-header__link" to={'#'}>
-          <img onClick={handleOpen} className="user-header__user-icon user-header__user-icon_user" src={userIcon} alt="user-icon" />
           {
-            isOpen && (<ul className="user-menu">
+            isOpenNotes && (<ul className="user-notes">
+              {notifications.map((item, i) => (
+                <li key={i} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}</li>
+              ))}
+            </ul>)
+          }
+        </button>
+        <button className="user-header__button">
+          <img onClick={handleOpenMenu} className="user-header__user-icon user-header__user-icon_user" src={userIcon} alt="user-icon" />
+          {
+            isOpenMenu && (<ul className="user-menu">
               {items.map((item, i) => (
                 <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
               ))}
             </ul>)
           }
-        </NavLink>
+        </button>
       </nav>
     </header>
   )

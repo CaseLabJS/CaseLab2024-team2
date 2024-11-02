@@ -1,6 +1,5 @@
 
 .user-header {
-    /* width: 100%; */
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -12,7 +11,20 @@
 .user-header__link {
     display: flex;
     align-items: center;
+}
+
+.user-header__button {
+    width: 20px;
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: center;
     position: relative;
+    justify-content: center;
+}
+
+.user-header__button:focus {
+  outline: none;
 }
 
 .user-header__logo {
@@ -39,7 +51,6 @@
 
 .user-header__notifications {
     width: 15px;
-    left: 15px;
     border-radius: 50%;
     background-color: rgb(245, 103, 103);
     position: absolute;
@@ -48,7 +59,6 @@
     top: -15px;
     left: 10px;
 }
-
 
 .user-menu {
     background: #fff;
@@ -59,7 +69,24 @@
     overflow-y: auto;
     position: absolute;
     top: 32px;
-    right: -10px;
+    right: 0px;
+    z-index: 10;
+
+    font-weight: normal;
+    font-size: 12px;
+    text-align: left;
+}
+
+.user-notes {
+    background: #fff;
+    margin: 1px 0 0;
+    padding: 5px;
+    border: 1px solid #bebebe;
+    max-height: 500px;
+    overflow-y: auto;
+    position: absolute;
+    top: 32px;
+    right: 0px;
     z-index: 10;
 
     font-weight: normal;
