@@ -4,7 +4,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import './header.css';
-import { ROUTE_CONSTANTS } from '../../../app/providers/router/config/constants';
+import { ROUTE_CONSTANTS } from '../../../../app/providers/router/config/constants';
 import bellIcon from './images/bell.svg';
 import logo from './images/logo.svg';
 import chatIcon from './images/messenger.svg';
@@ -13,7 +13,7 @@ import userIcon from './images/user.svg';
 export const Header = (): ReactElement => {
 
   /**Пример данных о пользователе - должно приходить с backend (для разработки) */
-  const user = {
+  const user = { //инфо из стор, обсервебл header
     id: 1,
     email: 'user@mail.ru',
     isAdmin: true,
