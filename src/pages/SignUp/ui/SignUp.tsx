@@ -1,26 +1,34 @@
-import { registerUser } from '@/api/register-auth';
-import { RegisterRequest } from '@/entities/User';
-import { SignupSchema } from '@/features/auth';
-import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
-import { Formik, Form, FormikHelpers } from 'formik';
+import { Form, Formik } from 'formik';
+import type { FormikHelpers } from 'formik';
+
 import { useState, type ReactElement } from 'react';
+
+import { registerUser } from '@/api/register-auth';
+import type { RegisterRequest } from '@/entities/User';
+import { SignupSchema } from '@/features/auth';
+
+import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 
 export const SignUp = (): ReactElement => {
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
 
-  const [agree, setAgree] = useState<boolean>(false);
+  const [isAgree, setIsAgree] = useState<boolean>(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAgree(event.target.checked);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setIsAgree(event.target.checked);
   };
 
-  const submitFormHandler = async (values: RegisterRequest, { setSubmitting }: FormikHelpers<RegisterRequest>) => {
+  const submitFormHandler = async (
+    values: RegisterRequest,
+    { setSubmitting }: FormikHelpers<RegisterRequest>,
+  ): Promise<void> => {
     try {
       const body: RegisterRequest = { ...values };
       await registerUser(body);
       alert('Пользователь успешно зарегистрирован!');
     } catch (error) {
       alert('Ошибка регистрации пользователя. Попробуйте снова.');
+      console.log(error);
     } finally {
       setSubmitting(false);
     }
@@ -78,7 +86,7 @@ export const SignUp = (): ReactElement => {
               />
 
               <FormControlLabel
-                control={<Checkbox checked={agree} onChange={handleChange} />}
+                control={<Checkbox checked={isAgree} onChange={handleChange} />}
                 label="Я принимаю Правила и Условия пользования"
               />
 
@@ -87,7 +95,7 @@ export const SignUp = (): ReactElement => {
                 variant="contained"
                 color="primary"
                 size="large"
-                disabled={isSubmitting || !agree}
+                disabled={isSubmitting || !isAgree}
                 fullWidth
               >
                 Зарегистрироваться
