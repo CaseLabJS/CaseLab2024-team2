@@ -4,13 +4,12 @@ import Admin from '@/pages/Admin/Admin';
 import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import SignIn from '@/pages/SignIn/SignIn';
-import SignUp from '@/pages/SignUp/SignUp';
 import User from '@/pages/User/User';
 import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
-import Layout from '../layouts/Layout';
+import Layout from '../layout/Layout';
 import { ROUTE_CONSTANTS } from './config/constants';
 
 const AppRouter = (): ReactElement => {
@@ -71,10 +70,6 @@ const AppRouter = (): ReactElement => {
     {
       path: ROUTE_CONSTANTS.SIGN_IN,
       element: isAuthenticated ? <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} /> : <SignIn />,
-    },
-    {
-      path: ROUTE_CONSTANTS.SIGN_UP,
-      element: isAuthenticated ? <Navigate to={ROUTE_CONSTANTS.USER} /> : <SignUp />,
     },
   ]);
 
