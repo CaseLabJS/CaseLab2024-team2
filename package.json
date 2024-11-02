@@ -14,7 +14,6 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@esbuild/darwin-arm64": "^0.24.0",
     "@fontsource/roboto": "^5.1.0",
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
@@ -54,5 +53,8 @@
     "endOfLine": "lf",
     "useTabs": false,
     "tabWidth": 2
+  },
+  "optionalDependencies": {
+    "@esbuild/darwin-arm64": "^0.24.0"
   }
 }
