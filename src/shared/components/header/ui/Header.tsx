@@ -51,13 +51,14 @@ export const Header = (): ReactElement => {
 
   /**Функционал выпадающего меню пользователя: */
   const [isOpenMenu, setOpenMenu] = useState(false);
-  const handleOpenMenu = (): void => setOpenMenu(!isOpenMenu);
+  const handleOpenMenu = (): void => setOpenMenu(!isOpenMenu); // меню выпадает и исчезает по клику на иконку user
 
   /**Функционал выпадающего меню уведомлений */
   const [isOpenNotes, setOpenNotes] = useState(false);
-  const handleOpenNotes = (): void => setOpenNotes(!isOpenNotes);
+  const handleOpenNotes = (): void => setOpenNotes(!isOpenNotes); // меню выпадает и исчезает по клику на иконку bell
 
   /**Функционал клика по уведомлениям */
+  //TODOсделать чтобы при клике по уведомлению появлялся текст уведомления, а само уведомление становилось причитанным, т.е. не жирным и изменялось количество непрочитанных сообщений у колокольчика
   // const noteIsRead = (note:any, event:any): ReactElement => {
   //   const notification = note.content;
   //   const tegP = <p>{notification}</p>;
