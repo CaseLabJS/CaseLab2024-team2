@@ -1,16 +1,12 @@
 import type { ReactElement } from 'react';
 
 import { devSignIn } from '@/shared/utils/dev/dev-utils';
-import { NavLink } from 'react-router-dom';
 
 const SignIn = (): ReactElement => {
   return (
     <div>
       <h1>Вход</h1>
       <button>Войти</button>
-      <p>
-        Еще не зарегистрированы? Нажмите <NavLink to={'/signup'}>здесь</NavLink>
-      </p>
       {/* Для разработки */}
       <div
         style={{
