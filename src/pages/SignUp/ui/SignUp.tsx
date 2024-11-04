@@ -54,7 +54,7 @@ export const SignUp = (): ReactElement => {
         }}
       >
         <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
-          {({ errors, touched, isSubmitting, getFieldProps }) => (
+          {({ errors, touched, isSubmitting, isValid, dirty, getFieldProps }) => (
             <Form style={{ width: '600px', display: 'flex', flexDirection: 'column', rowGap: '16px' }}>
               <TextField
                 label="Отображаемое имя"
@@ -95,7 +95,7 @@ export const SignUp = (): ReactElement => {
                 variant="contained"
                 color="primary"
                 size="large"
-                disabled={isSubmitting || !isAgree}
+                disabled={isSubmitting || !isAgree || !isValid || !dirty}
                 fullWidth
               >
                 Зарегистрироваться
