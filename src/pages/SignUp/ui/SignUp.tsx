@@ -3,13 +3,14 @@ import type { FormikHelpers } from 'formik';
 
 import { useState, type ReactElement } from 'react';
 
-import { registerUser } from '@/api/register-auth';
 import type { RegisterRequest } from '@/entities/User';
 import { SignupSchema } from '@/features/auth';
 
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { useRootStore } from '@/app/providers/store';
 
 export const SignUp = (): ReactElement => {
+  const { userStore } = useRootStore();
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
 
   const [isAgree, setIsAgree] = useState<boolean>(false);
@@ -24,7 +25,7 @@ export const SignUp = (): ReactElement => {
   ): Promise<void> => {
     try {
       const body: RegisterRequest = { ...values };
-      await registerUser(body);
+      await userStore.createUser(body);
       alert('Пользователь успешно зарегистрирован!');
     } catch (error) {
       alert('Ошибка регистрации пользователя. Попробуйте снова.');
