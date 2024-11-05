@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 
-import { useState } from "react";
+import { createElement, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import styles from './header.module.css';
@@ -18,6 +18,8 @@ export const Header = (): ReactElement => {
     email: 'user@mail.ru',
     isAdmin: true,
   }
+
+  
 
   /**Пример уведомлений - должно приходить с backend (для разработки) */
   const notifications = [ // уведомления
@@ -52,21 +54,36 @@ export const Header = (): ReactElement => {
   /**Функционал выпадающего меню пользователя: */
   const [isOpenMenu, setOpenMenu] = useState(false);
   const handleOpenMenu = (): void => setOpenMenu(!isOpenMenu); // меню выпадает и исчезает по клику на иконку user
+  const closeMenu = ():void => { // меню исчезает если открывают другое меню
+    if (isOpenMenu === true) {
+      handleOpenMenu();
+    }
+  }
 
   /**Функционал выпадающего меню уведомлений */
   const [isOpenNotes, setOpenNotes] = useState(false);
   const handleOpenNotes = (): void => setOpenNotes(!isOpenNotes); // меню выпадает и исчезает по клику на иконку bell
+  const closeNote = ():void => { // меню исчезает если открывают другое меню
+    if (isOpenNotes === true) {
+      handleOpenNotes();
+    }
+  }
 
   /**Функционал клика по уведомлениям */
-  //TODOсделать чтобы при клике по уведомлению появлялся текст уведомления, а само уведомление становилось причитанным, т.е. не жирным и изменялось количество непрочитанных сообщений у колокольчика
-  // const noteIsRead = (note:any, event:any): ReactElement => {
-  //   const notification = note.content;
-  //   const tegP = <p>{notification}</p>;
-  //   const noteEl = event.target.child(tegP);
-  //   return (
-  //     noteEl
-  //   )
+  //TODOсделать чтобы при клике по уведомлению появлялся текст уведомления, а само уведомление становилось прочитанным, т.е. не жирным и изменялось количество непрочитанных сообщений у колокольчика
+  // let read = [...notifications];
+
+  // const readEl = (id:number) => { // уведомление становится прочитанным
+  //     read = notifications.map((note) => {
+  //     if (note.id === id) {
+  //         return {...note, isRead: true};
+  //     } return note;
+  // })
+  //     return read;
   // }
+
+  // const [showNoteContent, setShowNoteContent ] = useState(false);
+  // const handleshowNoteContent = (): void => setShowNoteContent(!showNoteContent); // Содержание уведомления при клике появляется и исчезает
 
   /**Массив пунктов выпадающего меню пользователя: */
   const itemsAdmin = [ // пункты меню в случае администратора
@@ -104,21 +121,21 @@ export const Header = (): ReactElement => {
           <img className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconChat}`} src={chatIcon} alt="chatIcon" />
         </button>
         <button className={styles.userHeader__button}>
-          <img onClick={handleOpenNotes} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconBell}`} src={bellIcon} alt="bellIcon" />
+          <img onClick={() => {handleOpenNotes(); closeMenu()}} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconBell}`} src={bellIcon} alt="bellIcon" />
           {
             isRead.length > 0 &&
             (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
           }
           {
             isOpenNotes && (<ul className={styles.userNotes}>
-              {notifications.map((item, i) => (
-                <li key={i} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}</li>
+              {notifications.map((item) => (
+                <li key={item.id} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}</li>
               ))}
             </ul>)
           }
         </button>
         <button className={styles.userHeader__button}>
-          <img onClick={handleOpenMenu} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIcon_user}`} src={userIcon} alt="userIcon" />
+          <img onClick= {() => {handleOpenMenu(); closeNote()}} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIcon_user}`} src={userIcon} alt="userIcon" />
           {
             isOpenMenu && (<ul className={styles.userMenu}>
               {items.map((item, i) => (
