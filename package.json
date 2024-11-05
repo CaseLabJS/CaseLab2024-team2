@@ -9,7 +9,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "compile:splitjs": "tsc -P tsconfig.types.json",
-    "gen:types": "node src/entities/ts-split-types.js"
+    "gen:types": "node src/entities/ts-split-types.js",
+    "build:docker": "docker build -t caselab2024-team2 .",
+    "start:docker": "docker run -d -p 5173:80 --rm --name caselab2024-team2 caselab2024-team2",
+    "stop:docker": "docker stop caselab2024-team2",
+    "delete:docker": "docker rmi caselab2024-team2"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
