@@ -11,6 +11,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 
 import Layout from '../layout/Layout';
 import { ROUTE_CONSTANTS } from './config/constants';
+import DocumentTypesPage from '@/pages/DocumentTypesPage';
 
 const AppRouter = (): ReactElement => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -46,7 +47,12 @@ const AppRouter = (): ReactElement => {
         {
           path: ROUTE_CONSTANTS.USER,
           element: <User />,
-          children: [],
+          children: [
+            {
+              path: ROUTE_CONSTANTS.DOCUMENT_TYPES,
+              element: <DocumentTypesPage />,
+            },
+          ],
         },
         {
           path: ROUTE_CONSTANTS.ADMIN,
