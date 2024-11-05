@@ -1,18 +1,18 @@
+import React, { useState, type ReactElement } from 'react';
 import { Form, Formik } from 'formik';
 import type { FormikHelpers } from 'formik';
 
-import { useState, type ReactElement } from 'react';
-
-import type { RegisterRequest } from '@/entities/User';
-import { SignupSchema } from '@/features/auth';
-
+// import { devSignIn } from '@/shared/utils/dev/dev-utils';
+import type { AuthenticationRequest } from '@/entities/User';
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
-import { useRootStore } from '@/app/providers/store';
+import { authUser } from '@/api/register-auth';
+import { AuthSchema } from '@/features/auth';
 
-export const SignUp = (): ReactElement => {
-  const { userStore } = useRootStore();
-  const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
-
+export const SignIn = (): ReactElement => {
+  const initialValues: AuthenticationRequest = {
+    email: '',
+    password: '',
+  };
   const [isAgree, setIsAgree] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -20,21 +20,21 @@ export const SignUp = (): ReactElement => {
   };
 
   const submitFormHandler = async (
-    values: RegisterRequest,
-    { setSubmitting }: FormikHelpers<RegisterRequest>,
+    values: AuthenticationRequest,
+    { setSubmitting }: FormikHelpers<AuthenticationRequest>,
   ): Promise<void> => {
     try {
-      const body: RegisterRequest = { ...values };
-      await userStore.createUser(body);
-      alert('Пользователь успешно зарегистрирован!');
+      const body: AuthenticationRequest = { ...values };
+      // Когда появится AuthStore, запрос нужно делать с его помощью.
+      await authUser(body);
+      alert('Пользователь успешно авторизирован!');
     } catch (error) {
-      alert('Ошибка регистрации пользователя. Попробуйте снова.');
+      alert('Ошибка авторизации пользователя. Попробуйте снова.');
       console.log(error);
     } finally {
       setSubmitting(false);
     }
   };
-
   return (
     <div
       style={{
@@ -54,17 +54,9 @@ export const SignUp = (): ReactElement => {
           padding: '53px 57px 65px',
         }}
       >
-        <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
+        <Formik initialValues={initialValues} validationSchema={AuthSchema} onSubmit={submitFormHandler}>
           {({ errors, touched, isSubmitting, isValid, dirty, getFieldProps }) => (
             <Form style={{ width: '600px', display: 'flex', flexDirection: 'column', rowGap: '16px' }}>
-              <TextField
-                label={errors.display_name || 'Отображаемое имя'}
-                {...getFieldProps('display_name')}
-                fullWidth
-                margin="none"
-                error={touched.display_name && Boolean(errors.display_name)}
-              />
-
               <TextField
                 label={errors.email || 'Email'}
                 {...getFieldProps('email')}
@@ -96,7 +88,7 @@ export const SignUp = (): ReactElement => {
                 disabled={isSubmitting || !isAgree || !isValid || !dirty}
                 fullWidth
               >
-                Зарегистрироваться
+                Sign In
               </Button>
             </Form>
           )}
@@ -104,4 +96,22 @@ export const SignUp = (): ReactElement => {
       </div>
     </div>
   );
+  // return (
+  //   <div>
+  //     <h1>Вход</h1>
+  //     <button>Войти</button>
+  //     {/* Для разработки */}
+  //     <div
+  //       style={{
+  //         backgroundColor: 'rgba(255, 205, 210, 0.8)',
+  //         borderRadius: '12px',
+  //         padding: '20px',
+  //       }}
+  //     >
+  //       <button onClick={() => devSignIn('user')}>Войти как пользователь</button>
+  //       <button onClick={() => devSignIn('admin')}>Войти как админ</button>
+  //     </div>
+  //     {/* Для разработки */}
+  //   </div>
+  // );
 };
