@@ -1,5 +1,5 @@
 import { DocumentTypeResponse } from "@/entities/Document";
-import { Button, Card, CardActions, CardContent, Grid2, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
 import { ReactElement, useState } from "react";
 import DocumentFormModalWindow from "./DocumentFormModalWindow";
 
@@ -13,7 +13,7 @@ const DocumentType = ({ documentType }: DocumentTypeProps): ReactElement => {
     return <Card>
         <CardContent>
             <Typography variant="h6" sx={{fontWeight: 700}}>
-                #{documentType.id}
+                Документ {documentType.id}
             </Typography>
             <Typography variant="h6" >
                 {documentType.name}
