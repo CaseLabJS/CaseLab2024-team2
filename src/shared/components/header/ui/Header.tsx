@@ -3,7 +3,7 @@ import type { ReactElement } from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-import './header.css';
+import styles from './header.module.css';
 import { ROUTE_CONSTANTS } from '../../../../app/providers/router/config/constants';
 import bellIcon from './images/bell.svg';
 import logo from './images/logo.svg';
@@ -37,7 +37,7 @@ export const Header = (): ReactElement => {
       id: 3,
       note: 'Новый сотрудник',
       content: 'Теперь Иосиф Виссарионович с нами',
-      isRead: true,
+      isRead: false,
     },
     {
       id: 4,
@@ -95,32 +95,32 @@ export const Header = (): ReactElement => {
   } else items = itemsUser;
 
   return (
-    <header className="user-header">
-      <NavLink className="user-header__link" to={ROUTE_CONSTANTS.SIGN_IN}>
-        <img className="user-header__logo" src={logo} alt="user-header-logo" />
+    <header className={styles.userHeader}>
+      <NavLink className={styles.userHeader__link} to={ROUTE_CONSTANTS.SIGN_IN}>
+        <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
       </NavLink>
-      <nav className='user-header__icons'>
-        <button className="user-header__button">
-          <img className="user-header__user-icon user-header__user-icon_chat" src={chatIcon} alt="chat-icon" />
+      <nav className={styles.userHeader__icons}>
+        <button className={styles.userHeader__button}>
+          <img className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconChat}`} src={chatIcon} alt="chatIcon" />
         </button>
-        <button className="user-header__button">
-          <img onClick={handleOpenNotes} className="user-header__user-icon user-header__user-icon_bell" src={bellIcon} alt="bell-icon" />
+        <button className={styles.userHeader__button}>
+          <img onClick={handleOpenNotes} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconBell}`} src={bellIcon} alt="bellIcon" />
           {
             isRead.length > 0 &&
-            (<p className="user-header__notifications">{isRead.length}</p>)
+            (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
           }
           {
-            isOpenNotes && (<ul className="user-notes">
+            isOpenNotes && (<ul className={styles.userNotes}>
               {notifications.map((item, i) => (
                 <li key={i} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}</li>
               ))}
             </ul>)
           }
         </button>
-        <button className="user-header__button">
-          <img onClick={handleOpenMenu} className="user-header__user-icon user-header__user-icon_user" src={userIcon} alt="user-icon" />
+        <button className={styles.userHeader__button}>
+          <img onClick={handleOpenMenu} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIcon_user}`} src={userIcon} alt="userIcon" />
           {
-            isOpenMenu && (<ul className="user-menu">
+            isOpenMenu && (<ul className={styles.userMenu}>
               {items.map((item, i) => (
                 <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
               ))}

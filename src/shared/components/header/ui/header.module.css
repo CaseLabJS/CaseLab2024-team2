@@ -1,4 +1,4 @@
-.user-header {
+.userHeader {
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -6,12 +6,12 @@
     padding: 10px;
 }
 
-.user-header__link {
+.userHeader__link {
     display: flex;
     align-items: center;
 }
 
-.user-header__button {
+.userHeader__button {
     width: 20px;
     padding: 0;
     border: none;
@@ -21,33 +21,33 @@
     justify-content: center;
 }
 
-.user-header__button:focus {
+.userHeader__button:focus {
   outline: none;
 }
 
-.user-header__logo {
+.useHeader__logo {
     width: 70px;
 }
 
-.user-header__icons {
+.userHeader__icons {
     display: flex;
     gap: 5px;
 }
 
-.user-header__user-icon {
+.userHeader__userIcon {
     width: 20px;
-    border-radius: 50%;
+    background-color: #fff;
 }
 
-.user-header__user-icon:hover {
+.userHeader__userIcon:hover {
     transform: scale(1.2);
 }
 
-.user-header__user-icon_bell {
+.userHeader__userIconBell {
     position: relative;
 }
 
-.user-header__notifications {
+.userHeader__notifications {
     width: 15px;
     border-radius: 50%;
     background-color: rgb(245, 103, 103);
@@ -58,7 +58,7 @@
     left: 10px;
 }
 
-.user-menu {
+.userMenu {
     background: #fff;
     margin: 1px 0 0;
     padding: 5px;
@@ -75,7 +75,7 @@
     text-align: left;
 }
 
-.user-notes {
+.userNotes {
     background: #fff;
     margin: 1px 0 0;
     padding: 5px;
