@@ -7,6 +7,7 @@ import type { AuthenticationRequest } from '@/entities/User';
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { authUser } from '@/api/register-auth';
 import { AuthSchema } from '@/features/auth';
+import style from './SignIn.module.scss';
 
 export const SignIn = (): ReactElement => {
   const initialValues: AuthenticationRequest = {
@@ -36,27 +37,11 @@ export const SignIn = (): ReactElement => {
     }
   };
   return (
-    <div
-      style={{
-        width: '100vw',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '714px',
-          boxSizing: 'border-box',
-          margin: '0 auto',
-          justifyContent: 'center',
-          borderRadius: '20px',
-          border: '1px solid black',
-          padding: '53px 57px 65px',
-        }}
-      >
+    <div className={style.signInContainer}>
+      <div className={style.signInBox}>
         <Formik initialValues={initialValues} validationSchema={AuthSchema} onSubmit={submitFormHandler}>
           {({ errors, touched, isSubmitting, isValid, dirty, getFieldProps }) => (
-            <Form style={{ width: '600px', display: 'flex', flexDirection: 'column', rowGap: '16px' }}>
+            <Form className={style.signInForm}>
               <TextField
                 label={errors.email || 'Email'}
                 {...getFieldProps('email')}
