@@ -45,9 +45,7 @@ const AppRouter = (): ReactElement => {
       children: [
         {
           path: ROUTE_CONSTANTS.USER,
-          element: (
-              <User />
-          ),
+          element: <User />,
           children: [],
         },
         {
