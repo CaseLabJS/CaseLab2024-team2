@@ -68,7 +68,7 @@ export const Header = (): ReactElement => {
   /**Функционал клика по уведомлениям */
     // положить данные в localStorage:
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const toLocalStorage = (data: []) => {
+  const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean; }[]) => {
     localStorage.setItem(localStorageKey, JSON.stringify(data));
   }
 
@@ -76,19 +76,20 @@ export const Header = (): ReactElement => {
   //TODO сделать чтобы после обновления страницы, статус прочитанных сообщений не обновлялся
   //TODO сделать чтобы данные добавлялись в localStorage
   const localStorageKey: string = 'notifications';
-  let read = [...notifications];
+  const read = [...notifications];
   toLocalStorage(read);
- 
+
   const [localNotifications, setLocalNotifications] = useState(read);// ***
     // Получение данных из localStorage ***
     useEffect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
     }, [])
 
   //обновление localStorage и статуса прочтения уведомления***
   const readEl = (id: number): void => {
     const noteIndex = localNotifications.findIndex(note => note.id === id);
-    let updataNote = {...localNotifications[noteIndex]} // получение копии нужного уведомления
+    const updataNote = {...localNotifications[noteIndex]} // получение копии нужного уведомления
     updataNote.isRead = true; // Обновление статуса уведомления
     // const modifiedData: [] = data.map((item) => {
     //   if (item.id === id) {
