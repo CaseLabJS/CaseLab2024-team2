@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 import { ROUTE_CONSTANTS } from '../../../../app/providers/router/config/constants';
@@ -18,8 +18,6 @@ export const Header = (): ReactElement => {
     email: 'user@mail.ru',
     isAdmin: true,
   }
-
-
 
   /**Пример уведомлений - должно приходить с backend (для разработки) */
   const notifications = [ // уведомления
@@ -49,7 +47,6 @@ export const Header = (): ReactElement => {
     },
   ];
 
-
   /**Функционал выпадающего меню пользователя: */
   const [isOpenMenu, setOpenMenu] = useState(false);
   const handleOpenMenu = (): void => setOpenMenu(!isOpenMenu); // меню выпадает и исчезает по клику на иконку user
@@ -69,53 +66,48 @@ export const Header = (): ReactElement => {
   }
 
   /**Функционал клика по уведомлениям */
-  //TODOсделать чтобы при клике по уведомлению появлялся текст уведомления, а само уведомление становилось прочитанным, т.е. не жирным и изменялось количество непрочитанных сообщений у колокольчика
-  let read = [...notifications];
-  const localStorageKey: string = 'notifications';
-
-  // положить данные в localStorage:
+    // положить данные в localStorage:
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const toLocalStorage = (data: []) => {
     localStorage.setItem(localStorageKey, JSON.stringify(data));
   }
 
-  //получение данных из localStorage:
-  const fromLocalStorage = (): [] => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const localNotifications: [] = JSON.parse(localStorage.getItem(localStorageKey) || '[]');
-    return localNotifications;
-  }
-
-  //обновление localStorage
-  const updateLocalStorage = (id: number): void => {
-    const data: { id: number, note: string, content: string, isRead: boolean }[] = fromLocalStorage();
-    const modifiedData: [] = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, isRead: true };
-      } return item;
-    }) as [];
-    toLocalStorage(modifiedData);
-  }
-
+  //TODO сделать чтобы при клике по уведомлению появлялся текст уведомления и исчезал при повторном клике
+  //TODO сделать чтобы после обновления страницы, статус прочитанных сообщений не обновлялся
+  //TODO сделать чтобы данные добавлялись в localStorage
+  const localStorageKey: string = 'notifications';
+  let read = [...notifications];
   toLocalStorage(read);
-  // updateLocalStorage(2);
+ 
+  const [localNotifications, setLocalNotifications] = useState(read);// ***
+    // Получение данных из localStorage ***
+    useEffect(() => {
+      setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
+    }, [])
 
-  // console.log('>>', fromLocalStorage());
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const readEl = (id: number) => { // уведомление становится прочитанным
-    updateLocalStorage(id);
-    read = fromLocalStorage();
+  //обновление localStorage и статуса прочтения уведомления***
+  const readEl = (id: number): void => {
+    const noteIndex = localNotifications.findIndex(note => note.id === id);
+    let updataNote = {...localNotifications[noteIndex]} // получение копии нужного уведомления
+    updataNote.isRead = true; // Обновление статуса уведомления
+    // const modifiedData: [] = data.map((item) => {
+    //   if (item.id === id) {
+    //     return { ...item, isRead: true };
+    //   } return item;
+    // }) as [];
+    setLocalNotifications((localNotifications) => {
+      const modifiedData = [...localNotifications];
+      modifiedData[noteIndex] = updataNote;
+      toLocalStorage(modifiedData);
+      return modifiedData;
+    })
   }
 
-  const isRead = read.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
+  const isRead = localNotifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
 
   // const [showNoteContent, setShowNoteContent] = useState(false);
   // const handleshowNoteContent = (): void => setShowNoteContent(!showNoteContent); // Содержание уведомления при клике появляется и исчезает
   // const showContent = (note, id:number):void => {
-
-  //   if (showNoteContent)
-  // }
 
   /**Массив пунктов выпадающего меню пользователя: */
   const itemsAdmin = [ // пункты меню в случае администратора
@@ -160,7 +152,7 @@ export const Header = (): ReactElement => {
           }
           {
             isOpenNotes && (<ul className={styles.userNotes}>
-              {read.map((item) => (
+              {localNotifications.map((item) => (
                 <li onClick={(event) => {
                   readEl(Number(event.currentTarget.getAttribute('data-id'))); console.log(event.currentTarget.getAttribute('data-id'));
                 }} data-id={item.id} key={item.id} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}
