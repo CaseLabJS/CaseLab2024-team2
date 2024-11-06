@@ -1,7 +1,7 @@
+import { getAllDocTypes } from '@/api/req-doc-types';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
-import { DocumentTypeResponse } from './DocumentTypeResponse';
-import { getAllDocTypes } from '@/api/req-doc-types';
+import type { DocumentTypeResponse } from './DocumentTypeResponse';
 
 class DocumentTypesStore {
     documentTypes: DocumentTypeResponse[];
@@ -17,7 +17,7 @@ class DocumentTypesStore {
         });
     }
 
-    getDocumentType(id: number) {
+    getDocumentType(id: number): DocumentTypeResponse | undefined {
         return this.documentTypes.find(document => document.id === id)
     }
 }

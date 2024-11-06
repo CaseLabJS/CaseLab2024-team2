@@ -1,9 +1,9 @@
 import type { ReactElement } from 'react';
 
+import { AttributesStore } from '@/entities/Attribute';
+import { DocumentTypesStore } from '@/entities/Document/';
 import { UserStore } from '@/entities/User/model/UserStore';
 import { createContext } from 'react';
-import { DocumentTypesStore } from '@/entities/Document/';
-import { AttributesStore } from '@/entities/Attribute';
 
 class RootStore {
   userStore: UserStore;

@@ -2,6 +2,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 import Admin from '@/pages/Admin/Admin';
 import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
+import DocumentTypesPage from '@/pages/DocumentTypesPage';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import SignIn from '@/pages/SignIn/SignIn';
 import User from '@/pages/User/User';
@@ -11,7 +12,6 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 
 import Layout from '../layout/Layout';
 import { ROUTE_CONSTANTS } from './config/constants';
-import DocumentTypesPage from '@/pages/DocumentTypesPage';
 
 const AppRouter = (): ReactElement => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

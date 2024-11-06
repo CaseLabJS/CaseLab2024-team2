@@ -1,8 +1,9 @@
+import type { DocumentTypeResponse, DocumentTypeToAttributeResponse } from '@/entities/Document';
+
+import { getAllAttributeDocs } from '@/api/req-doc-attributes';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
-import { AttributeResponse } from './AttributeResponse';
-import { getAllAttributeDocs } from '@/api/req-doc-attributes';
-import { DocumentTypeResponse, DocumentTypeToAttributeResponse } from '@/entities/Document';
+import type { AttributeResponse } from './AttributeResponse';
 
 export interface CombinedAttribute extends AttributeResponse, DocumentTypeToAttributeResponse {}
 
@@ -20,7 +21,7 @@ class AttributesStore {
         });
     }
 
-    getAttribute(id: number) {
+    getAttribute(id: number): AttributeResponse | undefined {
         return this.attributes.find(attribute => attribute.id === id)
     }
 

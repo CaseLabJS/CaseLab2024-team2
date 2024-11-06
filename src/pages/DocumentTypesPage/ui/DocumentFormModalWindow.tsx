@@ -1,10 +1,12 @@
-import { ReactElement } from "react";
-import { DocumentTypeProps } from "./DocumentType";
-import { Box, Button, Container, Modal, TextField, Typography } from "@mui/material";
+import type { ReactElement } from "react";
+
 import { useRootStore } from "@/app/providers/store";
+import { Box, Button, Container, Modal, TextField, Typography } from "@mui/material";
+import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import * as Yup from "yup";
-import { Form, Formik } from "formik";
+
+import type { DocumentTypeProps } from "./DocumentType";
 
 interface DocumentFormModalWindowProps extends DocumentTypeProps {
     handleClose: () => void;

@@ -1,6 +1,9 @@
-import { DocumentTypeResponse } from "@/entities/Document";
+import type { DocumentTypeResponse } from "@/entities/Document";
+import type { ReactElement } from "react";
+
 import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
-import { ReactElement, useState } from "react";
+import { useState } from "react";
+
 import DocumentFormModalWindow from "./DocumentFormModalWindow";
 
 export interface DocumentTypeProps {
