@@ -33,19 +33,20 @@ class AuthStore {
     this.user = null;
   }
 
-  //   async getAuthUser(email: string, password: string): Promise<void> {
-  //     //при аутентификации получаем пользователя и роль
-  //     try {
-  //       const response = await authUser({ email, password });
-  //       const data = await getCurrentUserByToken(response.token); создать функцию после создания нового эндпоинта на бэке
-  //       runInAction(() => {
-  //         this.user = email;
-  //         this.role = data.role;
-  //       });
-  //     } catch (error) {
-  //       console.error('Error fetching users:', error);
-  //     }
-  //  }
+  async getAuthUser(email: string, password: string, role: Role): Promise<void> {
+    //при аутентификации получаем пользователя и роль
+    try {
+      const response = await authUser({ email, password });
+      //const data = await getCurrentUserByToken(response.token); создать функцию после создания нового эндпоинта на бэке
+      runInAction(() => {
+        this.user = email;
+        this.role = role;
+        //this.role = data.role
+      });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  }
 }
 
 export { AuthStore };
