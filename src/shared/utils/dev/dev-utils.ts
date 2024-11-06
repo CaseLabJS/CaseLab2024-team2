@@ -2,8 +2,7 @@ interface Credentials {
   role: string;
 }
 
-const devSignIn = (role: 'user' | 'admin'): void => {
-  const user = 'John Doe';
+const devSignIn = (role: 'user' | 'admin', user: string): void => {
   localStorage.setItem('auth', JSON.stringify({ user, role }));
   location.reload();
 };
