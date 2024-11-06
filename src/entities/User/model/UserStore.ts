@@ -40,7 +40,8 @@ class UserStore {
         this.users.push(user);
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      throw error;
     }
   }
 

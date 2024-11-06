@@ -1,51 +1,29 @@
-# CaseLabJS2024-team2
-# React + TypeScript + Vite
+# Работа с Docker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1. Если у вас нет Docker устанавливаем его по ссылке https://www.docker.com/get-started/
 
-Currently, two official plugins are available:
+Проверить есть ли у вас Docker можно введя в консоль команду docker -v
+Если ответ будет примерно таким Docker version 27.3.1, build ce12230 то поздравляю, Docker у вас есть.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 2. Сборка image Docker
+(Кстати заметил, что при включенном WireGuard сборка не происходит, так что сначала делаем сборку а потом уже включаем WireGuard)
 
-## Expanding the ESLint configuration
+В консоли вводим команду npm run build:docker
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Запускается процесс сборки image docker
 
-- Configure the top-level `parserOptions` property like this:
+## 3. Запуск container docker
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+В консоли вводим команду npm run start:docker
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Теперь можно открыть приложение по адресу http://localhost:5173
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## 4. Остановка container docker
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+В консоли вводим команду npm run stop:docker
+
+Данная команда автоматически удалит данный container после остановки
+
+## 5. Удаление image docker
+
+В консоли вводим команду npm run delete:docker
