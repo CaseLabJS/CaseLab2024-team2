@@ -1,2 +1,2 @@
-export * from './model/AttributeRequest';
-export * from './model/AttributeResponse';
+export type * from './model/AttributeRequest';
+export type * from './model/AttributeResponse';

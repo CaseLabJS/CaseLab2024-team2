@@ -1,13 +1,11 @@
-import { Form, Formik } from 'formik';
+import type { RegisterRequest } from '@/entities/User';
 import type { FormikHelpers } from 'formik';
 
-import { useState, type ReactElement } from 'react';
-
-import type { RegisterRequest } from '@/entities/User';
-import { SignupSchema } from '@/features/auth';
-
-import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { useRootStore } from '@/app/providers/store';
+import { SignupSchema } from '@/features/auth';
+import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Form, Formik } from 'formik';
+import { useState, type ReactElement } from 'react';
 
 import style from './SignUp.module.scss';
 

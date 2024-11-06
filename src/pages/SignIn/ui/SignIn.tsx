@@ -1,12 +1,16 @@
-import React, { useState, type ReactElement } from 'react';
-import { Form, Formik } from 'formik';
 import type { FormikHelpers } from 'formik';
+import type React from 'react';
+
+import { Form, Formik } from 'formik';
+import { useState, type ReactElement } from 'react';
 
 // import { devSignIn } from '@/shared/utils/dev/dev-utils';
 import type { AuthenticationRequest } from '@/entities/User';
-import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+
 import { authUser } from '@/api/register-auth';
 import { AuthSchema } from '@/features/auth';
+import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+
 import style from './SignIn.module.scss';
 
 export const SignIn = (): ReactElement => {

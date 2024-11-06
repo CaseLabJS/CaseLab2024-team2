@@ -1,7 +1,7 @@
-export * from './model/DocumentRequest';
-export * from './model/DocumentPermissionResponse';
-export * from './model/DocumentResponse';
-export * from './model/DocumentTypeRequest';
-export * from './model/DocumentTypeToAttributeRequest';
-export * from './model/DocumentTypeResponse';
-export * from './model/DocumentTypeToAttributeResponse';
+export type * from './model/DocumentRequest';
+export type * from './model/DocumentPermissionResponse';
+export type * from './model/DocumentResponse';
+export type * from './model/DocumentTypeRequest';
+export type * from './model/DocumentTypeToAttributeRequest';
+export type * from './model/DocumentTypeResponse';
+export type * from './model/DocumentTypeToAttributeResponse';
