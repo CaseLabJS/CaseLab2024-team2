@@ -1,15 +1,19 @@
 import type { ReactElement } from 'react';
 
+import { AttributesStore } from '@/entities/Attribute';
+import { DocumentTypesStore } from '@/entities/Document/';
 import { UserStore } from '@/entities/User/model/UserStore';
 import { createContext } from 'react';
-import { AuthStore } from '@/entities/auth';
 
 class RootStore {
   userStore: UserStore;
-  authStore: AuthStore;
+  documentTypesStore: DocumentTypesStore;
+  attributesStore: AttributesStore;
+
   constructor() {
     this.userStore = new UserStore(); // При создании нового стора необходимо его инициализировать в конструкторе RootStore
-    this.authStore = new AuthStore();
+    this.documentTypesStore = new DocumentTypesStore();
+    this.attributesStore = new AttributesStore();
   }
 }
 
