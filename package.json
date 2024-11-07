@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build:all": "tsc -P tsconfig.types.json && node src/entities/gen-types.js && eslint -c eslint.config.js src/entities --fix && prettier --write src/entities"
+    "build-gen:all": "tsc -P tsconfig.types.json && node src/entities/gen-types.js && eslint -c eslint.config.js src/entities --fix && prettier --write src/entities"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
