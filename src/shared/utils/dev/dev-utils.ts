@@ -39,10 +39,28 @@ const devCheckIsAdmin = (): boolean => {
 // };
 const devLogOut = (): void => {
   localStorage.removeItem('token');
-  //location.reload();
 };
+
 const devCheckToken = (): string | null => {
   return localStorage.getItem('token');
-  //location.reload();
 };
-export { devCheckToken, devSignIn, devCheckUserAuth, devCheckIsAdmin, devLogOut };
+const devSaveRole = (role: string): void => {
+  localStorage.setItem('role', role);
+};
+
+const devCleanRole = (): void => {
+  localStorage.removeItem('role');
+};
+const devCheckRole = (): string | null => {
+  return localStorage.getItem('role');
+};
+export {
+  devCheckRole,
+  devCleanRole,
+  devSaveRole,
+  devCheckToken,
+  devSignIn,
+  devCheckUserAuth,
+  devCheckIsAdmin,
+  devLogOut,
+};
