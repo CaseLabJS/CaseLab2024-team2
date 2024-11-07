@@ -1,51 +1,78 @@
-import { authUser } from '@/api/register-auth';
-import { devLogOut, devSignIn } from '@/shared/utils/dev/dev-utils';
-import { makeAutoObservable, observable, onBecomeObserved, runInAction, autorun } from 'mobx';
-type Role = 'user' | 'admin';
+import { authUser, getCurrentUser } from '@/api/register-auth';
+import { devCheckToken, devLogOut, devSignIn } from '@/shared/utils/dev/dev-utils';
+import { makeAutoObservable, runInAction, when } from 'mobx';
+
 class AuthStore {
-  role: Role | null = null;
-  user: string | null = null;
+  roles: string[];
+  _userEmail: string | null;
+  _displayName: string;
+
   get isAuth() {
     //true если user, false если null
-    return !!this.user;
+    return !!this._userEmail;
   }
   get isAdmin() {
-    //true если role  -  admin, иначе false
-    return this.role === 'admin';
+    //true если roles содержит admin, иначе false
+    return this.roles.includes('admin');
+  }
+  get displayName() {
+    return this._displayName;
   }
 
   constructor() {
     makeAutoObservable(this);
+    this.roles = [];
+    this._userEmail = null;
+    this._displayName = '';
 
-    autorun(() => {
-      //если role и user изменяются, то автоматически запись в storage
-      if (this.role && this.user) {
-        devSignIn(this.role, this.user);
-      } else {
-        devLogOut();
-      }
-    });
+    when(
+      //когда выполняется выход - удаляем токен
+      () => !this._userEmail,
+      () => devLogOut(),
+    );
+
+    this.init();
   }
 
   logOut() {
     //выход
-    this.role = null;
-    this.user = null;
+    this.roles = [];
+    this._userEmail = null;
   }
 
-  async getAuthUser(email: string, password: string, role: Role): Promise<void> {
+  async getAuthUser(): Promise<void> {
     //при аутентификации получаем пользователя и роль
     try {
-      const response = await authUser({ email, password });
-      //const data = await getCurrentUserByToken(response.token); создать функцию после создания нового эндпоинта на бэке
+      const data = await getCurrentUser(); //токен уже должен быть сохранен
       runInAction(() => {
-        this.user = email;
-        this.role = role;
-        //this.role = data.role
+        this._userEmail = data.email;
+        this._displayName = data.display_name;
+        this.roles = data.roles;
       });
     } catch (error) {
-      console.error('Error fetching users:', error);
+      alert('Ошибка авторизации. Попробуйте еще раз');
     }
+  }
+
+  async signIn(email: string, password: string): Promise<void> {
+    //функция входа
+    try {
+      await authUser({ email, password }); //сохраняем токен
+      await this.getAuthUser();
+    } catch (error) {
+      alert('Ошибка авторизации. Попробуйте еще раз');
+    }
+  }
+  async load(): Promise<void> {
+    //если токен жив, запрашиваем текущего пользователя
+    const token = devCheckToken();
+    if (token) {
+      this.getAuthUser();
+    }
+  }
+
+  init(): void {
+    this.load();
   }
 }
 

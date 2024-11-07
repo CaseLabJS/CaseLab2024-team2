@@ -29,12 +29,20 @@ const devCheckIsAdmin = (): boolean => {
   }
   return false;
 };
+// const devLogOut = (): void => {
+//   if (devCheckUserAuth()) {
+//     localStorage.removeItem('auth');
+//     location.reload();
+//   } else {
+//     console.log('Пользователь не авторизован!');
+//   }
+// };
 const devLogOut = (): void => {
-  if (devCheckUserAuth()) {
-    localStorage.removeItem('auth');
-    location.reload();
-  } else {
-    console.log('Пользователь не авторизован!');
-  }
+  localStorage.removeItem('token');
+  //location.reload();
 };
-export { devSignIn, devCheckUserAuth, devCheckIsAdmin, devLogOut };
+const devCheckToken = (): string | null => {
+  return localStorage.getItem('token');
+  //location.reload();
+};
+export { devCheckToken, devSignIn, devCheckUserAuth, devCheckIsAdmin, devLogOut };
