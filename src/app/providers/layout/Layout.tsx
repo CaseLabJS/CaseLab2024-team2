@@ -3,13 +3,16 @@ import type { ReactElement } from 'react';
 import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import {Header, Footer} from '@/shared/components/index';
 
 const Layout = () : ReactElement => {
   return (
     <div>
-      <DevHeader />
+      {/* <DevHeader /> */}
+      <Header/>
       <Outlet />
-      <DevFooter />
+      <Footer/>
+      {/* <DevFooter /> */}
     </div>
   );
 };

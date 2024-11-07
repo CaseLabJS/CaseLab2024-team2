@@ -9,13 +9,16 @@ import bellIcon from './images/bell.svg';
 import logo from './images/logo.svg';
 import chatIcon from './images/messenger.svg';
 import userIcon from './images/user.svg';
+import { devLogOut } from "@/shared/utils/dev/dev-utils";
+import { svgIconClasses } from "@mui/material";
 
 export const Header = (): ReactElement => {
 
   /**Пример данных о пользователе - должно приходить с backend (для разработки) */
   const user = { //инфо из стор, обсервебл header
     id: 1,
-    email: 'user@mail.ru',
+    userName: 'Сергей Орлов',
+    email: 'orel-dev@inbox.com',
     isAdmin: true,
   }
 
@@ -46,6 +49,16 @@ export const Header = (): ReactElement => {
       isRead: false,
     },
   ];
+
+  /**Компонет для иконки */
+  // const Icon = (url: string | undefined):ReactElement => {
+
+  //   return (
+  //     <svg xmlns={url}>
+
+  //     </svg>
+  //   )
+  // }
 
   /**Функционал выпадающего меню пользователя: */
   const [isOpenMenu, setOpenMenu] = useState(false);
@@ -113,18 +126,22 @@ export const Header = (): ReactElement => {
   /**Массив пунктов выпадающего меню пользователя: */
   const itemsAdmin = [ // пункты меню в случае администратора
     {
-      name: 'Администратор',
+      name: 'Профиль',
       link: ROUTE_CONSTANTS.ADMIN,
     },
     {
-      name: 'Выход',
-      link: ROUTE_CONSTANTS.SIGN_IN,
-    }
+      name: 'Admin menu',
+      link: ROUTE_CONSTANTS.ADMIN,
+    },
+    // {
+    //   name: 'Выход',
+    //   link: ROUTE_CONSTANTS.SIGN_IN,
+    // }
   ];
 
   const itemsUser = [ // пункты меню в случае простого пользователя
     {
-      name: 'Выход',
+      name: 'Профиль',
       link: ROUTE_CONSTANTS.SIGN_IN,
     }
   ];
@@ -168,11 +185,18 @@ export const Header = (): ReactElement => {
         <button className={styles.userHeader__button}>
           <img onClick={() => { handleOpenMenu(); closeNote() }} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIcon_user}`} src={userIcon} alt="userIcon" />
           {
-            isOpenMenu && (<ul className={styles.userMenu}>
-              {items.map((item, i) => (
+            isOpenMenu && <div className={styles.userMenu}>
+              <div className={styles.userMenu__user}>
+                <p className={styles.userMenu__user_name}>{user.userName}</p>
+                <p className={styles.userMenu__user_email}>{user.email}</p>
+              </div>
+              <ul>
+                {items.map((item, i) => (
                 <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
-              ))}
-            </ul>)
+                ))}
+              </ul>
+              <button className={styles.userHeader__button_menu} onClick={() => devLogOut()}>Sign out</button>
+            </div>
           }
         </button>
       </nav>

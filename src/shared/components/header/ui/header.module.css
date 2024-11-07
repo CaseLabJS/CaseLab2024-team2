@@ -12,7 +12,16 @@
 }
 
 .userHeader__button {
-    width: 20px;
+    width: 1.5rem;
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+}
+
+.userHeader__button_menu {
     padding: 0;
     border: none;
     display: flex;
@@ -59,12 +68,11 @@
 }
 
 .userMenu {
+    width: 7rem;
     background: #fff;
-    margin: 1px 0 0;
-    padding: 5px;
-    border: 1px solid #bebebe;
-    max-height: 100px;
-    overflow-y: auto;
+    padding: 5px 15px 5px 5px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 20px 3px rgb(0 0 0 / 14%);
     position: absolute;
     top: 32px;
     right: 0px;
@@ -75,11 +83,37 @@
     text-align: left;
 }
 
+.userMenu ul { 
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.userMenu__user { 
+    font-family: Arial, Helvetica, sans-serif;
+    border-bottom: 1px solid rgba(0, 0, 0, 12%);
+}
+
+.userMenu__user_name { 
+    font-weight: 600;
+    padding: 0px 0px 5px 0px;
+    margin: 0px;
+}
+
+.userMenu__user_email { 
+    padding: 0px 0px 5px 0px;
+    margin: 0px;
+    color: rgba(0, 0, 0, 60%);
+}
+
+
 .userNotes {
+    width: 7rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 20px 3px rgb(0 0 0 / 14%);
     background: #fff;
     margin: 1px 0 0;
     padding: 5px;
-    border: 1px solid #bebebe;
     max-height: 500px;
     overflow-y: auto;
     position: absolute;
