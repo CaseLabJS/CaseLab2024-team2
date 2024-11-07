@@ -1,3 +1,5 @@
+import type { RegisterRequest } from '@/entities/User';
+
 import { api } from './api-config';
 
 type UserData = {
@@ -19,14 +21,15 @@ export const getAllUserData = async (): Promise<UserData[]> => {
 };
 
 // редактирование данных пользователя
-export const editUserData = async (user: { email: string; display_name: string }): Promise<UserData> => {
+export const editUserData = async (user: Omit<RegisterRequest, 'email'>): Promise<UserData> => {
   const response = await api.put<UserData>('/users', user);
   return response.data;
 };
 
 // удаление пользователя
-export const deleteUserData = async (): Promise<void> => {
-  const response = await api.delete('/users');
+export const deleteUserData = async (email: string): Promise<void> => {
+  // TODO надо дождаться правок бэка, чтобы удалять можно было по почте, если эндпоинт не правильный, но внести изменения
+  const response = await api.delete(`/users/${email}`);
   if (response.status === 204) {
     localStorage.removeItem('token');
   }
