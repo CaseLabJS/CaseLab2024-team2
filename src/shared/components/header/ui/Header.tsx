@@ -1,7 +1,8 @@
 import type { ReactElement } from "react";
 
+import { devLogOut } from "@/shared/utils/dev/dev-utils";
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 import { ROUTE_CONSTANTS } from '../../../../app/providers/router/config/constants';
 import styles from './header.module.css';
@@ -9,11 +10,9 @@ import bellIcon from './images/bell.svg';
 import logo from './images/logo.svg';
 import chatIcon from './images/messenger.svg';
 import userIcon from './images/user.svg';
-import { devLogOut } from "@/shared/utils/dev/dev-utils";
-import { svgIconClasses } from "@mui/material";
 
 export const Header = (): ReactElement => {
-
+  const location = useLocation();
   /**Пример данных о пользователе - должно приходить с backend (для разработки) */
   const user = { //инфо из стор, обсервебл header
     id: 1,

@@ -1,18 +1,20 @@
 import type { ReactElement } from 'react';
 
+import {Header, Footer} from '@/shared/components/index';
 import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
+import { Box } from '@mui/material';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import {Header, Footer} from '@/shared/components/index';
 
 const Layout = () : ReactElement => {
   return (
     <div>
-      {/* <DevHeader /> */}
-      <Header/>
-      <Outlet />
+      {/* <Header/> */}
+      <DevHeader />
+      <Box component="main">
+        <Outlet />
+      </Box>
       <Footer/>
-      {/* <DevFooter /> */}
     </div>
   );
 };
@@ -46,10 +48,10 @@ const DevHeader = (): ReactElement => {
   );
 };
 
-const DevFooter = (): ReactElement => {
-  return (
-    <div>
-      <h1>Футер</h1>
-    </div>
-  );
-};
+// const DevFooter = (): ReactElement => {
+//   return (
+//     <div>
+//       <h1>Футер</h1>
+//     </div>
+//   );
+// };
