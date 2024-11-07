@@ -4,8 +4,6 @@ import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
-import { ROUTE_CONSTANTS } from '../router/config/constants';
-
 const Layout = () : ReactElement => {
   return (
     <div>
@@ -41,7 +39,6 @@ const DevHeader = (): ReactElement => {
           <NavLink to={'/admin'}>Панель администратора</NavLink>
         ))}
         {location.pathname === '/admin' && <NavLink to={'/admin/create-attribute'}>Создать аттрибут</NavLink>}
-        {location.pathname === '/user' && <NavLink to={ROUTE_CONSTANTS.DOCUMENT_TYPES}>Типы документов</NavLink>}
     </div>
   );
 };
