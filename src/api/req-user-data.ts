@@ -1,6 +1,6 @@
 import type { RegisterRequest } from '@/entities/User';
 
-import { api } from './api-config';
+import { api } from '@/shared/http';
 
 type UserData = {
   email: string;
