@@ -95,4 +95,6 @@ class UserStore {
   }
 }
 
-export { UserStore };
+const userStore = new UserStore();
+
+export { userStore };
