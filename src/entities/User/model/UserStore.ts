@@ -72,8 +72,14 @@ class UserStore {
   }
 
   async deleteUser({ email }: { email: string }): Promise<void> {
-    // TODO надо дождаться правок бэка, чтобы удалять можно было по почте
-    await deleteUserData(email);
+    try {
+      const response = await deleteUserData(email);
+      runInAction(() => {
+        if (response === 204) this.users = this.users.filter((user) => user.email !== email);
+      });
+    } catch (error) {
+      console.error('Error deleting user data:', error);
+    }
   }
 
   async load(): Promise<void> {
