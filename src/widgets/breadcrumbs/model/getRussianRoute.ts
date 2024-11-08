@@ -1,17 +1,16 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 
 type Route = keyof typeof ROUTE_CONSTANTS;
-type Path = (typeof ROUTE_CONSTANTS)[Route]['path'];
 type Title = (typeof ROUTE_CONSTANTS)[Route]['ruTitle'];
 
-function getRussianRoute(path: Path): Title | null {
-  Object.entries(ROUTE_CONSTANTS).find(([_key, value]) => {
-    if (value.path === path) {
-      return value.ruTitle;
+function getRussianRoute(path: string): Title | null {
+  const result = Object.entries(ROUTE_CONSTANTS).find(([key, value]) => {
+    if (value.path === `/${path}`) {
+      return key;
     }
   });
 
-  return null;
+  return result ? result[1].ruTitle : null;
 }
 
 export { getRussianRoute };
