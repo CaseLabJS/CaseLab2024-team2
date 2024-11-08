@@ -26,12 +26,9 @@ body {
   margin: 0;
   padding: 0;
   color: var(--font-color-primary);
+  background-color: var(--background-color-primary);
   font-family: var(--font-family-primary);
   font-weight: 400;
-}
-
-main {
-  background-color: var(--background-color-primary);
 }
 
 a {
