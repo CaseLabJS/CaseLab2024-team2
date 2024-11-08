@@ -74,7 +74,7 @@ const DocumentFormModalWindow = observer(({ documentType, isOpen, handleClose }:
                             label={
                                 attribute.name[0].toLocaleUpperCase() + 
                                 attribute.name.substring(1) + 
-                                (attribute.is_optional ? "*" : "")
+                                (!attribute.is_optional ? "*" : "")
                             }
                             name={attribute.name}
                             error={touched[attribute.name] && Boolean(errors[attribute.name])}
