@@ -24,20 +24,20 @@ const AppRouter = (): ReactElement => {
   }, []);
 
   const ProtectedUserRoute = ({ children }: { children: ReactNode }): ReactElement => {
-    return isAuthenticated ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN} replace />;
+    return isAuthenticated ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN.path} replace />;
   };
 
   const ProtectedAdminRoute = ({ children }: { children: ReactNode }): ReactElement => {
     return isAuthenticated && isAdmin ? (
       <>{children}</>
     ) : (
-      <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} replace />
+      <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN.path : ROUTE_CONSTANTS.USER.path} replace />
     );
   };
 
   const router = createBrowserRouter([
     {
-      path: ROUTE_CONSTANTS.ROOT,
+      path: ROUTE_CONSTANTS.ROOT.path,
       element: (
         <ProtectedUserRoute>
           <Layout />
@@ -45,17 +45,17 @@ const AppRouter = (): ReactElement => {
       ),
       children: [
         {
-          path: ROUTE_CONSTANTS.USER,
+          path: ROUTE_CONSTANTS.USER.path,
           element: <User />,
           children: [
             {
-              path: ROUTE_CONSTANTS.DOCUMENT_TYPES,
+              path: ROUTE_CONSTANTS.DOCUMENT_TYPES.path,
               element: <DocumentTypesPage />,
             },
           ],
         },
         {
-          path: ROUTE_CONSTANTS.ADMIN,
+          path: ROUTE_CONSTANTS.ADMIN.path,
           element: (
             <ProtectedAdminRoute>
               <Admin />
@@ -63,7 +63,7 @@ const AppRouter = (): ReactElement => {
           ),
           children: [
             {
-              path: ROUTE_CONSTANTS.CREATE_ATTRIBUTE,
+              path: ROUTE_CONSTANTS.CREATE_ATTRIBUTE.path,
               element: <CreateAttributePage />,
             },
           ],
@@ -72,8 +72,12 @@ const AppRouter = (): ReactElement => {
       errorElement: <ErrorPage />,
     },
     {
-      path: ROUTE_CONSTANTS.SIGN_IN,
-      element: isAuthenticated ? <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} /> : <SignIn />,
+      path: ROUTE_CONSTANTS.SIGN_IN.path,
+      element: isAuthenticated ? (
+        <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN.path : ROUTE_CONSTANTS.USER.path} />
+      ) : (
+        <SignIn />
+      ),
     },
   ]);
 
