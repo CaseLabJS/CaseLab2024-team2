@@ -49,7 +49,7 @@ const AppRouter = (): ReactElement => {
           element: <User />,
           children: [
             {
-              path: ROUTE_CONSTANTS.DOCUMENT_TYPES.path,
+              path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
               element: <DocumentTypesPage />,
             },
           ],
@@ -63,7 +63,7 @@ const AppRouter = (): ReactElement => {
           ),
           children: [
             {
-              path: ROUTE_CONSTANTS.CREATE_ATTRIBUTE.path,
+              path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.CREATE_ATTRIBUTE.path}`,
               element: <CreateAttributePage />,
             },
           ],

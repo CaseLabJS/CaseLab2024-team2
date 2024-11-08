@@ -1,12 +1,13 @@
 import type { ReactElement } from 'react';
 
 import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
+import { Breadcrumbs } from '@/widgets/breadcrumbs/ui';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import { ROUTE_CONSTANTS } from '../router/config/constants';
 
-const Layout = () : ReactElement => {
+const Layout = (): ReactElement => {
   return (
     <div>
       <DevHeader />
@@ -24,6 +25,7 @@ const DevHeader = (): ReactElement => {
     <div>
       <h1>Хэдер {location.pathname.includes('/admin') ? 'администратора' : 'пользователя'}</h1>
       {/* Для разработки */}
+      <Breadcrumbs />
       <div
         style={{
           backgroundColor: 'rgba(255, 205, 210, 0.8)',
@@ -40,8 +42,10 @@ const DevHeader = (): ReactElement => {
         ) : (
           <NavLink to={'/admin'}>Панель администратора</NavLink>
         ))}
-        {location.pathname === '/admin' && <NavLink to={'/admin/create-attribute'}>Создать аттрибут</NavLink>}
-        {location.pathname === '/user' && <NavLink to={ROUTE_CONSTANTS.DOCUMENT_TYPES}>Типы документов</NavLink>}
+      {location.pathname === '/admin' && <NavLink to={'/admin/create-attribute'}>Создать аттрибут</NavLink>}
+      {location.pathname === '/user' && (
+        <NavLink to={`${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`}>Типы документов</NavLink>
+      )}
     </div>
   );
 };
