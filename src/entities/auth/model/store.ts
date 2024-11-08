@@ -1,42 +1,70 @@
 import { authUser, getCurrentUser } from '@/api/register-auth';
-import { devCheckRole, devCheckToken, devCleanRole, devLogOut, devSaveRole } from '@/shared/utils/dev/dev-utils';
+import { AuthenticationRequest } from '@/entities/User';
 import { makeAutoObservable, runInAction } from 'mobx';
 type ISimpleState = 'error' | 'success' | 'loading';
 
 class AuthStore {
-  isAuth: boolean = !!devCheckToken();
-  isAdmin: boolean = devCheckRole() === 'admin';
+  isAuth: boolean = !!localStorage.getItem('token');
+  isAdmin: boolean = false;
   state: ISimpleState = 'success';
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async login(email: string, password: string): Promise<void> {
+  async login(values: AuthenticationRequest): Promise<void> {
+    this.state = 'loading';
     try {
-      this.state = 'loading';
-      await authUser({ email, password }); //функция сохраняет токен в локал сторадже
-      const data = await getCurrentUser();
-      runInAction(() => {
-        this.state = 'success';
-        this.isAuth = true;
-        const role = data.roles.includes('admin') ? 'admin' : 'user';
-        this.isAdmin = role === 'admin';
-        devSaveRole(role);
-      });
-    } catch {
-      this.state = 'error';
-      alert('Ошибка авторизации');
+      const authResponse = await authUser(values);
+      if (!authResponse) {
+        this.handleAuthError();
+      } else {
+        const userData = await this.fetchCurrentUser();
+        if (userData) {
+          this.processAuthResponse(authResponse.token, userData.roles);
+        }
+      }
+    } catch (error) {
+      this.handleAuthError();
+      throw error;
     }
   }
 
   logout(): void {
+    localStorage.removeItem('token');
     this.isAdmin = false;
     this.isAuth = false;
-    devLogOut();
-    devCleanRole();
     this.state = 'success';
+  }
+  private handleAuthError(): void {
+    runInAction(() => {
+      this.state = 'error';
+      this.isAuth = false;
+      this.isAdmin = false;
+      localStorage.removeItem('token');
+    });
+  }
+
+  private async fetchCurrentUser() {
+    try {
+      const data = await getCurrentUser();
+      return data;
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+      return null;
+    }
+  }
+
+  private processAuthResponse(token: string, roles: string[]): void {
+    runInAction(() => {
+      localStorage.setItem('token', token);
+      this.state = 'success';
+      this.isAuth = true;
+      this.isAdmin = roles.includes('ADMIN');
+    });
   }
 }
 
-export { AuthStore };
+const authStore = new AuthStore();
+
+export { authStore };

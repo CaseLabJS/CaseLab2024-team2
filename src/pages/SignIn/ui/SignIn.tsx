@@ -4,21 +4,22 @@ import type React from 'react';
 import { Form, Formik } from 'formik';
 import { useState, type ReactElement } from 'react';
 
-// import { devSignIn } from '@/shared/utils/dev/dev-utils';
 import type { AuthenticationRequest } from '@/entities/User';
 
-import { authUser } from '@/api/register-auth';
 import { AuthSchema } from '@/features/auth';
-import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 
 import style from './SignIn.module.scss';
+import { authStore } from '@/entities/auth/model/store';
+import { useNavigate } from 'react-router-dom';
 
 export const SignIn = (): ReactElement => {
+  const navigate = useNavigate();
   const initialValues: AuthenticationRequest = {
-    email: '',
+    email: 'admin@gmail.com',
     password: '',
   };
-  const [isAgree, setIsAgree] = useState<boolean>(false);
+  const [isAgree, setIsAgree] = useState<boolean>(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setIsAgree(event.target.checked);
@@ -30,19 +31,32 @@ export const SignIn = (): ReactElement => {
   ): Promise<void> => {
     try {
       const body: AuthenticationRequest = { ...values };
-      // Когда появится AuthStore, запрос нужно делать с его помощью.
-      await authUser(body);
+      await authStore.login(body);
       alert('Пользователь успешно авторизирован!');
+      navigate('/user');
     } catch (error) {
       alert('Ошибка авторизации пользователя. Попробуйте снова.');
-      console.log(error);
+      throw error;
     } finally {
       setSubmitting(false);
     }
   };
   return (
-    <div className={style.signInContainer}>
-      <div className={style.signInBox}>
+    <Box sx={{ width: '100vw' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          width: '714px',
+          mx: 'auto',
+          my: '0',
+          alignItems: 'center',
+          padding: '53px 57px 65px',
+          borderRadius: '20px',
+          boxSizing: 'border-box',
+        }}
+      >
         <Formik initialValues={initialValues} validationSchema={AuthSchema} onSubmit={submitFormHandler}>
           {({ errors, touched, isSubmitting, isValid, dirty, getFieldProps }) => (
             <Form className={style.signInForm}>
@@ -82,25 +96,7 @@ export const SignIn = (): ReactElement => {
             </Form>
           )}
         </Formik>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
-  // return (
-  //   <div>
-  //     <h1>Вход</h1>
-  //     <button>Войти</button>
-  //     {/* Для разработки */}
-  //     <div
-  //       style={{
-  //         backgroundColor: 'rgba(255, 205, 210, 0.8)',
-  //         borderRadius: '12px',
-  //         padding: '20px',
-  //       }}
-  //     >
-  //       <button onClick={() => devSignIn('user')}>Войти как пользователь</button>
-  //       <button onClick={() => devSignIn('admin')}>Войти как админ</button>
-  //     </div>
-  //     {/* Для разработки */}
-  //   </div>
-  // );
 };

@@ -1,10 +1,9 @@
 import type { ReactElement } from 'react';
 
-import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
-import { NavLink, Outlet } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { authStore } from '@/entities/auth/model/store';
 
-const Layout = () : ReactElement => {
+const Layout = (): ReactElement => {
   return (
     <div>
       <DevHeader />
@@ -17,10 +16,10 @@ const Layout = () : ReactElement => {
 export default Layout;
 
 const DevHeader = (): ReactElement => {
-  const location = useLocation();
+  const navigate = useNavigate();
   return (
     <div>
-      <h1>Хэдер {location.pathname.includes('/admin') ? 'администратора' : 'пользователя'}</h1>
+      <h1>Хэдер {authStore.isAdmin ? 'администратора' : 'пользователя'}</h1>
       {/* Для разработки */}
       <div
         style={{
@@ -29,16 +28,23 @@ const DevHeader = (): ReactElement => {
           padding: '20px',
         }}
       >
-        <button onClick={() => devLogOut()}>Выйти</button>
+        <button
+          onClick={() => {
+            authStore.logout();
+            navigate('/signin');
+          }}
+        >
+          Выйти
+        </button>
       </div>
       {/* Для разработки */}
-      {devCheckIsAdmin() &&
-        (location.pathname === '/admin' ? (
+      {authStore.isAdmin &&
+        (authStore.isAdmin ? (
           <NavLink to={'/user'}>Панель пользователя</NavLink>
         ) : (
           <NavLink to={'/admin'}>Панель администратора</NavLink>
         ))}
-        {location.pathname === '/admin' && <NavLink to={'/admin/create-attribute'}>Создать аттрибут</NavLink>}
+      {authStore.isAdmin && <NavLink to={'/admin/create-attribute'}>Создать аттрибут</NavLink>}
     </div>
   );
 };

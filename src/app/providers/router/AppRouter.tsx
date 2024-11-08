@@ -5,32 +5,25 @@ import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import { SignIn } from '@/pages/SignIn/';
 import User from '@/pages/User/User';
-import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
-import { useEffect, useState } from 'react';
+// import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
+// import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
 import Layout from '../layout/Layout';
 import { ROUTE_CONSTANTS } from './config/constants';
+import { authStore } from '@/entities/auth/model/store';
+import { observer } from 'mobx-react-lite';
 
-const AppRouter = (): ReactElement => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  useEffect(() => {
-    const isAuth = devCheckUserAuth();
-    const isAdmin = devCheckIsAdmin();
-    setIsAuthenticated(isAuth);
-    setIsAdmin(isAdmin);
-  }, []);
-
+const AppRouter = observer((): ReactElement => {
   const ProtectedUserRoute = ({ children }: { children: ReactNode }): ReactElement => {
-    return isAuthenticated ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN} replace />;
+    return authStore.isAuth ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN} replace />;
   };
 
   const ProtectedAdminRoute = ({ children }: { children: ReactNode }): ReactElement => {
-    return isAuthenticated && isAdmin ? (
+    return authStore.isAuth && authStore.isAdmin ? (
       <>{children}</>
     ) : (
-      <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} replace />
+      <Navigate to={authStore.isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} replace />
     );
   };
 
@@ -67,11 +60,15 @@ const AppRouter = (): ReactElement => {
     },
     {
       path: ROUTE_CONSTANTS.SIGN_IN,
-      element: isAuthenticated ? <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} /> : <SignIn />,
+      element: authStore.isAuth ? (
+        <Navigate to={authStore.isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} />
+      ) : (
+        <SignIn />
+      ),
     },
   ]);
 
   return <RouterProvider router={router} />;
-};
+});
 
 export default AppRouter;
