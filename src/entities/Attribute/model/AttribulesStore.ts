@@ -8,31 +8,35 @@ import type { AttributeResponse } from './AttributeResponse';
 export interface CombinedAttribute extends AttributeResponse, DocumentTypeToAttributeResponse {}
 
 class AttributesStore {
-    attributes: AttributeResponse[];
+  attributes: AttributeResponse[];
 
-    constructor() {
-        makeAutoObservable(this);
-        this.attributes = [];
+  constructor() {
+    makeAutoObservable(this);
+    this.attributes = [];
 
-        onBecomeObserved(this, 'attributes', () => {
-            getAllAttributeDocs()
-                .then(result => runInAction(() => { this.attributes = result }))
-                .catch(console.error);
-        });
-    }
+    onBecomeObserved(this, 'attributes', () => {
+      getAllAttributeDocs()
+        .then((result) =>
+          runInAction(() => {
+            this.attributes = result;
+          }),
+        )
+        .catch(console.error);
+    });
+  }
 
-    getAttribute(id: number): AttributeResponse | undefined {
-        return this.attributes.find(attribute => attribute.id === id)
-    }
+  getAttribute(id: number): AttributeResponse | undefined {
+    return this.attributes.find((attribute) => attribute.id === id);
+  }
 
-    getCombinedDocumentAttributes(documentType: DocumentTypeResponse): CombinedAttribute[] {
-        return documentType.attributes.map(attribute => {
-            return {
-                ...attribute,
-                ...(this.getAttribute(attribute.attribute_id))
-            } as CombinedAttribute;
-        })
-    }
+  getCombinedDocumentAttributes(documentType: DocumentTypeResponse): CombinedAttribute[] {
+    return documentType.attributes.map((attribute) => {
+      return {
+        ...attribute,
+        ...this.getAttribute(attribute.attribute_id),
+      } as CombinedAttribute;
+    });
+  }
 }
 
 export { AttributesStore };

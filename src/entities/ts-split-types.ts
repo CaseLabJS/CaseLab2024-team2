@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 import path from 'path';
 import fs from 'fs';
 import url from 'url';
@@ -30,7 +30,7 @@ interface Schema {
   $ref?: string;
 }
 
-const pathToSharedTypes = path.join(__dirname, '..', 'shared', 'types')
+const pathToSharedTypes = path.join(__dirname, '..', 'shared', 'types');
 
 // Генерация файлов по группам
 async function generateSchemas() {
@@ -44,24 +44,28 @@ async function generateSchemas() {
 
     for (const [name, schema] of Object.entries(schemas)) {
       console.log(`Обрабатываем схему: ${name}`); // Лог для каждого имени схемы
-    
-        if (name === 'ProblemDetail') {
-          console.log(`Создаем схему: ${name} в ${pathToSharedTypes}`); // Лог для создания схемы ProblemDetail
-          const interfaceContent = generateInterface(name, schema, {}, []);
-          const filePath = path.join(pathToSharedTypes, `${name}.ts`); // Путь к файлу в shared/types
-          await fs.promises.writeFile(filePath, interfaceContent, 'utf8');
-          console.log(`Создан файл: ${filePath}`);
-          continue; // Пропускаем дальнейшую обработку для этой схемы
-        }
-    
+
+      if (name === 'ProblemDetail') {
+        console.log(`Создаем схему: ${name} в ${pathToSharedTypes}`); // Лог для создания схемы ProblemDetail
+        const interfaceContent = generateInterface(name, schema, {}, []);
+        const filePath = path.join(pathToSharedTypes, `${name}.ts`); // Путь к файлу в shared/types
+        await fs.promises.writeFile(filePath, interfaceContent, 'utf8');
+        console.log(`Создан файл: ${filePath}`);
+        continue; // Пропускаем дальнейшую обработку для этой схемы
+      }
+
       let groupName = name.split(/(?=[A-Z])/)[0];
-      if (['Authentication', 'Register', 'AuthenticationRequest', 'RegisterRequest', 'AuthenticationResponse'].includes(name)) {
-        groupName = 'User';  // Установим группу "User" для Authentication и Register
+      if (
+        ['Authentication', 'Register', 'AuthenticationRequest', 'RegisterRequest', 'AuthenticationResponse'].includes(
+          name,
+        )
+      ) {
+        groupName = 'User'; // Установим группу "User" для Authentication и Register
         console.log(`Схема ${name} попадает в группу ${groupName}`); // Лог о группировке
       } else {
         console.log(`Схема ${name} попадает в группу ${groupName}`); // Лог для других схем
       }
-    
+
       groupedSchemas[groupName] = groupedSchemas[groupName] || [];
       groupedSchemas[groupName].push({ name, schema });
     }
@@ -95,8 +99,8 @@ async function generateSchemas() {
             const refType = value.items?.$ref
               ? value.items.$ref.split('/').pop()
               : value.$ref
-              ? value.$ref.split('/').pop()
-              : undefined;
+                ? value.$ref.split('/').pop()
+                : undefined;
 
             if (refType) {
               const firstWord = refType.split(/(?=[A-Z])/)[0];
@@ -140,19 +144,26 @@ async function generateSchemas() {
   }
 }
 
-function generateInterface(name: string, schema: Schema, nestedSchemas: Record<string, { place: string; nameRef: string }>, importStatements: string[]): string {
-  const properties = Object.entries(schema.properties).map(([key, value]: [string, SchemaProperty]) => {
-    let type: string;
+function generateInterface(
+  name: string,
+  schema: Schema,
+  nestedSchemas: Record<string, { place: string; nameRef: string }>,
+  importStatements: string[],
+): string {
+  const properties = Object.entries(schema.properties)
+    .map(([key, value]: [string, SchemaProperty]) => {
+      let type: string;
 
-    if (value.$ref) {
-      const refName = value.$ref.split('/').pop()!;
-      type = refName;
-    } else {
-      type = getTypeFromSchemaProperty(value);
-    }
+      if (value.$ref) {
+        const refName = value.$ref.split('/').pop()!;
+        type = refName;
+      } else {
+        type = getTypeFromSchemaProperty(value);
+      }
 
-    return `${key}: ${type}; // ${value.description || ''}`;
-  }).join('\n');
+      return `${key}: ${type}; // ${value.description || ''}`;
+    })
+    .join('\n');
 
   if (nestedSchemas[name]) {
     const { place, nameRef } = nestedSchemas[name];
@@ -162,18 +173,24 @@ function generateInterface(name: string, schema: Schema, nestedSchemas: Record<s
   }
 
   const importSection = importStatements.length > 0 ? `${importStatements.join('\n')}\n\n` : '';
-  
+
   return `${importSection}export interface ${name} {\n${properties}\n}`;
 }
 
 function getTypeFromSchemaProperty(value: SchemaProperty): string {
   switch (value.type) {
-    case 'string': return 'string';
-    case 'integer': return 'number';
-    case 'boolean': return 'boolean';
-    case 'array': return `${generateTypeForArray(value.items)}[]`;
-    case 'object': return '{ [key: string]: any }';
-    default: return 'unknown';
+    case 'string':
+      return 'string';
+    case 'integer':
+      return 'number';
+    case 'boolean':
+      return 'boolean';
+    case 'array':
+      return `${generateTypeForArray(value.items)}[]`;
+    case 'object':
+      return '{ [key: string]: any }';
+    default:
+      return 'unknown';
   }
 }
 
@@ -187,6 +204,6 @@ async function main() {
   await generateSchemas();
 }
 
-main().catch(error => {
+main().catch((error) => {
   console.error('Ошибка при запуске основного скрипта:', error);
 });

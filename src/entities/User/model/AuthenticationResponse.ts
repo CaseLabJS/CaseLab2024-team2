@@ -1,3 +1,3 @@
 export interface AuthenticationResponse {
-token: string; // JWT токен для аутентифицированного пользователя
+  token: string; // JWT токен для аутентифицированного пользователя
 }
