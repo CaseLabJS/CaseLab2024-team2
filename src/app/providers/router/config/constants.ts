@@ -5,4 +5,4 @@ export const ROUTE_CONSTANTS = {
   ADMIN: '/admin',
   CREATE_ATTRIBUTE: '/admin/create-attribute',
   DOCUMENT_TYPES: '/user/document-types',
-};
+} as const;
