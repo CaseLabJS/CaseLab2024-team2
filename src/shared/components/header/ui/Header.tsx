@@ -1,10 +1,10 @@
 import type { ReactElement } from "react";
 
-import { devLogOut } from "@/shared/utils/dev/dev-utils";
+import { devCheckIsAdmin, devLogOut } from "@/shared/utils/dev/dev-utils";
 import { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-import { ROUTE_CONSTANTS } from '../../../../app/providers/router/config/constants';
+import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import styles from './header.module.css';
 import bellIcon from './images/bell.svg';
 import logo from './images/logo.svg';
@@ -12,7 +12,6 @@ import chatIcon from './images/messenger.svg';
 import userIcon from './images/user.svg';
 
 export const Header = (): ReactElement => {
-  const location = useLocation();
   /**Пример данных о пользователе - должно приходить с backend (для разработки) */
   const user = { //инфо из стор, обсервебл header
     id: 1,
@@ -49,16 +48,6 @@ export const Header = (): ReactElement => {
     },
   ];
 
-  /**Компонет для иконки */
-  // const Icon = (url: string | undefined):ReactElement => {
-
-  //   return (
-  //     <svg xmlns={url}>
-
-  //     </svg>
-  //   )
-  // }
-
   /**Функционал выпадающего меню пользователя: */
   const [isOpenMenu, setOpenMenu] = useState(false);
   const handleOpenMenu = (): void => setOpenMenu(!isOpenMenu); // меню выпадает и исчезает по клику на иконку user
@@ -86,28 +75,22 @@ export const Header = (): ReactElement => {
 
   //TODO сделать чтобы при клике по уведомлению появлялся текст уведомления и исчезал при повторном клике
   //TODO сделать чтобы после обновления страницы, статус прочитанных сообщений не обновлялся
-  //TODO сделать чтобы данные добавлялись в localStorage
   const localStorageKey: string = 'notifications';
   const read = [...notifications];
   toLocalStorage(read);
 
-  const [localNotifications, setLocalNotifications] = useState(read);// ***
-    // Получение данных из localStorage ***
+  const [localNotifications, setLocalNotifications] = useState(read);
+    // Получение данных из localStorage
     useEffect(() => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
     }, [])
 
-  //обновление localStorage и статуса прочтения уведомления***
+  //обновление localStorage и статуса прочтения уведомления
   const readEl = (id: number): void => {
     const noteIndex = localNotifications.findIndex(note => note.id === id);
     const updataNote = {...localNotifications[noteIndex]} // получение копии нужного уведомления
     updataNote.isRead = true; // Обновление статуса уведомления
-    // const modifiedData: [] = data.map((item) => {
-    //   if (item.id === id) {
-    //     return { ...item, isRead: true };
-    //   } return item;
-    // }) as [];
     setLocalNotifications((localNotifications) => {
       const modifiedData = [...localNotifications];
       modifiedData[noteIndex] = updataNote;
@@ -120,7 +103,7 @@ export const Header = (): ReactElement => {
 
   // const [showNoteContent, setShowNoteContent] = useState(false);
   // const handleshowNoteContent = (): void => setShowNoteContent(!showNoteContent); // Содержание уведомления при клике появляется и исчезает
-  // const showContent = (note, id:number):void => {
+  // const showContent = (note, id:number):void => {} - TODO
 
   /**Массив пунктов выпадающего меню пользователя: */
   const itemsAdmin = [ // пункты меню в случае администратора
@@ -132,10 +115,6 @@ export const Header = (): ReactElement => {
       name: 'Admin menu',
       link: ROUTE_CONSTANTS.ADMIN,
     },
-    // {
-    //   name: 'Выход',
-    //   link: ROUTE_CONSTANTS.SIGN_IN,
-    // }
   ];
 
   const itemsUser = [ // пункты меню в случае простого пользователя
@@ -146,11 +125,11 @@ export const Header = (): ReactElement => {
   ];
 
   /** Проверка пользователя на права администратора, для рендеринга сообветствующего меню пользователя*/
-  let items;
+  let menuForUser;
 
-  if (user.isAdmin === true) {
-    items = itemsAdmin;
-  } else items = itemsUser;
+  if (devCheckIsAdmin()) {
+    menuForUser = itemsAdmin;
+  } else menuForUser = itemsUser;
 
   return (
     <header className={styles.userHeader}>
@@ -190,7 +169,7 @@ export const Header = (): ReactElement => {
                 <p className={styles.userMenu__user_email}>{user.email}</p>
               </div>
               <ul>
-                {items.map((item, i) => (
+                {menuForUser.map((item, i) => (
                 <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
                 ))}
               </ul>
