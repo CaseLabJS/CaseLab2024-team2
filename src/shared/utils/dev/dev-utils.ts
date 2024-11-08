@@ -2,7 +2,8 @@ interface Credentials {
   role: string;
 }
 
-const devSignIn = (role: 'user' | 'admin', user: string): void => {
+const devSignIn = (role: 'user' | 'admin'): void => {
+  const user = 'John Doe';
   localStorage.setItem('auth', JSON.stringify({ user, role }));
   location.reload();
 };
@@ -29,38 +30,12 @@ const devCheckIsAdmin = (): boolean => {
   }
   return false;
 };
-// const devLogOut = (): void => {
-//   if (devCheckUserAuth()) {
-//     localStorage.removeItem('auth');
-//     location.reload();
-//   } else {
-//     console.log('Пользователь не авторизован!');
-//   }
-// };
 const devLogOut = (): void => {
-  localStorage.removeItem('token');
+  if (devCheckUserAuth()) {
+    localStorage.removeItem('auth');
+    location.reload();
+  } else {
+    console.log('Пользователь не авторизован!');
+  }
 };
-
-const devCheckToken = (): string | null => {
-  return localStorage.getItem('token');
-};
-const devSaveRole = (role: string): void => {
-  localStorage.setItem('role', role);
-};
-
-const devCleanRole = (): void => {
-  localStorage.removeItem('role');
-};
-const devCheckRole = (): string | null => {
-  return localStorage.getItem('role');
-};
-export {
-  devCheckRole,
-  devCleanRole,
-  devSaveRole,
-  devCheckToken,
-  devSignIn,
-  devCheckUserAuth,
-  devCheckIsAdmin,
-  devLogOut,
-};
+export { devSignIn, devCheckUserAuth, devCheckIsAdmin, devLogOut };

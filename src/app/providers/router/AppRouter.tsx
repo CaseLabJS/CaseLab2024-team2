@@ -2,6 +2,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 import Admin from '@/pages/Admin/Admin';
 import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
+import DocumentTypesPage from '@/pages/DocumentTypesPage';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import SignIn from '@/pages/SignIn/SignIn';
 import User from '@/pages/User/User';
@@ -46,7 +47,12 @@ const AppRouter = (): ReactElement => {
         {
           path: ROUTE_CONSTANTS.USER,
           element: <User />,
-          children: [],
+          children: [
+            {
+              path: ROUTE_CONSTANTS.DOCUMENT_TYPES,
+              element: <DocumentTypesPage />,
+            },
+          ],
         },
         {
           path: ROUTE_CONSTANTS.ADMIN,
