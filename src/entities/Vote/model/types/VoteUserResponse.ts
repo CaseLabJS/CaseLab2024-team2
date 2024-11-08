@@ -1,4 +1,4 @@
 export interface VoteUserResponse {
-  email: string;
-  displayName: string;
+	email: string;
+	displayName: string;
 }

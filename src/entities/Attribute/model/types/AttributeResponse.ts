@@ -1,5 +1,5 @@
 export interface AttributeResponse {
-  id: number;
-  name: string;
-  type: string;
+	id: number;
+	name: string;
+	type: string;
 }

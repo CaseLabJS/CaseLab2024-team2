@@ -14,7 +14,6 @@ async function ensureDirectoryExists(directory: string): Promise<void> {
   }
 }
 
-
 interface SchemaProperty {
   type: string;
   description?: string;

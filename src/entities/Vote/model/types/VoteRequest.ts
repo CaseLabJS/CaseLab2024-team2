@@ -1,4 +1,4 @@
 export interface VoteRequest {
-  documentId: number;
-  status: string;
+	documentId: number;
+	status: string;
 }
