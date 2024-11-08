@@ -39,4 +39,6 @@ class AuthStore {
   }
 }
 
-export { AuthStore };
+const authStore = new AuthStore();
+
+export { authStore };
