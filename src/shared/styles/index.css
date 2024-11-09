@@ -28,9 +28,6 @@ body {
   color: var(--font-color-primary);
   font-family: var(--font-family-primary);
   font-weight: 400;
-}
-
-main {
   background-color: var(--background-color-primary);
 }
 
