@@ -6,7 +6,7 @@ import { Breadcrumbs as MuiBreadcrumbs, Typography } from '@mui/material';
 import { Link as MuiLink } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 
-import { getRussianRoute } from '../model/getRussianRoute';
+import { getRussianRouteAndPath } from '../model/getRussianRoute';
 
 const Breadcrumbs = (): ReactElement => {
   const location = useLocation();
@@ -16,14 +16,14 @@ const Breadcrumbs = (): ReactElement => {
     routes.pop();
   }
 
-  const ruRoutes = routes.map((route) => getRussianRoute(route));
+  const ruRoutes = routes.map((route) => getRussianRouteAndPath(route));
 
   if (ruRoutes.length === 1 || ruRoutes.every((route) => !route)) {
     return <></>;
   }
 
   const routesComponents = ruRoutes.map((route, index) => {
-    if (route === ROUTE_CONSTANTS.ROOT.ruTitle) {
+    if (route?.ruTitle === ROUTE_CONSTANTS.ROOT.ruTitle) {
       return (
         <MuiLink key={index} color="inherit" href={ROUTE_CONSTANTS.ROOT.path}>
           <HouseIcon color="inherit" sx={{ mt: 0.5 }} />
@@ -31,12 +31,12 @@ const Breadcrumbs = (): ReactElement => {
       );
     } else if (index !== ruRoutes.length - 1) {
       return (
-        <MuiLink key={index} color="inherit" href={routes[index]}>
-          {route}
+        <MuiLink key={index} color="inherit" href={route?.path}>
+          {route?.ruTitle}
         </MuiLink>
       );
     } else {
-      return <Typography key={index}>{route}</Typography>;
+      return <Typography key={index}>{route?.ruTitle}</Typography>;
     }
   });
 
