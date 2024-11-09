@@ -1,10 +1,10 @@
 import type { ReactElement } from "react";
 
+import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { devCheckIsAdmin, devLogOut } from "@/shared/utils/dev/dev-utils";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
-import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import styles from './header.module.css';
 import bellIcon from './images/bell.svg';
 import logo from './images/logo.svg';
