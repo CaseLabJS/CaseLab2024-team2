@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { MouseEvent, ReactElement } from "react";
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { devCheckIsAdmin, devLogOut } from "@/shared/utils/dev/dev-utils";
@@ -50,7 +50,7 @@ export const Header = (): ReactElement => {
 
   /**Функционал выпадающего меню пользователя: */
   const [isOpenMenu, setOpenMenu] = useState(false);
-  const handleOpenMenu = (): void => setOpenMenu(!isOpenMenu); // меню выпадает и исчезает по клику на иконку user
+  const handleOpenMenu = (): void => {setOpenMenu(!isOpenMenu);} // меню выпадает и исчезает по клику на иконку user
   const closeMenu = (): void => { // меню исчезает если открывают другое меню
     if (isOpenMenu === true) {
       handleOpenMenu();
@@ -59,7 +59,9 @@ export const Header = (): ReactElement => {
 
   /**Функционал выпадающего меню уведомлений */
   const [isOpenNotes, setOpenNotes] = useState(false);
-  const handleOpenNotes = (): void => setOpenNotes(!isOpenNotes); // меню выпадает и исчезает по клику на иконку bell
+  const handleOpenNotes = (): void => {
+    setOpenNotes(!isOpenNotes)
+  }; // меню выпадает и исчезает по клику на иконку bell
   const closeNote = (): void => { // меню исчезает если открывают другое меню
     if (isOpenNotes === true) {
       handleOpenNotes();
@@ -140,8 +142,8 @@ export const Header = (): ReactElement => {
         <button className={styles.userHeader__button}>
           <img className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconChat}`} src={chatIcon} alt="chatIcon" />
         </button>
-        <button className={styles.userHeader__button}>
-          <img onClick={() => { handleOpenNotes(); closeMenu() }} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconBell}`} src={bellIcon} alt="bellIcon" />
+        <button onClick={() => {handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
+          <img className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconBell}`} src={bellIcon} alt="bellIcon" />
           {
             isRead.length > 0 &&
             (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
@@ -150,7 +152,8 @@ export const Header = (): ReactElement => {
             isOpenNotes && (<ul className={styles.userNotes}>
               {localNotifications.map((item) => (
                 <li onClick={(event) => {
-                  readEl(Number(event.currentTarget.getAttribute('data-id'))); console.log(event.currentTarget.getAttribute('data-id'));
+                  event.stopPropagation();
+                  readEl(Number(event.currentTarget.getAttribute('data-id')));
                 }} data-id={item.id} key={item.id} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}
                   {/* {
                     showNoteContent && (<p>{item.content}</p>)
@@ -160,8 +163,8 @@ export const Header = (): ReactElement => {
             </ul>)
           }
         </button>
-        <button className={styles.userHeader__button}>
-          <img onClick={() => { handleOpenMenu(); closeNote() }} className={`${styles.userHeader__userIcon} ${styles.userHeader__userIcon_user}`} src={userIcon} alt="userIcon" />
+        <button onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); }}} className={styles.userHeader__button}>
+          <img className={`${styles.userHeader__userIcon} ${styles.userHeader__userIcon_user}`} src={userIcon} alt="userIcon" />
           {
             isOpenMenu && <div className={styles.userMenu}>
               <div className={styles.userMenu__user}>
