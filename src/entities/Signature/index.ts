@@ -1,2 +1,2 @@
-export type * from './model/types/SignatureResponse';
-export type * from './model/types/SignatureCreateRequest';
+export * from './model/SignatureResponse';
+export * from './model/SignatureCreateRequest';

@@ -1,7 +1,7 @@
 import type { RegisterRequest } from '@/entities/User';
 import type { FormikHelpers } from 'formik';
 
-import { useRootStore } from '@/app/providers/store';
+import { userStore } from '@/entities/User/model/UserStore';
 import { SignupSchema } from '@/features/auth';
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
@@ -10,7 +10,6 @@ import { useState, type ReactElement } from 'react';
 import style from './SignUp.module.scss';
 
 export const SignUp = (): ReactElement => {
-  const { userStore } = useRootStore();
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
 
   const [isAgree, setIsAgree] = useState<boolean>(false);

@@ -1,1 +1,1 @@
-export { AuthStore } from './model/store';
+export { authStore } from './model/store';
