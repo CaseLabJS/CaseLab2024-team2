@@ -1,4 +1,4 @@
-.user-footer {
+.userFooter {
     background-color: #0056B3;
     display: flex;
     justify-content: center;
@@ -6,12 +6,7 @@
     font-size: 12px;
 }
 
-.user-footer__links {
-    display: flex;
-    gap: 5px;
-}
-
-.user-footer__text {
+.userFooter__text {
     color: #fff;
     text-transform: uppercase;
 }
