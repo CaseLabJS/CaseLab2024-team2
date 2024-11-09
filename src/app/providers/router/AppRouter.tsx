@@ -1,21 +1,28 @@
 import type { ReactElement, ReactNode } from 'react';
 
+import { authStore } from '@/entities/auth/model/store';
 import Admin from '@/pages/Admin/Admin';
 import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
 import DocumentTypesPage from '@/pages/DocumentTypesPage';
 import ErrorPage from '@/pages/ErrorPage/ErrorPage';
 import { SignIn } from '@/pages/SignIn/';
 import User from '@/pages/User/User';
-// import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
-// import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
 import Layout from '../layout/Layout';
 import { ROUTE_CONSTANTS } from './config/constants';
-import { authStore } from '@/entities/auth/model/store';
-import { observer } from 'mobx-react-lite';
 
 const AppRouter = observer((): ReactElement => {
+  //Если реализуем функцию получения пользователя по токену в userStore, то эту можно снести в будущем
+  useEffect(() => {
+    const checkAuthAsync = (): void => {
+      void authStore.checkAuth();
+    };
+
+    checkAuthAsync();
+  }, []);
   const ProtectedUserRoute = ({ children }: { children: ReactNode }): ReactElement => {
     return authStore.isAuth ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN} replace />;
   };

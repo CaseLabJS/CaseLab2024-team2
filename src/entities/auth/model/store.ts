@@ -1,5 +1,7 @@
+import type { UserAuth } from '@/api/register-auth';
+import type { AuthenticationRequest } from '@/entities/User';
+
 import { authUser, getCurrentUser } from '@/api/register-auth';
-import { AuthenticationRequest } from '@/entities/User';
 import { makeAutoObservable, runInAction } from 'mobx';
 type ISimpleState = 'error' | 'success' | 'loading';
 
@@ -30,6 +32,22 @@ class AuthStore {
     }
   }
 
+  //Если реализуем функцию получения пользователя по токену в userStore, то эту можно снести в будущем
+  async checkAuth(): Promise<void> {
+    try {
+      const data = await this.fetchCurrentUser();
+      if (data) {
+        runInAction(() => {
+          this.isAdmin = data.roles.includes('ADMIN');
+        });
+      } else {
+        this.logout();
+      }
+    } catch {
+      this.logout();
+    }
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     this.isAdmin = false;
@@ -44,8 +62,7 @@ class AuthStore {
       localStorage.removeItem('token');
     });
   }
-
-  private async fetchCurrentUser() {
+  private async fetchCurrentUser(): Promise<UserAuth | null> {
     try {
       const data = await getCurrentUser();
       return data;

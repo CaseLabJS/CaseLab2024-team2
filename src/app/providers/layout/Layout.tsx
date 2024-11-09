@@ -1,10 +1,7 @@
 import type { ReactElement } from 'react';
 
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { authStore } from '@/entities/auth/model/store';
-import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
-import { NavLink, Outlet } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
 import { ROUTE_CONSTANTS } from '../router/config/constants';
 

@@ -1,17 +1,15 @@
+import type { AuthenticationRequest } from '@/entities/User';
 import type { FormikHelpers } from 'formik';
 import type React from 'react';
 
-import { Form, Formik } from 'formik';
-import { useState, type ReactElement } from 'react';
-
-import type { AuthenticationRequest } from '@/entities/User';
-
+import { authStore } from '@/entities/auth/model/store';
 import { AuthSchema } from '@/features/auth';
 import { Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Form, Formik } from 'formik';
+import { useState, type ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import style from './SignIn.module.scss';
-import { authStore } from '@/entities/auth/model/store';
-import { useNavigate } from 'react-router-dom';
 
 export const SignIn = (): ReactElement => {
   const navigate = useNavigate();
