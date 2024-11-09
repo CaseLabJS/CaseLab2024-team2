@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 
 import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
-import { Breadcrumbs } from '@/widgets/breadcrumbs/ui';
+import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
