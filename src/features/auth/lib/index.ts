@@ -1,2 +1,2 @@
-export * from './validation/loginSchema';
+export * from './validation/authSchema';
 export * from './validation/signupSchema';
