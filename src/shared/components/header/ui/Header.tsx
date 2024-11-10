@@ -69,7 +69,7 @@ export const Header = (): ReactElement => {
 
   /**Функционал клика по уведомлениям */
   // положить данные в localStorage:
-  const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean; }[]):void => {
+  const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean; }[]): void => {
     localStorage.setItem(localStorageKey, JSON.stringify(data));
   }
 
@@ -134,7 +134,7 @@ export const Header = (): ReactElement => {
       </NavLink>
       <nav className={styles.userHeader__icons}>
         <button onClick={() => { handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
-          <NotificationsNoneIcon  />
+          <NotificationsNoneIcon />
           {
             isRead.length > 0 &&
             (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
@@ -151,7 +151,7 @@ export const Header = (): ReactElement => {
             </ul>)
           }
         </button>
-        <button onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); } }} className={styles.userHeader__button}>
+        <div onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); } }} className={styles.userHeader__button}>
           <AccountCircleOutlinedIcon />
           {
             isOpenMenu && <div className={styles.userMenu}>
@@ -167,7 +167,7 @@ export const Header = (): ReactElement => {
               <button className={styles.userHeader__button_menu} onClick={() => devLogOut()}>Sign out</button>
             </div>
           }
-        </button>
+        </div>
       </nav>
     </header>
   )
