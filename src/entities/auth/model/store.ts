@@ -54,6 +54,7 @@ class AuthStore {
     this.isAuth = false;
     this.state = 'success';
   }
+
   private handleAuthError(): void {
     runInAction(() => {
       this.state = 'error';
@@ -62,6 +63,7 @@ class AuthStore {
       localStorage.removeItem('token');
     });
   }
+
   private async fetchCurrentUser(): Promise<UserAuth | null> {
     try {
       const data = await getCurrentUser();

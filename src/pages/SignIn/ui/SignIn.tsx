@@ -9,7 +9,7 @@ import { Form, Formik } from 'formik';
 import { useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import style from './SignIn.module.scss';
+import style from './SignIn.module.css';
 
 export const SignIn = (): ReactElement => {
   const navigate = useNavigate();
@@ -40,19 +40,14 @@ export const SignIn = (): ReactElement => {
     }
   };
   return (
-    <Box sx={{ width: '100vw' }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', height: '100vh' }}>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
           width: '714px',
+          backgroundColor: '#fff',
           mx: 'auto',
-          my: '0',
-          alignItems: 'center',
           padding: '53px 57px 65px',
           borderRadius: '20px',
-          boxSizing: 'border-box',
         }}
       >
         <Formik initialValues={initialValues} validationSchema={AuthSchema} onSubmit={submitFormHandler}>
