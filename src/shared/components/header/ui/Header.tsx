@@ -7,6 +7,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
+import { authStore } from '../../../../entities/auth/model/store';
 import styles from './header.module.css';
 import logo from './images/logo.svg';
 
@@ -128,47 +129,49 @@ export const Header = (): ReactElement => {
   } else menuForUser = itemsUser;
 
   return (
-    <header className={styles.userHeader}>
-      <NavLink className={styles.userHeader__link} to={ROUTE_CONSTANTS.ROOT}>
-        <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
-      </NavLink>
-      <nav className={styles.userHeader__icons}>
-        <div onClick={() => { handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
-          <NotificationsNoneIcon />
-          {
-            isRead.length > 0 &&
-            (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
-          }
-          {
-            isOpenNotes && (<ul className={styles.userNotes}>
-              {localNotifications.map((item) => (
-                <li onClick={(event) => {
-                  event.stopPropagation();
-                  readEl(Number(event.currentTarget.getAttribute('data-id')));
-                }} data-id={item.id} key={item.id} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}
-                </li>
-              ))}
-            </ul>)
-          }
-        </div>
-        <div onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); } }} className={styles.userHeader__button}>
-          <AccountCircleOutlinedIcon />
-          {
-            isOpenMenu && <div className={styles.userMenu}>
-              <div className={styles.userMenu__user}>
-                <p className={styles.userMenu__user_name}>{user.userName}</p>
-                <p className={styles.userMenu__user_email}>{user.email}</p>
-              </div>
-              <ul>
-                {menuForUser.map((item, i) => (
-                  <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
+    <header>
+      <div className={styles.userHeader}>
+        <NavLink className={styles.userHeader__link} to={ROUTE_CONSTANTS.ROOT}>
+          <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
+        </NavLink>
+        <nav className={styles.userHeader__icons}>
+          <div onClick={() => { handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
+            <NotificationsNoneIcon />
+            {
+              isRead.length > 0 &&
+              (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
+            }
+            {
+              isOpenNotes && (<ul className={styles.userNotes}>
+                {localNotifications.map((item) => (
+                  <li onClick={(event) => {
+                    event.stopPropagation();
+                    readEl(Number(event.currentTarget.getAttribute('data-id')));
+                  }} data-id={item.id} key={item.id} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}
+                  </li>
                 ))}
-              </ul>
-              <button className={styles.userHeader__button_menu} onClick={() => devLogOut()}>Sign out</button>
-            </div>
-          }
-        </div>
-      </nav>
+              </ul>)
+            }
+          </div>
+          <div onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); } }} className={styles.userHeader__button}>
+            <AccountCircleOutlinedIcon />
+            {
+              isOpenMenu && <div className={styles.userMenu}>
+                <div className={styles.userMenu__user}>
+                  <p className={styles.userMenu__user_name}>{user.userName}</p>
+                  <p className={styles.userMenu__user_email}>{user.email}</p>
+                </div>
+                <ul>
+                  {menuForUser.map((item, i) => (
+                    <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
+                  ))}
+                </ul>
+                <button className={styles.userHeader__button_menu} onClick={() => { authStore.logout() }}>Sign out</button>
+              </div>
+            }
+          </div>
+        </nav>
+      </div>
     </header>
   )
 }

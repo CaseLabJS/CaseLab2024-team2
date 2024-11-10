@@ -1,4 +1,15 @@
+ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.wrapper {
+  max-width: 1920px;
+}
+
 .userHeader {
+    max-width: 1920px;
     background-color: #fff;
     display: flex;
     justify-content: space-between;
@@ -68,7 +79,7 @@
 }
 
 .userMenu {
-    width: 7rem;
+    width: 13em;
     background: #fff;
     padding: 5px 15px 5px 5px;
     border-radius: 5px;
@@ -83,24 +94,18 @@
     text-align: left;
 }
 
-.userMenu ul { 
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-}
-
-.userMenu__user { 
+.userMenu__user {
     font-family: Arial, Helvetica, sans-serif;
     border-bottom: 1px solid rgba(0, 0, 0, 12%);
 }
 
-.userMenu__user_name { 
+.userMenu__user_name {
     font-weight: 600;
     padding: 0px 0px 5px 0px;
     margin: 0px;
 }
 
-.userMenu__user_email { 
+.userMenu__user_email {
     padding: 0px 0px 5px 0px;
     margin: 0px;
     color: rgba(0, 0, 0, 60%);
@@ -108,14 +113,13 @@
 
 
 .userNotes {
-    width: 7rem;
+    width: 10em;
     border-radius: 5px;
     box-shadow: 1px 1px 20px 3px rgb(0 0 0 / 14%);
     background: #fff;
     margin: 1px 0 0;
     padding: 5px;
     max-height: 500px;
-    overflow-y: auto;
     position: absolute;
     top: 32px;
     right: 0px;
@@ -124,4 +128,5 @@
     font-weight: normal;
     font-size: 12px;
     text-align: left;
+    cursor: pointer;
 }

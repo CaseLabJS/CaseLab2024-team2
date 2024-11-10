@@ -1,4 +1,5 @@
 .userFooter {
+    max-width: 1920px;
     background-color: #0056B3;
     display: flex;
     justify-content: center;
