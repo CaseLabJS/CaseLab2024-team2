@@ -1,15 +1,14 @@
-import type { MouseEvent, ReactElement } from "react";
+import type { ReactElement } from "react";
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { devCheckIsAdmin, devLogOut } from "@/shared/utils/dev/dev-utils";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 import styles from './header.module.css';
-import bellIcon from './images/bell.svg';
 import logo from './images/logo.svg';
-import chatIcon from './images/messenger.svg';
-import userIcon from './images/user.svg';
 
 export const Header = (): ReactElement => {
   /**Пример данных о пользователе - должно приходить с backend (для разработки) */
@@ -50,7 +49,7 @@ export const Header = (): ReactElement => {
 
   /**Функционал выпадающего меню пользователя: */
   const [isOpenMenu, setOpenMenu] = useState(false);
-  const handleOpenMenu = (): void => {setOpenMenu(!isOpenMenu);} // меню выпадает и исчезает по клику на иконку user
+  const handleOpenMenu = (): void => { setOpenMenu(!isOpenMenu); } // меню выпадает и исчезает по клику на иконку user
   const closeMenu = (): void => { // меню исчезает если открывают другое меню
     if (isOpenMenu === true) {
       handleOpenMenu();
@@ -69,9 +68,8 @@ export const Header = (): ReactElement => {
   }
 
   /**Функционал клика по уведомлениям */
-    // положить данные в localStorage:
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean; }[]) => {
+  // положить данные в localStorage:
+  const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean; }[]):void => {
     localStorage.setItem(localStorageKey, JSON.stringify(data));
   }
 
@@ -82,16 +80,16 @@ export const Header = (): ReactElement => {
   toLocalStorage(read);
 
   const [localNotifications, setLocalNotifications] = useState(read);
-    // Получение данных из localStorage
-    useEffect(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
-    }, [])
+  // Получение данных из localStorage
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
+  }, [])
 
   //обновление localStorage и статуса прочтения уведомления
   const readEl = (id: number): void => {
     const noteIndex = localNotifications.findIndex(note => note.id === id);
-    const updataNote = {...localNotifications[noteIndex]} // получение копии нужного уведомления
+    const updataNote = { ...localNotifications[noteIndex] } // получение копии нужного уведомления
     updataNote.isRead = true; // Обновление статуса уведомления
     setLocalNotifications((localNotifications) => {
       const modifiedData = [...localNotifications];
@@ -102,10 +100,6 @@ export const Header = (): ReactElement => {
   }
 
   const isRead = localNotifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
-
-  // const [showNoteContent, setShowNoteContent] = useState(false);
-  // const handleshowNoteContent = (): void => setShowNoteContent(!showNoteContent); // Содержание уведомления при клике появляется и исчезает
-  // const showContent = (note, id:number):void => {} - TODO
 
   /**Массив пунктов выпадающего меню пользователя: */
   const itemsAdmin = [ // пункты меню в случае администратора
@@ -135,15 +129,12 @@ export const Header = (): ReactElement => {
 
   return (
     <header className={styles.userHeader}>
-      <NavLink className={styles.userHeader__link} to={ROUTE_CONSTANTS.SIGN_IN}>
+      <NavLink className={styles.userHeader__link} to={ROUTE_CONSTANTS.ROOT}>
         <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
       </NavLink>
       <nav className={styles.userHeader__icons}>
-        <button className={styles.userHeader__button}>
-          <img className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconChat}`} src={chatIcon} alt="chatIcon" />
-        </button>
-        <button onClick={() => {handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
-          <img className={`${styles.userHeader__userIcon} ${styles.userHeader__userIconBell}`} src={bellIcon} alt="bellIcon" />
+        <button onClick={() => { handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
+          <NotificationsNoneIcon  />
           {
             isRead.length > 0 &&
             (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
@@ -155,16 +146,13 @@ export const Header = (): ReactElement => {
                   event.stopPropagation();
                   readEl(Number(event.currentTarget.getAttribute('data-id')));
                 }} data-id={item.id} key={item.id} style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }} >{item.note}
-                  {/* {
-                    showNoteContent && (<p>{item.content}</p>)
-                  } */}
                 </li>
               ))}
             </ul>)
           }
         </button>
-        <button onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); }}} className={styles.userHeader__button}>
-          <img className={`${styles.userHeader__userIcon} ${styles.userHeader__userIcon_user}`} src={userIcon} alt="userIcon" />
+        <button onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); } }} className={styles.userHeader__button}>
+          <AccountCircleOutlinedIcon />
           {
             isOpenMenu && <div className={styles.userMenu}>
               <div className={styles.userMenu__user}>
@@ -173,7 +161,7 @@ export const Header = (): ReactElement => {
               </div>
               <ul>
                 {menuForUser.map((item, i) => (
-                <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
+                  <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
                 ))}
               </ul>
               <button className={styles.userHeader__button_menu} onClick={() => devLogOut()}>Sign out</button>
