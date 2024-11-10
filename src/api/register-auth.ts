@@ -7,16 +7,16 @@ type UserRegister = {
   email: string;
   password: string;
 };
+
+type UserLogin = {
+  email: string;
+  password: string;
+};
 type UserAuth = {
   display_name: string;
   email: string;
   roles: string[];
 };
-type UserLogin = {
-  email: string;
-  password: string;
-};
-
 // регистрация пользователя
 export const registerUser = async (user: UserRegister): Promise<{ token: string }> => {
   const response = await apiAuth.post<{ token: string }>('/auth/register', user);
