@@ -1,0 +1,53 @@
+@import 'modern-normalize';
+
+/* Глобальные переменные */
+:root {
+  --background-color-primary: #e7e7e7;
+  --background-color-secondary: rgba(0, 86, 179, 1);
+
+  --font-family-primary: 'Roboto', sans-serif;
+  --font-family-secondary: 'Inter', sans-serif;
+
+  --font-color-primary: rgba(0, 0, 0, 0.87);
+  --font-color-secondary: rgba(0, 0, 0, 0.6);
+
+  --font-color-accent: rgba(25, 118, 210, 1);
+  --icon-color: rgba(0, 0, 0, 0.56);
+}
+
+/* Основные стили */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--font-color-primary);
+  background-color: var(--background-color-primary);
+  font-family: var(--font-family-primary);
+  font-weight: 400;
+  background-color: var(--background-color-primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: normal;
+}
