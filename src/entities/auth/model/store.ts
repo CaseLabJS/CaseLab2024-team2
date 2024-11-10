@@ -34,6 +34,7 @@ class AuthStore {
 
   //Если реализуем функцию получения пользователя по токену в userStore, то эту можно снести в будущем
   async checkAuth(): Promise<void> {
+    if (!this.isAuth) return;
     try {
       const data = await this.fetchCurrentUser();
       if (data) {
