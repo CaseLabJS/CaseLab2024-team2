@@ -133,7 +133,7 @@ export const Header = (): ReactElement => {
         <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
       </NavLink>
       <nav className={styles.userHeader__icons}>
-        <button onClick={() => { handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
+        <div onClick={() => { handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
           <NotificationsNoneIcon />
           {
             isRead.length > 0 &&
@@ -150,7 +150,7 @@ export const Header = (): ReactElement => {
               ))}
             </ul>)
           }
-        </button>
+        </div>
         <div onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); } }} className={styles.userHeader__button}>
           <AccountCircleOutlinedIcon />
           {
