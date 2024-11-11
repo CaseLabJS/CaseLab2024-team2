@@ -1,4 +1,4 @@
-import type { AuthenticationRequest } from '@/entities/User';
+import type { AuthenticationRequest } from '@/entities/user';
 import type { FormikHelpers } from 'formik';
 import type React from 'react';
 
