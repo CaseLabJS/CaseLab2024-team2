@@ -9,7 +9,7 @@ import { Form, Formik } from 'formik';
 import { useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import style from './SignIn.module.css';
+import style from './signIn.module.css';
 
 export const SignIn = (): ReactElement => {
   const navigate = useNavigate();
