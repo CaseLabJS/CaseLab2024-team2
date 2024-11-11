@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { attributesStore } from '@/entities/Attribute';
+import { attributesStore } from '@/entities/Attribute/model/AttribulesStore';
 import { Box, Button, Container, Modal, TextField, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
