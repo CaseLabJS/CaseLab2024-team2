@@ -1,1 +1,1 @@
-export { default as DocumentTypes } from './ui/DocumentTypes';
+export { default as DocumentTypesPage } from './ui/DocumentTypes';
