@@ -26,4 +26,5 @@ class DocumentTypesStore {
   }
 }
 
-export { DocumentTypesStore };
+const documentTypesStore = new DocumentTypesStore();
+export { documentTypesStore };
