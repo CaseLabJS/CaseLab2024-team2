@@ -3,7 +3,7 @@ import type { DocumentTypeResponse, DocumentTypeToAttributeResponse } from '@/en
 import { getAllAttributeDocs } from '@/api/req-doc-attributes';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
-import type { AttributeResponse } from '../index';
+import type { AttributeResponse } from './types/AttributeResponse';
 
 export interface CombinedAttribute extends AttributeResponse, DocumentTypeToAttributeResponse {}
 
