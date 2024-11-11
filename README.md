@@ -75,74 +75,89 @@
 
 ---
 
-## Расширение конфигурации ESLint
+## Работа с Docker
 
-Для разработки продакшн-приложений рекомендуется обновить конфигурацию, чтобы включить правила lint, осведомленные о типах:
+### 1. Установка Docker
 
-- Настройте свойство `parserOptions` на верхнем уровне следующим образом:
+Если у вас нет Docker, установите его по [ссылке](https://www.docker.com/get-started/).
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // другие опции...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Проверьте, установлен ли Docker, введя в консоль команду:
+
+```bash
+docker -v
 ```
 
-- Замените `tseslint.configs.recommended` на `tseslint.configs.recommendedTypeChecked` или `tseslint.configs.strictTypeChecked`.
-- Опционально добавьте `...tseslint.configs.stylisticTypeChecked`.
-- Установите [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) и обновите конфигурацию:
-# Работа с Docker
+Если вы видите что-то вроде `Docker version 27.3.1, build ce12230`, значит Docker установлен.
 
-## 1. Если у вас нет Docker устанавливаем его по ссылке https://www.docker.com/get-started/
+### 2. Сборка образа Docker
 
-Проверить есть ли у вас Docker можно введя в консоль команду docker -v
-Если ответ будет примерно таким Docker version 27.3.1, build ce12230 то поздравляю, Docker у вас есть.
+> **Примечание**: Если у вас включен WireGuard, сборка может не начаться. Сначала выполните сборку, а затем включите WireGuard.
 
-## 2. Сборка image Docker
-(Кстати заметил, что при включенном WireGuard сборка не происходит, так что сначала делаем сборку а потом уже включаем WireGuard)
+Запустите команду:
 
-В консоли вводим команду npm run build:docker
+```bash
+npm run build:docker
+```
 
-Запускается процесс сборки image docker
+### 3. Запуск контейнера Docker
 
-## 3. Запуск container docker
+Для запуска контейнера введите:
 
-В консоли вводим команду npm run start:docker
+```bash
+npm run start:docker
+```
 
-Теперь можно открыть приложение по адресу http://localhost:5173
+Теперь приложение будет доступно по адресу `http://localhost:5173`.
 
-## 4. Остановка container docker
+### 4. Остановка контейнера Docker
 
-<<<<<<< HEAD
-export default tseslint.config({
-  // Укажите версию react
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Добавьте плагин react
-    react,
-  },
-  rules: {
-    // другие правила...
-    // Включите его рекомендуемые правила
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+Чтобы остановить и автоматически удалить контейнер, выполните:
+
+```bash
+npm run stop:docker
+```
+
+### 5. Удаление образа Docker
+
+Чтобы удалить образ Docker, используйте команду:
+
+```bash
+npm run delete:docker
 ```
 
 ---
 
-=======
-В консоли вводим команду npm run stop:docker
+## Расширение конфигурации ESLint
 
-Данная команда автоматически удалит данный container после остановки
+Для разработки продакшн-приложений рекомендуется обновить конфигурацию, чтобы включить правила lint, осведомленные о типах:
 
-## 5. Удаление image docker
+1. Настройте свойство `parserOptions` на верхнем уровне следующим образом:
 
-В консоли вводим команду npm run delete:docker
->>>>>>> main
+   ```js
+   export default tseslint.config({
+     languageOptions: {
+       parserOptions: {
+         project: ['./tsconfig.node.json', './tsconfig.app.json'],
+         tsconfigRootDir: import.meta.dirname,
+       },
+     },
+   })
+   ```
+
+2. Замените `tseslint.configs.recommended` на `tseslint.configs.recommendedTypeChecked` или `tseslint.configs.strictTypeChecked`.
+3. Опционально добавьте `...tseslint.configs.stylisticTypeChecked`.
+4. Установите [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) и обновите конфигурацию:
+
+   ```js
+   // eslint.config.js
+   import react from 'eslint-plugin-react'
+
+   export default tseslint.config({
+     settings: { react: { version: '18.3' } },
+     plugins: { react },
+     rules: {
+       ...react.configs.recommended.rules,
+       ...react.configs['jsx-runtime'].rules,
+     },
+   })
+   ```
