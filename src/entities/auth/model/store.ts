@@ -1,5 +1,5 @@
 import type { UserAuth } from '@/api/register-auth';
-import type { AuthenticationRequest } from '@/entities/User';
+import type { AuthenticationRequest } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/api/register-auth';
 import { makeAutoObservable, runInAction } from 'mobx';
