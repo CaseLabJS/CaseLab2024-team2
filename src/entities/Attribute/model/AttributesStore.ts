@@ -39,4 +39,5 @@ class AttributesStore {
   }
 }
 
-export { AttributesStore };
+const attributesStore = new AttributesStore();
+export { attributesStore };
