@@ -4,17 +4,17 @@ ul {
     margin: 0px;
 }
 
-.wrapper {
-  max-width: 1920px;
+.header {
+  background-color: #fff;
 }
 
 .userHeader {
     max-width: 1920px;
-    background-color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    margin: 0 auto;
 }
 
 .userHeader__link {

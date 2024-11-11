@@ -129,9 +129,9 @@ export const Header = (): ReactElement => {
   } else menuForUser = itemsUser;
 
   return (
-    <header>
+    <header className={styles.header}>
       <div className={styles.userHeader}>
-        <NavLink className={styles.userHeader__link} to={ROUTE_CONSTANTS.ROOT}>
+        <NavLink className={styles.userHeader__link} to={ROUTE_CONSTANTS.ROOT.ruTitle}>
           <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
         </NavLink>
         <nav className={styles.userHeader__icons}>
