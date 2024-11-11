@@ -23,7 +23,7 @@
 1. Клонируйте репозиторий и перейдите в директорию проекта:
 
    ```bash
-   git clone https://github.com/your-username/your-repository.git
+   https://github.com/CaseLabJS/CaseLab2024-team2.git
    cd your-repository
    ```
 
