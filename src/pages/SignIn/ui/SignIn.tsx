@@ -1,53 +1,58 @@
-import type { RegisterRequest } from '@/entities/User';
+import type { AuthenticationRequest } from '@/entities/User';
 import type { FormikHelpers } from 'formik';
+import type React from 'react';
 
-import { userStore } from '@/entities/User/model/UserStore';
-import { SignupSchema } from '@/features/auth';
-import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { authStore } from '@/entities/auth/model/store';
+import { AuthSchema } from '@/features/auth';
+import { Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { useState, type ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import style from './SignUp.module.css';
+import style from './SignIn.module.css';
 
-export const SignUp = (): ReactElement => {
-  const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
-
-  const [isAgree, setIsAgree] = useState<boolean>(false);
+export const SignIn = (): ReactElement => {
+  const navigate = useNavigate();
+  const initialValues: AuthenticationRequest = {
+    email: 'admin@gmail.com',
+    password: '',
+  };
+  const [isAgree, setIsAgree] = useState<boolean>(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setIsAgree(event.target.checked);
   };
 
   const submitFormHandler = async (
-    values: RegisterRequest,
-    { setSubmitting }: FormikHelpers<RegisterRequest>,
+    values: AuthenticationRequest,
+    { setSubmitting }: FormikHelpers<AuthenticationRequest>,
   ): Promise<void> => {
     try {
-      const body: RegisterRequest = { ...values };
-      await userStore.createUser(body);
-      alert('Пользователь успешно зарегистрирован!');
+      const body: AuthenticationRequest = { ...values };
+      await authStore.login(body);
+      alert('Пользователь успешно авторизирован!');
+      navigate('/user');
     } catch (error) {
-      alert('Ошибка регистрации пользователя. Попробуйте снова.');
-      console.log(error);
+      alert('Ошибка авторизации пользователя. Попробуйте снова.');
+      throw error;
     } finally {
       setSubmitting(false);
     }
   };
-
   return (
-    <div className={style.signUpContainer}>
-      <div className={style.signUpBox}>
-        <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
+    <Box sx={{ display: 'flex', alignItems: 'center', height: '100vh' }}>
+      <Box
+        sx={{
+          width: '714px',
+          backgroundColor: '#fff',
+          mx: 'auto',
+          padding: '53px 57px 65px',
+          borderRadius: '20px',
+        }}
+      >
+        <Formik initialValues={initialValues} validationSchema={AuthSchema} onSubmit={submitFormHandler}>
           {({ errors, touched, isSubmitting, isValid, dirty, getFieldProps }) => (
-            <Form className={style.signUpForm}>
-              <TextField
-                label={errors.display_name || 'Отображаемое имя'}
-                {...getFieldProps('display_name')}
-                fullWidth
-                margin="none"
-                error={touched.display_name && Boolean(errors.display_name)}
-              />
-
+            <Form className={style.signInForm}>
               <TextField
                 label={errors.email || 'Email'}
                 {...getFieldProps('email')}
@@ -79,12 +84,12 @@ export const SignUp = (): ReactElement => {
                 disabled={isSubmitting || !isAgree || !isValid || !dirty}
                 fullWidth
               >
-                Sign Up
+                Sign In
               </Button>
             </Form>
           )}
         </Formik>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };

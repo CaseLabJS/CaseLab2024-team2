@@ -4,22 +4,28 @@ import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 import type { DocumentTypeResponse } from './DocumentTypeResponse';
 
 class DocumentTypesStore {
-    documentTypes: DocumentTypeResponse[];
+  documentTypes: DocumentTypeResponse[];
 
-    constructor() {
-        makeAutoObservable(this);
-        this.documentTypes = [];
+  constructor() {
+    makeAutoObservable(this);
+    this.documentTypes = [];
 
-        onBecomeObserved(this, 'documentTypes', () => {
-        getAllDocTypes()
-            .then(result => runInAction(() => { this.documentTypes = result }))
-            .catch(console.log);
-        });
-    }
+    onBecomeObserved(this, 'documentTypes', () => {
+      getAllDocTypes()
+        .then((result) =>
+          runInAction(() => {
+            this.documentTypes = result;
+          }),
+        )
+        .catch(console.log);
+    });
+  }
 
-    getDocumentType(id: number): DocumentTypeResponse | undefined {
-        return this.documentTypes.find(document => document.id === id)
-    }
+  getDocumentType(id: number): DocumentTypeResponse | undefined {
+    return this.documentTypes.find((document) => document.id === id);
+  }
 }
 
-export { DocumentTypesStore };
+const documentTypesStore = new DocumentTypesStore();
+
+export { documentTypesStore };

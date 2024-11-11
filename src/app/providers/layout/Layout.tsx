@@ -1,9 +1,8 @@
 import type { ReactElement } from 'react';
 
-import { devLogOut, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
+import { authStore } from '@/entities/auth/model/store';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
-import { NavLink, Outlet } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
 import { ROUTE_CONSTANTS } from '../router/config/constants';
 
@@ -20,10 +19,10 @@ const Layout = (): ReactElement => {
 export default Layout;
 
 const DevHeader = (): ReactElement => {
-  const location = useLocation();
+  const navigate = useNavigate();
   return (
     <div>
-      <h1>Хэдер {location.pathname.includes('/admin') ? 'администратора' : 'пользователя'}</h1>
+      <h1>Хэдер {authStore.isAdmin ? 'администратора' : 'пользователя'}</h1>
       {/* Для разработки */}
       <Breadcrumbs />
       <div
@@ -33,11 +32,18 @@ const DevHeader = (): ReactElement => {
           padding: '20px',
         }}
       >
-        <button onClick={() => devLogOut()}>Выйти</button>
+        <button
+          onClick={() => {
+            authStore.logout();
+            navigate('/signin');
+          }}
+        >
+          Выйти
+        </button>
       </div>
       {/* Для разработки */}
-      {devCheckIsAdmin() &&
-        (location.pathname === '/admin' ? (
+      {authStore.isAdmin &&
+        (authStore.isAdmin ? (
           <NavLink to={'/user'}>Панель пользователя</NavLink>
         ) : (
           <NavLink to={'/admin'}>Панель администратора</NavLink>
