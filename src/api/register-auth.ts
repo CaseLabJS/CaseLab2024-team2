@@ -12,7 +12,7 @@ type UserLogin = {
   email: string;
   password: string;
 };
-type UserAuth = {
+export type UserAuth = {
   display_name: string;
   email: string;
   roles: string[];
