@@ -24,20 +24,20 @@ const AppRouter = observer((): ReactElement => {
     checkAuthAsync();
   }, []);
   const ProtectedUserRoute = ({ children }: { children: ReactNode }): ReactElement => {
-    return authStore.isAuth ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN} replace />;
+    return authStore.isAuth ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN.path} replace />;
   };
 
   const ProtectedAdminRoute = ({ children }: { children: ReactNode }): ReactElement => {
     return authStore.isAuth && authStore.isAdmin ? (
       <>{children}</>
     ) : (
-      <Navigate to={authStore.isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} replace />
+      <Navigate to={authStore.isAdmin ? ROUTE_CONSTANTS.ADMIN.path : ROUTE_CONSTANTS.USER.path} replace />
     );
   };
 
   const router = createBrowserRouter([
     {
-      path: ROUTE_CONSTANTS.ROOT,
+      path: ROUTE_CONSTANTS.ROOT.path,
       element: (
         <ProtectedUserRoute>
           <Layout />
@@ -45,17 +45,17 @@ const AppRouter = observer((): ReactElement => {
       ),
       children: [
         {
-          path: ROUTE_CONSTANTS.USER,
+          path: ROUTE_CONSTANTS.USER.path,
           element: <User />,
           children: [
             {
-              path: ROUTE_CONSTANTS.DOCUMENT_TYPES,
+              path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
               element: <DocumentTypesPage />,
             },
           ],
         },
         {
-          path: ROUTE_CONSTANTS.ADMIN,
+          path: ROUTE_CONSTANTS.ADMIN.path,
           element: (
             <ProtectedAdminRoute>
               <Admin />
@@ -63,7 +63,7 @@ const AppRouter = observer((): ReactElement => {
           ),
           children: [
             {
-              path: ROUTE_CONSTANTS.CREATE_ATTRIBUTE,
+              path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.CREATE_ATTRIBUTE.path}`,
               element: <CreateAttributePage />,
             },
           ],
@@ -72,9 +72,9 @@ const AppRouter = observer((): ReactElement => {
       errorElement: <ErrorPage />,
     },
     {
-      path: ROUTE_CONSTANTS.SIGN_IN,
+      path: ROUTE_CONSTANTS.SIGN_IN.path,
       element: authStore.isAuth ? (
-        <Navigate to={authStore.isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} />
+        <Navigate to={authStore.isAdmin ? ROUTE_CONSTANTS.ADMIN.path : ROUTE_CONSTANTS.USER.path} />
       ) : (
         <SignIn />
       ),

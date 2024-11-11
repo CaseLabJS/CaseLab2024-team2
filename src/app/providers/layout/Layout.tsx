@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 
 import { authStore } from '@/entities/auth/model/store';
+import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
 import { ROUTE_CONSTANTS } from '../router/config/constants';
@@ -23,6 +24,7 @@ const DevHeader = (): ReactElement => {
     <div>
       <h1>Хэдер {authStore.isAdmin ? 'администратора' : 'пользователя'}</h1>
       {/* Для разработки */}
+      <Breadcrumbs />
       <div
         style={{
           backgroundColor: 'rgba(255, 205, 210, 0.8)',
@@ -46,9 +48,10 @@ const DevHeader = (): ReactElement => {
         ) : (
           <NavLink to={'/admin'}>Панель администратора</NavLink>
         ))}
-      {authStore.isAdmin && <NavLink to={'/admin/create-attribute'}>Создать аттрибут</NavLink>}
       {location.pathname === '/admin' && <NavLink to={'/admin/create-attribute'}>Создать аттрибут</NavLink>}
-      {location.pathname === '/user' && <NavLink to={ROUTE_CONSTANTS.DOCUMENT_TYPES}>Типы документов</NavLink>}
+      {location.pathname === '/user' && (
+        <NavLink to={`${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`}>Типы документов</NavLink>
+      )}
     </div>
   );
 };
