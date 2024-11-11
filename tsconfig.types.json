@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
     },
-    "include": ["src/entities/gen-types.ts"],
+    "include": ["src/entities/ts-split-types.ts"],
     "exclude": ["node_modules"]
 }
 

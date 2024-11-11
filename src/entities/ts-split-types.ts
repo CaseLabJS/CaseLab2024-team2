@@ -57,12 +57,10 @@ async function generateSchemas() {
       let groupName = name.split(/(?=[A-Z])/)[0];
       if (['Authentication', 'Register', 'AuthenticationRequest', 'RegisterRequest', 'AuthenticationResponse'].includes(name)) {
         groupName = 'User';  // Установим группу "User" для Authentication и Register
-      } else if (['CreateDocumentRequest', 'UpdateDocumentRequest', 'UpdateDocumentVersionRequest', 'VoteRequest', 'VoteResponse', 'VoteUserResponse', 'VotingProcessRequest', 'VotingProcessResponse'].includes(name)) {
-        groupName = 'Document';
-      } 
-      // else {
-      //   console.log(`Схема ${name} попадает в группу ${groupName}`); // Лог для других схем
-      // }
+        console.log(`Схема ${name} попадает в группу ${groupName}`); // Лог о группировке
+      } else {
+        console.log(`Схема ${name} попадает в группу ${groupName}`); // Лог для других схем
+      }
     
       groupedSchemas[groupName] = groupedSchemas[groupName] || [];
       groupedSchemas[groupName].push({ name, schema });
