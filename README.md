@@ -1,29 +1,126 @@
-# Работа с Docker
 
-## 1. Если у вас нет Docker устанавливаем его по ссылке https://www.docker.com/get-started/
+# CaseLabJS2024-team2
 
-Проверить есть ли у вас Docker можно введя в консоль команду docker -v
-Если ответ будет примерно таким Docker version 27.3.1, build ce12230 то поздравляю, Docker у вас есть.
+## React + TypeScript + Vite
 
-## 2. Сборка image Docker
-(Кстати заметил, что при включенном WireGuard сборка не происходит, так что сначала делаем сборку а потом уже включаем WireGuard)
+Этот проект использует минимальную настройку для работы React в Vite с поддержкой горячей перезагрузки (HMR) и некоторыми правилами ESLint.
 
-В консоли вводим команду npm run build:docker
+### Используемые плагины:
 
-Запускается процесс сборки image docker
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) — использует [Babel](https://babeljs.io/) для Fast Refresh.
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) — использует [SWC](https://swc.rs/) для Fast Refresh.
 
-## 3. Запуск container docker
+---
 
-В консоли вводим команду npm run start:docker
+## Установка и запуск проекта
 
-Теперь можно открыть приложение по адресу http://localhost:5173
+### Требования
 
-## 4. Остановка container docker
+- **Node.js**: версия 18 и выше
 
-В консоли вводим команду npm run stop:docker
+### Установка зависимостей
 
-Данная команда автоматически удалит данный container после остановки
+1. Клонируйте репозиторий и перейдите в директорию проекта:
 
-## 5. Удаление image docker
+   ```bash
+   https://github.com/CaseLabJS/CaseLab2024-team2.git
+   cd your-repository
+   ```
 
-В консоли вводим команду npm run delete:docker
+2. Установите зависимости:
+
+   ```bash
+   npm install
+   ```
+
+### Запуск проекта
+
+- **Режим разработки**:
+
+   ```bash
+   npm run dev
+   ```
+
+- **Сборка для продакшена**:
+
+   ```bash
+   npm run build
+   ```
+
+- **Предпросмотр собранного проекта**:
+
+   ```bash
+   npm run preview
+   ```
+
+### Дополнительные команды
+
+- **Линтинг кода**:
+
+   ```bash
+   npm run lint
+   ```
+
+- **Компиляция TypeScript с отдельным конфигом**:
+
+   ```bash
+   npm run compile:splitjs
+   ```
+
+- **Генерация типов**:
+
+   ```bash
+   npm run gen:types
+   ```
+
+---
+
+## Работа с Docker
+
+### 1. Установка Docker
+
+Если у вас нет Docker, установите его по [ссылке](https://www.docker.com/get-started/).
+
+Проверьте, установлен ли Docker, введя в консоль команду:
+
+```bash
+docker -v
+```
+
+Если вы видите что-то вроде `Docker version 27.3.1, build ce12230`, значит Docker установлен.
+
+### 2. Сборка образа Docker
+
+> **Примечание**: Если у вас включен WireGuard, сборка может не начаться. Сначала выполните сборку, а затем включите WireGuard.
+
+Запустите команду:
+
+```bash
+npm run build:docker
+```
+
+### 3. Запуск контейнера Docker
+
+Для запуска контейнера введите:
+
+```bash
+npm run start:docker
+```
+
+Теперь приложение будет доступно по адресу `http://localhost:5173`.
+
+### 4. Остановка контейнера Docker
+
+Чтобы остановить и автоматически удалить контейнер, выполните:
+
+```bash
+npm run stop:docker
+```
+
+### 5. Удаление образа Docker
+
+Чтобы удалить образ Docker, используйте команду:
+
+```bash
+npm run delete:docker
+```
