@@ -2,8 +2,7 @@ import { registerUser } from '@/api/register-auth';
 import { deleteUserData, editUserData, getAllUserData, getUserData } from '@/api/req-user-data';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
-import type { RegisterRequest } from './RegisterRequest';
-import type { UserResponse } from './UserResponse';
+import type { RegisterRequest, UserResponse } from '../index';
 
 class UserStore {
   users: UserResponse[];

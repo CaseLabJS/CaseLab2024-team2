@@ -1,7 +1,7 @@
 import { getAllDocTypes } from '@/api/req-doc-types';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
-import type { DocumentTypeResponse } from './DocumentTypeResponse';
+import type { DocumentTypeResponse } from '../index';
 
 class DocumentTypesStore {
   documentTypes: DocumentTypeResponse[];
@@ -26,6 +26,4 @@ class DocumentTypesStore {
   }
 }
 
-const documentTypesStore = new DocumentTypesStore();
-
-export { documentTypesStore };
+export { DocumentTypesStore };
