@@ -1,95 +1,75 @@
 {
-  "User/model/UserToDocumentResponse": {
-    "place": "Document/model/DocumentPermissionResponse.ts",
-    "nameRef": "DocumentPermissionResponse"
-  },
-  "Document/model/DocumentRequest": {
-    "place": "User/model/UserToDocumentRequest.ts",
-    "nameRef": "UserToDocumentRequest"
-  },
-  "Document/model/DocumentResponse": {
-    "place": "User/model/UserToDocumentResponse.ts",
-    "nameRef": "UserToDocumentResponse"
-  },
-  "Document/model/DocumentTypeRequest": {
-    "place": "Document/model/DocumentTypeToAttributeRequest.ts",
-    "nameRef": "DocumentTypeToAttributeRequest"
-  },
-  "Document/model/DocumentTypeResponse": {
-    "place": "Document/model/DocumentTypeToAttributeResponse.ts",
-    "nameRef": "DocumentTypeToAttributeResponse"
-  },
-  "User/model/types/UserToDocumentResponse": [
+  "user/model/types/UserToDocumentResponse": [
     {
-      "place": "Document/model/types/DocumentPermissionResponse.ts",
+      "place": "document/model/types/DocumentPermissionResponse.ts",
       "nameRef": "DocumentPermissionResponse"
     }
   ],
-  "Document/model/types/UpdateDocumentRequest": [
+  "document/model/types/UpdateDocumentRequest": [
     {
-      "place": "Attribute/model/types/AttributeValueRequest.ts",
+      "place": "attribute/model/types/AttributeValueRequest.ts",
       "nameRef": "AttributeValueRequest"
     }
   ],
-  "Document/model/types/DocumentFacadeResponse": [
+  "document/model/types/DocumentFacadeResponse": [
     {
-      "place": "Document/model/types/DocumentResponse.ts",
+      "place": "document/model/types/DocumentResponse.ts",
       "nameRef": "DocumentResponse"
     },
     {
-      "place": "Document/model/types/DocumentVersionResponse.ts",
+      "place": "document/model/types/DocumentVersionResponse.ts",
       "nameRef": "DocumentVersionResponse"
     },
     {
-      "place": "Signature/model/types/SignatureResponse.ts",
+      "place": "signature/model/types/SignatureResponse.ts",
       "nameRef": "SignatureResponse"
     }
   ],
-  "Document/model/types/DocumentResponse": [
+  "document/model/types/DocumentResponse": [
     {
-      "place": "User/model/types/UserToDocumentResponse.ts",
+      "place": "user/model/types/UserToDocumentResponse.ts",
       "nameRef": "UserToDocumentResponse"
     }
   ],
-  "Document/model/types/DocumentVersionResponse": [
+  "document/model/types/DocumentVersionResponse": [
     {
-      "place": "Attribute/model/types/AttributeValueResponse.ts",
+      "place": "attribute/model/types/AttributeValueResponse.ts",
       "nameRef": "AttributeValueResponse"
     }
   ],
-  "Document/model/types/DocumentTypeRequest": [
+  "document/model/types/DocumentTypeRequest": [
     {
-      "place": "Document/model/types/DocumentTypeToAttributeRequest.ts",
+      "place": "document/model/types/DocumentTypeToAttributeRequest.ts",
       "nameRef": "DocumentTypeToAttributeRequest"
     }
   ],
-  "Document/model/types/DocumentTypeResponse": [
+  "document/model/types/DocumentTypeResponse": [
     {
-      "place": "Document/model/types/DocumentTypeToAttributeResponse.ts",
+      "place": "document/model/types/DocumentTypeToAttributeResponse.ts",
       "nameRef": "DocumentTypeToAttributeResponse"
     }
   ],
-  "Document/model/types/CreateDocumentRequest": [
+  "document/model/types/CreateDocumentRequest": [
     {
-      "place": "Attribute/model/types/AttributeValueRequest.ts",
+      "place": "attribute/model/types/AttributeValueRequest.ts",
       "nameRef": "AttributeValueRequest"
     }
   ],
-  "Document/model/types/PatchDocumentRequest": [
+  "document/model/types/PatchDocumentRequest": [
     {
-      "place": "Attribute/model/types/AttributeValueRequest.ts",
+      "place": "attribute/model/types/AttributeValueRequest.ts",
       "nameRef": "AttributeValueRequest"
     }
   ],
-  "Voting/model/types/VotingProcessResponse": [
+  "voting/model/types/VotingProcessResponse": [
     {
-      "place": "Vote/model/types/VoteResponse.ts",
+      "place": "vote/model/types/VoteResponse.ts",
       "nameRef": "VoteResponse"
     }
   ],
-  "Vote/model/types/VoteResponse": [
+  "vote/model/types/VoteResponse": [
     {
-      "place": "Vote/model/types/VoteUserResponse.ts",
+      "place": "vote/model/types/VoteUserResponse.ts",
       "nameRef": "VoteUserResponse"
     }
   ]

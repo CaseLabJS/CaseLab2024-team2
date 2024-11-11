@@ -8,9 +8,10 @@ const apiUrl = 'http://172.18.27.102:8080/v3/api-docs';
 const outputDir = path.join(__dirname, '');
 
 async function ensureDirectoryExists(directory: string): Promise<void> {
-  if (!fs.existsSync(directory)) {
-    await fs.promises.mkdir(directory, { recursive: true });
-    console.log(`Создана директория для схем: ${directory}`);
+  const lowerCaseDir = directory.toLowerCase(); // Преобразуем к нижнему регистру
+  if (!fs.existsSync(lowerCaseDir)) {
+    await fs.promises.mkdir(lowerCaseDir, { recursive: true });
+    console.log(`Создана директория для схем: ${lowerCaseDir}`);
   }
 }
 
@@ -28,7 +29,6 @@ interface Schema {
   $ref?: string;
 }
 
-// Добавляем тип для valueData
 interface ValueData {
   [key: string]: { place: string; nameRef: string }[];
 }
@@ -54,7 +54,6 @@ async function generateSchemas(): Promise<void> {
       console.log(`Обрабатываем схему: ${name}`);
 
       if (name === 'ProblemDetail') {
-        console.log(`Создаем схему: ${name} в ${pathToSharedTypes}`);
         const interfaceContent = generateInterface(name, schema, {}, []);
         const filePath = path.join(pathToSharedTypes, `${name}.ts`);
         await fs.promises.writeFile(filePath, interfaceContent, 'utf8');
@@ -62,21 +61,21 @@ async function generateSchemas(): Promise<void> {
         continue;
       }
 
-      let groupName = name.split(/(?=[A-Z])/)[0];
+      let groupName = name.split(/(?=[A-Z])/)[0].toLowerCase(); // Переводим groupName в нижний регистр
       if (
-        ['Authentication', 'Register', 'AuthenticationRequest', 'RegisterRequest', 'AuthenticationResponse'].includes(
-          name,
+        ['authentication', 'register', 'authenticationrequest', 'registerrequest', 'authenticationresponse'].includes(
+          name.toLowerCase(),
         )
       ) {
-        groupName = 'User';
+        groupName = 'user';
       }
 
       if (
-        name.substring(0, 6).indexOf('Create') >= 0 ||
-        name.substring(0, 6).indexOf('Update') >= 0 ||
-        name.substring(0, 6).indexOf('Patch') >= 0
+        name.toLowerCase().startsWith('create') ||
+        name.toLowerCase().startsWith('update') ||
+        name.toLowerCase().startsWith('patch')
       ) {
-        groupName = 'Document';
+        groupName = 'document';
       }
 
       groupedSchemas[groupName] = groupedSchemas[groupName] || [];
@@ -86,10 +85,10 @@ async function generateSchemas(): Promise<void> {
     const nestedSchemas: Record<string, { place: string; nameRef: string }[]> = {};
 
     for (const [groupName, interfaces] of Object.entries(groupedSchemas)) {
-      const groupDir = path.join(outputDir, groupName, 'model', 'types');
-      if (!fs.existsSync(groupDir)) fs.mkdirSync(groupDir, { recursive: true });
+      const groupDir = path.join(outputDir, groupName.toLowerCase(), 'model', 'types'); // Путь к папке в нижнем регистре
+      await ensureDirectoryExists(groupDir);
 
-      const importFilePath: string = path.join(outputDir, groupName, 'index.ts');
+      const importFilePath: string = path.join(outputDir, groupName.toLowerCase(), 'index.ts'); // Путь к файлу импорта в нижнем регистре
       const importStatements: string[] = [];
 
       for (const { name, schema } of interfaces) {
@@ -99,9 +98,7 @@ async function generateSchemas(): Promise<void> {
         const filePath = path.join(groupDir, `${name}.ts`);
         const dirPath = path.posix.dirname(filePath);
 
-        if (!fs.existsSync(dirPath)) {
-          await fs.promises.mkdir(dirPath, { recursive: true });
-        }
+        await ensureDirectoryExists(dirPath); // Создаем директорию в нижнем регистре
 
         fs.writeFileSync(filePath, interfaceContent, 'utf8');
         console.log(`Создан файл: ${filePath}`);
@@ -117,13 +114,12 @@ async function generateSchemas(): Promise<void> {
                 : undefined;
 
             if (refType) {
-              const firstWord = refType.split(/(?=[A-Z])/)[0];
+              const firstWord = refType.split(/(?=[A-Z])/)[0].toLowerCase();
               const relativePath = path.join(firstWord, 'model', 'types', `${refType}.ts`).replace(/\\/g, '/');
-              const key = `${groupName}/model/types/${name}`;
+              const key = `${groupName.toLowerCase()}/model/types/${name}`;
 
               console.log(`Добавляем вложенный тип: ${key} -> ${relativePath}`);
 
-              // Теперь добавляем вложенные типы в массив
               nestedSchemas[key] = nestedSchemas[key] || [];
               nestedSchemas[key].push({ place: relativePath, nameRef: refType });
             }
@@ -131,27 +127,19 @@ async function generateSchemas(): Promise<void> {
         }
       }
 
-      if (typeof importFilePath === 'string' && Array.isArray(importStatements)) {
-        fs.writeFileSync(importFilePath, importStatements.join('\n'), 'utf8');
-        console.log(`Создан файл импорта: ${importFilePath}`);
-      } else {
-        console.error('Ошибка: importFilePath должен быть строкой, а importStatements — массивом строк.');
-      }
+      fs.writeFileSync(importFilePath, importStatements.join('\n'), 'utf8');
+      console.log(`Создан файл импорта: ${importFilePath}`);
     }
 
-    // Чтение и запись данных в value.json с проверкой существования
     const valueFilePath = path.join(outputDir, 'value.json');
-    let valueData: ValueData | null = {}; // Используем новый тип ValueData
+    let valueData: ValueData | null = {};
     if (fs.existsSync(valueFilePath)) {
       valueData = JSON.parse(await fs.promises.readFile(valueFilePath, 'utf8')) as ValueData;
     }
 
-    // Обновляем или добавляем новые записи
     for (const parentName in nestedSchemas) {
-      // Получаем все вложенные типы для этого родителя
       for (const { place, nameRef } of nestedSchemas[parentName]) {
         if (valueData[parentName]) {
-          // Проверяем, существует ли уже запись с таким же place и nameRef
           const isExisting = valueData[parentName].some((item) => item.place === place && item.nameRef === nameRef);
           if (!isExisting) {
             valueData[parentName].push({ place, nameRef });
@@ -162,17 +150,14 @@ async function generateSchemas(): Promise<void> {
       }
     }
 
-    // Записываем обновленные данные в value.json
     await fs.promises.writeFile(valueFilePath, JSON.stringify(valueData, null, 2), 'utf8');
     console.log(`Типы с вложенными типами успешно сохранены в ${valueFilePath}`);
 
-    // Дополнительная проверка добавления импорта в родительские файлы
     for (const parentName in valueData) {
-      const parentFilePath = path.join(outputDir, `${parentName}.ts`);
+      const parentFilePath = path.join(outputDir, `${parentName.toLowerCase()}.ts`);
       if (fs.existsSync(parentFilePath)) {
         let parentFileContent = await fs.promises.readFile(parentFilePath, 'utf8');
 
-        // Добавляем импорты для каждого вложенного типа, если их больше одного
         const importStatementsToAdd: string[] = [];
         for (const { place, nameRef } of valueData[parentName]) {
           const importStatement = `import { ${nameRef} } from '../../../${place}';\n`;
@@ -195,7 +180,6 @@ async function generateSchemas(): Promise<void> {
   }
 }
 
-// Генерация интерфейса с добавлением импортов
 function generateInterface(
   name: string,
   schema: Schema,
@@ -219,7 +203,8 @@ function generateInterface(
         });
       }
     } else if (value.items && value.items.$ref) {
-      type = value.items.$ref.split('/').pop()!;
+      // Если у свойства есть items и $ref, значит, это массив
+      type = `${value.items.$ref.split('/').pop()!}[]`;
     } else {
       type = getTypeFromSchemaProperty(value);
     }

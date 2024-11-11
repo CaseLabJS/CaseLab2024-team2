@@ -1,5 +1,5 @@
-import type { VoteUserResponse } from '../../../Vote/model/types/VoteUserResponse.ts';
+import type { VoteUserResponse } from '../../../vote/model/types/VoteUserResponse.ts';
 export interface VoteResponse {
-	status: string;
-	applicationUser: VoteUserResponse;
+  status: string;
+  applicationUser: VoteUserResponse;
 }

@@ -1,4 +1,4 @@
-import type { RegisterRequest } from '@/entities/User';
+import type { RegisterRequest } from '@/entities/user';
 
 import { api } from './api-config';
 
