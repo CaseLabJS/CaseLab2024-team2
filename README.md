@@ -61,16 +61,10 @@
    npm run lint
    ```
 
-- **Компиляция TypeScript с отдельным конфигом**:
+- **Полная сборка и генерация типов**:
 
    ```bash
-   npm run compile:splitjs
-   ```
-
-- **Генерация типов**:
-
-   ```bash
-   npm run gen:types
+   npm run build-gen:all
    ```
 
 ---
