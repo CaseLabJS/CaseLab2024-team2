@@ -1,5 +1,5 @@
-import type { DocumentTypeToAttributeRequest } from '../../../document/model/types/DocumentTypeToAttributeRequest.ts';
+import type { DocumentTypeToAttributeRequest } from '@/entities/document/model/types/DocumentTypeToAttributeRequest.ts';
 export interface DocumentTypeRequest {
-  name: string;
-  attributes: DocumentTypeToAttributeRequest[];
+	name: string;
+	attributes: DocumentTypeToAttributeRequest[];
 }

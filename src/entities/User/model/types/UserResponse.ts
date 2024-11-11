@@ -1,5 +1,5 @@
 export interface UserResponse {
-  email: string;
-  display_name: string;
-  roles: string[];
+	email: string;
+	display_name: string;
+	roles: string[];
 }

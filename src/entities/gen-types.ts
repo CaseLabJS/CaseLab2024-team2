@@ -160,7 +160,7 @@ async function generateSchemas(): Promise<void> {
 
         const importStatementsToAdd: string[] = [];
         for (const { place, nameRef } of valueData[parentName]) {
-          const importStatement = `import { ${nameRef} } from '../../../${place}';\n`;
+          const importStatement = `import { ${nameRef} } from '@/entities/${place}';\n`;
           if (!parentFileContent.includes(importStatement)) {
             importStatementsToAdd.push(importStatement);
           }

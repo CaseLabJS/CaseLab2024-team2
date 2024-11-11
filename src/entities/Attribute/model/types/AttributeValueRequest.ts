@@ -1,4 +1,4 @@
 export interface AttributeValueRequest {
-  attributeId: number;
-  value: string;
+	attributeId: number;
+	value: string;
 }

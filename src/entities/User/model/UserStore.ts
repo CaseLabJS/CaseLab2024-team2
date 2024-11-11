@@ -6,8 +6,6 @@ import type { RegisterRequest, UserResponse } from '../index';
 
 class UserStore {
   users: UserResponse[];
-  email = '';
-  displayName = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -16,8 +14,6 @@ class UserStore {
     onBecomeObserved(this, 'users', () => {
       this.getAllUsers().catch(console.error);
     });
-
-    this.init();
   }
 
   async getAllUsers(): Promise<void> {
@@ -27,7 +23,13 @@ class UserStore {
         this.users = response;
       });
     } catch (error) {
-      console.error('Error fetching users:', error);
+      if (error instanceof Error) {
+        if (error.message) {
+          alert(error.message);
+        } else {
+          alert('Something went wrong');
+        }
+      }
     }
   }
 
@@ -39,20 +41,13 @@ class UserStore {
         this.users.push(user);
       });
     } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  async getUserData({ email }: { email: string }): Promise<void> {
-    try {
-      const response = await getUserData(email);
-      runInAction(() => {
-        this.email = response.email;
-        this.displayName = response.display_name;
-      });
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+      if (error instanceof Error) {
+        if (error.message) {
+          alert(error.message);
+        } else {
+          alert('Something went wrong');
+        }
+      }
     }
   }
 
@@ -66,32 +61,34 @@ class UserStore {
         }
       });
     } catch (error) {
-      console.error('Error editing user data:', error);
+      if (error instanceof Error) {
+        if (error.message) {
+          alert(error.message);
+        } else {
+          alert('Something went wrong');
+        }
+      }
     }
   }
 
   async deleteUser({ email }: { email: string }): Promise<void> {
-    // TODO надо дождаться правок бэка, чтобы удалять можно было по почте
-    await deleteUserData(email);
-  }
-
-  async load(): Promise<void> {
     try {
-      const user = await getUserData('admin@gmail.com');
-      // TODO надо продумать логику хранения мейла или токена
-
+      const response = await deleteUserData(email);
       runInAction(() => {
-        this.email = user.email;
-        this.displayName = user.display_name;
+        if (response === 204) this.users = this.users.filter((user) => user.email !== email);
       });
     } catch (error) {
-      console.error('Error fetching users:', error);
+      if (error instanceof Error) {
+        if (error.message) {
+          alert(error.message);
+        } else {
+          alert('Something went wrong');
+        }
+      }
     }
-  }
-
-  init(): void {
-    this.load().catch(console.error);
   }
 }
 
-export { UserStore };
+const userStore = new UserStore();
+
+export { userStore };
