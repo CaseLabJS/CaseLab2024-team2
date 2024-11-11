@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import type { RegisterRequest } from '@/entities/user';
-=======
-import type { RegisterRequest, UserResponse } from '@/entities/User';
->>>>>>> main
+import type { RegisterRequest, UserResponse } from '@/entities/user';
 
 import { api } from './api-config';
 
