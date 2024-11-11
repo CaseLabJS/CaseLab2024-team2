@@ -7,15 +7,12 @@ import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { useState, type ReactElement } from 'react';
 
-<<<<<<< HEAD
 import type { RegisterRequest } from '@/entities/user';
 import { SignupSchema } from '@/features/auth';
 
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { useRootStore } from '@/app/providers/store';
-=======
 import style from './SignUp.module.css';
->>>>>>> main
 
 export const SignUp = (): ReactElement => {
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
