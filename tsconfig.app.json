@@ -10,7 +10,6 @@
     },
     "rootDir": "src",
     "baseUrl": "./src",
-    "outDir": "../build",
 
     /* Bundler mode */
     "moduleResolution": "Bundler",
