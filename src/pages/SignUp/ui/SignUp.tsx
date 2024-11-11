@@ -7,6 +7,13 @@ import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { useState, type ReactElement } from 'react';
 
+import type { RegisterRequest } from '@/entities/user';
+import { SignupSchema } from '@/features/auth';
+
+import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { useRootStore } from '@/app/providers/store';
+import style from './SignUp.module.css';
+
 export const SignUp = (): ReactElement => {
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
 
@@ -33,54 +40,35 @@ export const SignUp = (): ReactElement => {
   };
 
   return (
-    <div
-      style={{
-        width: '100vw',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '714px',
-          boxSizing: 'border-box',
-          margin: '0 auto',
-          justifyContent: 'center',
-          borderRadius: '20px',
-          border: '1px solid black',
-          padding: '53px 57px 65px',
-        }}
-      >
+    <div className={style.signUpContainer}>
+      <div className={style.signUpBox}>
         <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
           {({ errors, touched, isSubmitting, isValid, dirty, getFieldProps }) => (
-            <Form style={{ width: '600px', display: 'flex', flexDirection: 'column', rowGap: '16px' }}>
+            <Form className={style.signUpForm}>
               <TextField
-                label="Отображаемое имя"
+                label={errors.display_name || 'Отображаемое имя'}
                 {...getFieldProps('display_name')}
                 fullWidth
                 margin="none"
                 error={touched.display_name && Boolean(errors.display_name)}
-                helperText={touched.display_name && errors.display_name}
               />
 
               <TextField
-                label="Email"
+                label={errors.email || 'Email'}
                 {...getFieldProps('email')}
                 fullWidth
                 margin="none"
                 type="email"
                 error={touched.email && Boolean(errors.email)}
-                helperText={touched.email && errors.email}
               />
 
               <TextField
-                label="Пароль"
+                label={errors.password || 'Пароль'}
                 {...getFieldProps('password')}
                 fullWidth
                 margin="none"
                 type="password"
                 error={touched.password && Boolean(errors.password)}
-                helperText={touched.password && errors.password}
               />
 
               <FormControlLabel
@@ -96,7 +84,7 @@ export const SignUp = (): ReactElement => {
                 disabled={isSubmitting || !isAgree || !isValid || !dirty}
                 fullWidth
               >
-                Зарегистрироваться
+                Sign Up
               </Button>
             </Form>
           )}
