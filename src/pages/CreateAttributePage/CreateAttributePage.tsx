@@ -1,6 +1,8 @@
+import type { ReactElement } from 'react';
+
 import { AddAttribute } from '@/widgets/AddAttribute';
 
-const CreateAttributePage = () => {
+const CreateAttributePage = (): ReactElement => {
   return <AddAttribute />;
 };
 
