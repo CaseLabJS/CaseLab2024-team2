@@ -1,0 +1,38 @@
+.userForm {
+    box-sizing: border-box;
+    width: 448px;
+    padding: 30px;
+    background: #b9b6b6;
+}
+
+.userForm__form {
+    width: 275px;
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.userForm__form input {
+    all: unset;
+    text-align: left;
+    line-height: 24px;
+    border-bottom: 1px solid #686161;
+}
+
+.userForm__title {
+    color:rgba(0, 86, 179, 0.87);
+    font-weight: 600;
+    text-align: left;
+    font-size: 20px;
+    line-height: 32px;
+}
+
+.userFrom__error {
+    color: red;
+    font-size: 10px;
+}
+
+.userForm__button {
+    background: rgba(0, 86, 179, 0.87);
+    text-transform: uppercase;
+}
