@@ -1,4 +1,4 @@
-import { api } from './api-config';
+import { api } from '@/shared/http';
 
 type Document = {
   id: number;
