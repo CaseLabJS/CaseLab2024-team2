@@ -136,12 +136,14 @@ export const Header = (): ReactElement => {
           <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
         </NavLink>
         <nav className={styles.userHeader__icons}>
-          <IconButton onClick={() => { handleOpenNotes(); closeMenu() }}>
-            <NotificationsNoneIcon />
-            {
-              isRead.length > 0 &&
-              (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
-            }
+          <div>
+            <IconButton onClick={() => { handleOpenNotes(); closeMenu() }}>
+              <NotificationsNoneIcon />
+              {
+                isRead.length > 0 &&
+                (<p className={styles.userHeader__notifications}>{isRead.length}</p>)
+              }
+            </IconButton>
             {
               isOpenNotes && (<ul className={styles.userNotes}>
                 {localNotifications.map((item) => (
@@ -153,9 +155,11 @@ export const Header = (): ReactElement => {
                 ))}
               </ul>)
             }
-          </IconButton>
-          <IconButton onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); console.log('click') } }} aria-label="account" size="large">
-            <AccountCircleOutlinedIcon />
+          </div>
+          <div>
+            <IconButton onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); console.log('click') } }} aria-label="account" size="large">
+              <AccountCircleOutlinedIcon />
+            </IconButton>
             {
               isOpenMenu && <div className={styles.userMenu}>
                 <div className={styles.userMenu__user}>
@@ -170,7 +174,7 @@ export const Header = (): ReactElement => {
                 <button className={styles.userHeader__button_menu} onClick={() => { authStore.logout() }}>Sign out</button>
               </div>
             }
-          </IconButton>
+          </div>
         </nav>
       </div>
     </header>
