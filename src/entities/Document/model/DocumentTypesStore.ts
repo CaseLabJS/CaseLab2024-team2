@@ -1,4 +1,4 @@
-import { getAllDocTypes } from '@/api/req-doc-types';
+import { getAllDocTypes } from '@/entities/document/api';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
 import type { DocumentTypeResponse } from './types/DocumentTypeResponse';
