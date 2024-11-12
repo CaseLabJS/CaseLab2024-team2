@@ -1,10 +1,9 @@
 import type { ReactElement, ReactNode } from 'react';
 
-import { authStore } from '@/entities/auth/model/store';
+import { authStore } from '@/entities/auth';
 import { Admin } from '@/pages/admin';
 import { CreateAttributePage } from '@/pages/createAttributePage';
 import { DocumentTypesPage } from '@/pages/documentTypesPage';
-import ErrorPage from '@/pages/errorPage/ErrorPage';
 import { SignIn } from '@/pages/signin';
 import { User } from '@/pages/user';
 import { observer } from 'mobx-react-lite';

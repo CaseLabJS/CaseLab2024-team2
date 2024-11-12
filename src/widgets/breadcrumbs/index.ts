@@ -1,1 +1,1 @@
-export { Breadcrumbs } from './ui/Breadcrumbs';
+export { default as Breadcrumbs } from './ui/Breadcrumbs';

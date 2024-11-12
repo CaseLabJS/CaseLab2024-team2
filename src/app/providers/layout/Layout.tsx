@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { authStore } from '@/entities/auth/model/store';
+import { authStore } from '@/entities/auth';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 
