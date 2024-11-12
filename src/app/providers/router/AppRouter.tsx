@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from 'react';
 
 import { authStore } from '@/entities/auth';
-import { Admin } from '@/pages/admin';
+import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
 import { DocumentTypesPage } from '@/pages/documentTypesPage';
 import { ErrorPage } from '@/pages/errorPage';
