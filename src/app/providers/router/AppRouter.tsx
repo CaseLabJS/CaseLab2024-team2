@@ -6,7 +6,7 @@ import { CreateAttributePage } from '@/pages/createAttributePage';
 import { DocumentTypesPage } from '@/pages/documentTypesPage';
 import ErrorPage from '@/pages/errorPage/ErrorPage';
 import { SignIn } from '@/pages/signin';
-import User from '@/pages/User/User';
+
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
