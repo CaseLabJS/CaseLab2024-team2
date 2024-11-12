@@ -9,8 +9,9 @@ import { IconButton } from "@mui/material";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
-import styles from './header.module.css';
 import logo from './images/logo.svg';
+
+import styles from './header.module.css';
 
 export const Header = (): ReactElement => {
   /**Пример данных о пользователе - должно приходить с backend (для разработки) */
