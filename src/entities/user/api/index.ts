@@ -1,1 +1,1 @@
-export { getAllUserData, getUserData, editUserData, deleteUserData } from './req-user-data';
+export { getAllUserData, getUserData, editUserData, deleteUserData } from './api-user';
