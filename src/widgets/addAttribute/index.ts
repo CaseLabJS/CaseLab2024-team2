@@ -1,1 +1,1 @@
-export { AddAttribute } from './ui';
+export { AddAttribute } from './ui/AttributeWidget';
