@@ -1,4 +1,3 @@
-
 # CaseLabJS2024-team2
 
 ## React + TypeScript + Vite
@@ -37,35 +36,35 @@
 
 - **Режим разработки**:
 
-   ```bash
-   npm run dev
-   ```
+  ```bash
+  npm run dev
+  ```
 
 - **Сборка для продакшена**:
 
-   ```bash
-   npm run build
-   ```
+  ```bash
+  npm run build
+  ```
 
 - **Предпросмотр собранного проекта**:
 
-   ```bash
-   npm run preview
-   ```
+  ```bash
+  npm run preview
+  ```
 
 ### Дополнительные команды
 
 - **Линтинг кода**:
 
-   ```bash
-   npm run lint
-   ```
+  ```bash
+  npm run lint
+  ```
 
 - **Полная сборка и генерация типов**:
 
-   ```bash
-   npm run build-gen:all
-   ```
+  ```bash
+  npm run build-gen:all
+  ```
 
 ---
 
