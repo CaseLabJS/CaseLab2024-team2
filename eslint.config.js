@@ -21,6 +21,17 @@ const baseESLintConfig = {
       {
         type: 'natural',
         order: 'asc',
+        groups: [
+          'type',
+          ['builtin', 'external'],
+          'internal-type',
+          'internal',
+          ['parent-type', 'sibling-type', 'index-type'],
+          ['parent', 'sibling', 'index'],
+          'object',
+          'style',
+          'unknown',
+        ],
       },
     ],
     curly: ['error', 'all'],
