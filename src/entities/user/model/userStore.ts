@@ -1,4 +1,4 @@
-import { registerUser } from '@/entities/auth/api/register-auth';
+import { registerUser } from '@/entities/auth/api/api-auth';
 import { deleteUserData, editUserData, getAllUserData, getUserData } from '@/api/req-user-data';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
