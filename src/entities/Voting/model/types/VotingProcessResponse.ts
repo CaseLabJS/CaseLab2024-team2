@@ -1,4 +1,4 @@
-import type { VoteResponse } from '@/entities/vovovo/model/types/VoteResponse';
+import type { VoteResponse } from '@/entities/vote/model/types/VoteResponse';
 export interface VotingProcessResponse {
   id: number;
   name: string;
