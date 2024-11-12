@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
+import { authStore } from '@/entities/auth/model/store';
 import { devCheckIsAdmin } from "@/shared/utils/dev/dev-utils";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -8,7 +9,6 @@ import { IconButton } from "@mui/material";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
-import { authStore } from '../../../../entities/auth/model/store';
 import styles from './header.module.css';
 import logo from './images/logo.svg';
 
