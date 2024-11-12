@@ -7,12 +7,16 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "build-gen:all": "tsc -P tsconfig.types.json && node src/entities/gen-types.js && eslint -c eslint.config.js src/entities --fix && prettier --write src/entities",
     "build:docker": "docker build -t caselab2024-team2 .",
     "start:docker": "docker run -d -p 5173:80 --rm --name caselab2024-team2 caselab2024-team2",
     "stop:docker": "docker stop caselab2024-team2",
-    "delete:docker": "docker rmi caselab2024-team2"
+    "delete:docker": "docker rmi caselab2024-team2",
+    "prepare": "husky",
+    "format": "prettier . --check",
+    "format:fix": "prettier . --write"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -45,6 +49,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.13",
     "globals": "^15.11.0",
+    "husky": "^9.1.6",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "~5.6.2",
