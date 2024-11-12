@@ -79,6 +79,10 @@ async function generateSchemas(): Promise<void> {
         groupName = 'documents';
       }
 
+      if (name.toLowerCase().startsWith('voting')) {
+        groupName = 'vote';
+      }
+
       groupedSchemas[groupName] = groupedSchemas[groupName] || [];
       groupedSchemas[groupName].push({ name, schema });
     }

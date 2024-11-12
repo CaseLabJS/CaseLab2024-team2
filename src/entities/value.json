@@ -61,16 +61,16 @@
       "nameRef": "AttributeValueRequest"
     }
   ],
-  "voting/model/types/votingProcessResponse": [
-    {
-      "place": "vote/model/types/voteResponse.type.ts",
-      "nameRef": "VoteResponse"
-    }
-  ],
   "vote/model/types/voteResponse": [
     {
       "place": "vote/model/types/voteUserResponse.type.ts",
       "nameRef": "VoteUserResponse"
+    }
+  ],
+  "vote/model/types/votingProcessResponse": [
+    {
+      "place": "vote/model/types/voteResponse.type.ts",
+      "nameRef": "VoteResponse"
     }
   ]
 }
