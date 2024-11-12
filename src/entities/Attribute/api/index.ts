@@ -4,4 +4,4 @@ export {
   addAttributeDoc,
   updateAttributeDoc,
   deleteAttributeDoc,
-} from './req-doc-attributes';
+} from './api-attribute';
