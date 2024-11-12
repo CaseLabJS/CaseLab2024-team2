@@ -1,17 +1,17 @@
 import type { ReactElement, ReactNode } from 'react';
 
-import { authStore } from '@/entities/auth/model/store';
-import Admin from '@/pages/Admin/Admin';
-import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
-import DocumentTypesPage from '@/pages/DocumentTypesPage';
-import ErrorPage from '@/pages/ErrorPage/ErrorPage';
-import { SignIn } from '@/pages/SignIn/';
-import User from '@/pages/User/User';
+import { authStore } from '@/entities/auth';
+import { Admin } from '@/pages/adminPage';
+import { CreateAttributePage } from '@/pages/createAttributePage';
+import { DocumentTypesPage } from '@/pages/documentPage';
+import { ErrorPage } from '@/pages/errorPage';
+import { SignIn } from '@/pages/signin';
+import { User } from '@/pages/user';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
-import Layout from '../layout/Layout';
+import { Layout } from '../layout';
 import { ROUTE_CONSTANTS } from './config/constants';
 
 const AppRouter = observer((): ReactElement => {
