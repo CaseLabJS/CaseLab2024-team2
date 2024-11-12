@@ -1,4 +1,4 @@
-import type { AttributeValueResponse } from '@/entities/exemple/model/types/AttributeValueResponse';
+import type { AttributeValueResponse } from '@/entities/attribute/model/types/AttributeValueResponse';
 export interface DocumentVersionResponse {
   id: number;
   attributes: AttributeValueResponse[];
