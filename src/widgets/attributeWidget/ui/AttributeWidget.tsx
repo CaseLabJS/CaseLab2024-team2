@@ -5,7 +5,7 @@ import { Button, TextField, Typography, Box, Stack } from '@mui/material';
 import { useState, type ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 
-import style from './fattributeWidget.module.css';
+import style from './attributeWidget.module.css';
 
 const AddAttribute = (): ReactElement => {
   const [name, setName] = useState<string>('');
