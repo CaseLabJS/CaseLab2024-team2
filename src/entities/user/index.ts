@@ -4,3 +4,4 @@ export type * from './model/types/UserToDocumentResponse';
 export type * from './model/types/RegisterRequest';
 export type * from './model/types/AuthenticationRequest';
 export type * from './model/types/AuthenticationResponse';
+export { userStore } from './model/userStore';
