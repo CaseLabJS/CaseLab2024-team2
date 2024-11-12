@@ -9,3 +9,4 @@ export type * from './model/types/DocumentTypeResponse';
 export type * from './model/types/DocumentTypeToAttributeResponse';
 export type * from './model/types/CreateDocumentRequest';
 export type * from './model/types/PatchDocumentRequest';
+export { documentTypesStore } from './model/documentTypesStore';
