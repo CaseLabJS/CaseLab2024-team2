@@ -1,5 +1,4 @@
-import type { AuthenticationRequest } from '@/entities/user';
-import type { UserResponse } from '@/entities/user';
+import type { AuthenticationRequest, UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -23,7 +22,8 @@ class AuthStore {
       if (!authResponse) {
         this.handleAuthError();
       } else {
-        this.processAuthResponse();
+        localStorage.setItem('token', authResponse.token);
+        await this.processAuthResponse();
       }
     } catch (error) {
       this.handleAuthError();
@@ -35,7 +35,7 @@ class AuthStore {
   async checkAuth(): Promise<void> {
     if (!this.isAuth) return;
     try {
-      this.processAuthResponse();
+      await this.processAuthResponse();
     } catch {
       this.logout();
     }
@@ -73,7 +73,6 @@ class AuthStore {
       const userData = await this.fetchCurrentUser();
       if (userData) {
         runInAction(() => {
-          localStorage.setItem('token', token);
           this.state = 'success';
           this.isAuth = true;
           this.displayName = userData.display_name;
