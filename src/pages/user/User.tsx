@@ -11,5 +11,4 @@ const User = (): ReactElement => {
   );
 };
 
-
 export default User;

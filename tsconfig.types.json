@@ -1,5 +1,5 @@
 {
-    "compilerOptions": {
+  "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -8,9 +8,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-    },
-    "include": ["src/entities/gen-types.ts"],
-    "exclude": ["node_modules"]
+  },
+  "include": ["src/entities/gen-types.ts"],
+  "exclude": ["node_modules"]
 }
-
-    
