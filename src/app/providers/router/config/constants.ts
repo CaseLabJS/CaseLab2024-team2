@@ -3,6 +3,6 @@ export const ROUTE_CONSTANTS = {
   SIGN_IN: { path: '/signin', ruTitle: 'Авторизация' },
   USER: { path: '/user', ruTitle: 'Пользователь' },
   ADMIN: { path: '/admin', ruTitle: 'Администратор' },
-  CREATE_ATTRIBUTE: { path: '/create-attribute', ruTitle: 'Создать аттрибут' },
+  ATTRIBUTES: { path: '/admin/attributes', ruTitle: 'Аттрибуты' },
   DOCUMENT_TYPES: { path: '/document-types', ruTitle: 'Типы документов' },
 } as const;
