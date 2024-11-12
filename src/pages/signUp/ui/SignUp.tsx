@@ -9,7 +9,7 @@ import { useState, type ReactElement } from 'react';
 
 import style from './signUp.module.css';
 
-export const SignUp = (): ReactElement => {
+const SignUp = (): ReactElement => {
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
 
   const [isAgree, setIsAgree] = useState<boolean>(false);
@@ -88,3 +88,5 @@ export const SignUp = (): ReactElement => {
     </div>
   );
 };
+
+export default SignUp;

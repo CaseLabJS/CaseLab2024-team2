@@ -1,1 +1,1 @@
-export { AddAttribute } from './ui/AttributeWidget';
+export { default as AddAttribute } from './ui/AttributeWidget';

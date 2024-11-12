@@ -4,7 +4,7 @@ import { Button, FormControl, TextField } from '@mui/material';
 import { useState } from 'react';
 //тут импорт addAttributeDoc
 
-export const AddAttribute = (): ReactElement => {
+const AddAttribute = (): ReactElement => {
   const [name, setName] = useState<string>('');
   const [type, setType] = useState<string>('');
 
@@ -37,3 +37,5 @@ export const AddAttribute = (): ReactElement => {
     </FormControl>
   );
 };
+
+export default AddAttribute;

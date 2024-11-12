@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 import style from './signIn.module.css';
 
-export const SignIn = (): ReactElement => {
+const SignIn = (): ReactElement => {
   const navigate = useNavigate();
   const initialValues: AuthenticationRequest = {
     email: 'admin@gmail.com',
@@ -93,3 +93,5 @@ export const SignIn = (): ReactElement => {
     </Box>
   );
 };
+
+export default SignIn;
