@@ -22,7 +22,6 @@ class AuthStore {
       if (!authResponse) {
         this.handleAuthError();
       } else {
-        localStorage.setItem('token', authResponse.token);
         await this.processAuthResponse();
       }
     } catch (error) {
@@ -45,6 +44,8 @@ class AuthStore {
     localStorage.removeItem('token');
     this.isAdmin = false;
     this.isAuth = false;
+    this.displayName = '';
+    this.email = '';
     this.state = 'success';
   }
 
