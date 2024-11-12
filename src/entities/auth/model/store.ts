@@ -1,7 +1,7 @@
-import type { UserAuth } from '@/api/register-auth';
 import type { AuthenticationRequest } from '@/entities/user';
+import type { UserResponse } from '@/entities/user';
 
-import { authUser, getCurrentUser } from '@/api/register-auth';
+import { authUser, getCurrentUser } from '@/entities/auth/api/register-auth';
 import { makeAutoObservable, runInAction } from 'mobx';
 type ISimpleState = 'error' | 'success' | 'loading';
 
@@ -65,7 +65,7 @@ class AuthStore {
     });
   }
 
-  private async fetchCurrentUser(): Promise<UserAuth | null> {
+  private async fetchCurrentUser(): Promise<UserResponse | null> {
     try {
       const data = await getCurrentUser();
       return data;
