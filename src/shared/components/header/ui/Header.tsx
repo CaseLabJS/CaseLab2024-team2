@@ -158,7 +158,7 @@ export const Header = (): ReactElement => {
             }
           </div>
           <div>
-            <IconButton onClick={(e) => { { handleOpenMenu(); closeNote(); console.log(e.target, 'click') } }} aria-label="account" size="large">
+            <IconButton onClick={() => { { handleOpenMenu(); closeNote(); } }} aria-label="account" size="large">
               <AccountCircleOutlinedIcon />
             </IconButton>
             {
