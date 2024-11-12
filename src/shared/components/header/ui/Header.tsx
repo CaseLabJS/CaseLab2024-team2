@@ -4,6 +4,7 @@ import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { devCheckIsAdmin } from "@/shared/utils/dev/dev-utils";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import { IconButton } from "@mui/material";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
@@ -135,7 +136,7 @@ export const Header = (): ReactElement => {
           <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
         </NavLink>
         <nav className={styles.userHeader__icons}>
-          <div onClick={() => { handleOpenNotes(); closeMenu() }} className={styles.userHeader__button}>
+          <IconButton onClick={() => { handleOpenNotes(); closeMenu() }}>
             <NotificationsNoneIcon />
             {
               isRead.length > 0 &&
@@ -152,8 +153,8 @@ export const Header = (): ReactElement => {
                 ))}
               </ul>)
             }
-          </div>
-          <div onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); } }} className={styles.userHeader__button}>
+          </IconButton>
+          <IconButton onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); console.log('click') } }} aria-label="account" size="large">
             <AccountCircleOutlinedIcon />
             {
               isOpenMenu && <div className={styles.userMenu}>
@@ -169,7 +170,7 @@ export const Header = (): ReactElement => {
                 <button className={styles.userHeader__button_menu} onClick={() => { authStore.logout() }}>Sign out</button>
               </div>
             }
-          </div>
+          </IconButton>
         </nav>
       </div>
     </header>
