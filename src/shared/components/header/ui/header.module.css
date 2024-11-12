@@ -5,6 +5,7 @@ ul {
 }
 
 .header {
+  width: 100%;
   background-color: #fff;
 }
 
@@ -80,7 +81,7 @@ ul {
 }
 
 .userMenu {
-    width: 13em;
+    width: 15em;
     background: #fff;
     padding: 5px 15px 5px 5px;
     border-radius: 5px;
@@ -102,7 +103,7 @@ ul {
 
 .userMenu__user_name {
     font-weight: 600;
-    padding: 0px 0px 5px 0px;
+    padding: 5px 0px 10px 0px;
     margin: 0px;
 }
 
@@ -112,11 +113,16 @@ ul {
     color: rgba(0, 0, 0, 60%);
 }
 
+.userMenu__userMenu_link {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
 .userNotes {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 10em;
+    width: 13em;
     border-radius: 5px;
     box-shadow: 1px 1px 20px 3px rgb(0 0 0 / 14%);
     background: #fff;

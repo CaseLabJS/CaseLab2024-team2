@@ -158,7 +158,7 @@ export const Header = (): ReactElement => {
             }
           </div>
           <div>
-            <IconButton onClick={(e) => { if (e.target === e.currentTarget.firstChild) { handleOpenMenu(); closeNote(); console.log('click') } }} aria-label="account" size="large">
+            <IconButton onClick={(e) => { { handleOpenMenu(); closeNote(); console.log(e.target, 'click') } }} aria-label="account" size="large">
               <AccountCircleOutlinedIcon />
             </IconButton>
             {
@@ -169,7 +169,7 @@ export const Header = (): ReactElement => {
                 </div>
                 <ul>
                   {menuForUser.map((item, i) => (
-                    <li key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
+                    <li className={styles.userMenu__userMenu_link} key={i}><NavLink to={item.link}>{item.name}</NavLink></li>
                   ))}
                 </ul>
                 <button className={styles.userHeader__button_menu} onClick={() => { authStore.logout() }}>Sign out</button>
