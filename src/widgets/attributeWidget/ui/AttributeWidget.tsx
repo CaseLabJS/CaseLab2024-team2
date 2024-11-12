@@ -1,11 +1,11 @@
-import type { ReactElement } from 'react';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, TextField, Typography, Box, Stack } from '@mui/material';
-import { addAttributeDoc } from '@/entities/attribute/api';
-import style from './AttributeWidget.module.css';
-import iconLink from '@/assets/Vector.svg';
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
+import iconLink from '@/assets/Vector.svg';
+import { addAttributeDoc } from '@/entities/attribute/api';
+import { Button, TextField, Typography, Box, Stack } from '@mui/material';
+import { useState, type ReactElement } from 'react';
+import { Link } from 'react-router-dom';
+
+import style from './AttributeWidget.module.css';
 
 const AddAttribute = (): ReactElement => {
   const [name, setName] = useState<string>('');
@@ -16,7 +16,7 @@ const AddAttribute = (): ReactElement => {
   }
   return (
     <Box className={style.boxCreateAttribute}>
-      <Link to={ROUTE_CONSTANTS.CREATE_ATTRIBUTE.path} className={style.stylelinkIcon}>
+      <Link to={ROUTE_CONSTANTS.ATTRIBUTES.path} className={style.stylelinkIcon}>
         <img src={iconLink} alt="" />
       </Link>
       <Stack direction="column" gap="13px" marginBottom="80px">
