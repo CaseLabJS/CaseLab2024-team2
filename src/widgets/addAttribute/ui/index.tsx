@@ -1,12 +1,14 @@
+import type { ReactElement } from 'react';
+
 import { Button, FormControl, TextField } from '@mui/material';
 import { useState } from 'react';
 //тут импорт addAttributeDoc
 
-export const AddAttribute = () => {
+export const AddAttribute = (): ReactElement => {
   const [name, setName] = useState<string>('');
   const [type, setType] = useState<string>('');
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     //addAttributeDoc(name, type);
   };
   return (
