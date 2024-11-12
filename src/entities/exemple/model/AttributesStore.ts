@@ -1,6 +1,6 @@
 import type { DocumentTypeResponse, DocumentTypeToAttributeResponse } from '@/entities/document';
 
-import { getAllAttributeDocs } from '@/entities/attribute/api/api-attribute';
+import { getAllAttributeDocs } from '@/entities/exemple/api/api-attribute';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
 import type { AttributeResponse } from './types/AttributeResponse';
