@@ -43,4 +43,4 @@ const Breadcrumbs = (): ReactElement => {
   return <MuiBreadcrumbs aria-label="breadcrumb">{routesComponents}</MuiBreadcrumbs>;
 };
 
-export { Breadcrumbs };
+export default Breadcrumbs;
