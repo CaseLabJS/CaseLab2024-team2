@@ -1,4 +1,4 @@
-import { documentTypesStore } from '@/entities/docs';
+import { documentTypesStore } from '@/entities/documents';
 import { Grid2, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 

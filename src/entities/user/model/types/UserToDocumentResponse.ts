@@ -1,4 +1,4 @@
-import type { DocumentPermissionResponse } from '@/entities/docs/model/types/DocumentPermissionResponse';
+import type { DocumentPermissionResponse } from '@/entities/documents/model/types/DocumentPermissionResponse';
 export interface UserToDocumentResponse {
   email: string;
   document_permissions: DocumentPermissionResponse[];
