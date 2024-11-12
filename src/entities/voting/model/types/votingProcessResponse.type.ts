@@ -1,4 +1,4 @@
-import type { VoteResponse } from '@/entities/vote/model/types/VoteResponse';
+import type { VoteResponse } from '@/entities/vote/model/types/voteResponse.type.ts';
 export interface VotingProcessResponse {
   id: number;
   name: string;

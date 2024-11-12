@@ -73,9 +73,10 @@ async function generateSchemas(): Promise<void> {
       if (
         name.toLowerCase().startsWith('create') ||
         name.toLowerCase().startsWith('update') ||
-        name.toLowerCase().startsWith('patch')
+        name.toLowerCase().startsWith('patch') ||
+        name.toLowerCase().startsWith('document')
       ) {
-        groupName = 'document';
+        groupName = 'documents';
       }
 
       groupedSchemas[groupName] = groupedSchemas[groupName] || [];
@@ -95,7 +96,9 @@ async function generateSchemas(): Promise<void> {
         const interfaceImportStatements: string[] = [];
         const interfaceContent = generateInterface(name, schema, nestedSchemas, interfaceImportStatements);
 
-        const filePath = path.join(groupDir, `${name}.ts`);
+        const nameLow = name[0].toLowerCase() + name.slice(1);
+
+        const filePath = path.join(groupDir, `${nameLow}.type.ts`);
         const dirPath = path.posix.dirname(filePath);
 
         await ensureDirectoryExists(dirPath); // Создаем директорию в нижнем регистре
@@ -103,7 +106,9 @@ async function generateSchemas(): Promise<void> {
         fs.writeFileSync(filePath, interfaceContent, 'utf8');
         console.log(`Создан файл: ${filePath}`);
 
-        importStatements.push(`export * from './model/types/${name}';`);
+        importStatements.push(
+          `export type * from '@/entities/${groupName.toLowerCase()}/model/types/${nameLow}.type';`,
+        );
 
         if (schema.properties) {
           for (const [, value] of Object.entries(schema.properties)) {
@@ -115,8 +120,18 @@ async function generateSchemas(): Promise<void> {
 
             if (refType) {
               const firstWord = refType.split(/(?=[A-Z])/)[0].toLowerCase();
-              const relativePath = path.join(firstWord, 'model', 'types', `${refType}.ts`).replace(/\\/g, '/');
-              const key = `${groupName.toLowerCase()}/model/types/${name}`;
+              const refTypeLow = refType[0].toLowerCase() + refType.slice(1);
+              let firstWordChenged;
+              if (firstWord === 'document') {
+                firstWordChenged = firstWord + 's';
+              } else {
+                firstWordChenged = firstWord;
+              }
+              const relativePath = path
+                .join(firstWordChenged, 'model', 'types', `${refTypeLow}.type.ts`)
+                .replace(/\\/g, '/');
+              const refNameLow = name[0].toLowerCase() + name.slice(1);
+              const key = `${groupName.toLowerCase()}/model/types/${refNameLow}`;
 
               console.log(`Добавляем вложенный тип: ${key} -> ${relativePath}`);
 
@@ -154,7 +169,7 @@ async function generateSchemas(): Promise<void> {
     console.log(`Типы с вложенными типами успешно сохранены в ${valueFilePath}`);
 
     for (const parentName in valueData) {
-      const parentFilePath = path.join(outputDir, `${parentName.toLowerCase()}.ts`);
+      const parentFilePath = path.join(outputDir, `${parentName.toLowerCase()}.type.ts`);
       if (fs.existsSync(parentFilePath)) {
         let parentFileContent = await fs.promises.readFile(parentFilePath, 'utf8');
 

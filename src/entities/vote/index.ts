@@ -1,3 +1,3 @@
-export type * from './model/types/VoteResponse';
-export type * from './model/types/VoteUserResponse';
-export type * from './model/types/VoteRequest';
+export type * from '@/entities/vote/model/types/voteResponse.type';
+export type * from '@/entities/vote/model/types/voteUserResponse.type';
+export type * from '@/entities/vote/model/types/voteRequest.type';
