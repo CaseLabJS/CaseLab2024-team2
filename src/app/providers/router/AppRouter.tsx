@@ -4,13 +4,14 @@ import { authStore } from '@/entities/auth';
 import { Admin } from '@/pages/admin';
 import { CreateAttributePage } from '@/pages/createAttributePage';
 import { DocumentTypesPage } from '@/pages/documentTypesPage';
+import { ErrorPage } from '@/pages/errorPage';
 import { SignIn } from '@/pages/signin';
 import { User } from '@/pages/user';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
-import Layout from '../layout/Layout';
+import { Layout } from '../layout';
 import { ROUTE_CONSTANTS } from './config/constants';
 
 const AppRouter = observer((): ReactElement => {
