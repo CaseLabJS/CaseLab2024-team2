@@ -119,14 +119,14 @@ export const Header = (): ReactElement => {
   const itemsUser = [ // пункты меню в случае простого пользователя
     {
       name: 'Профиль',
-      link: ROUTE_CONSTANTS.SIGN_IN.path,
+      link: ROUTE_CONSTANTS.USER.path,
     }
   ];
 
   /** Проверка пользователя на права администратора, для рендеринга сообветствующего меню пользователя*/
   let menuForUser;
 
-  if (devCheckIsAdmin()) {
+  if (authStore.isAdmin) {
     menuForUser = itemsAdmin;
   } else menuForUser = itemsUser;
 
