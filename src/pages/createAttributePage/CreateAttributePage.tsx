@@ -1,9 +1,7 @@
 import type { ReactElement } from 'react';
 
-import { AddAttribute } from '@/widgets/addAttribute';
-
 const CreateAttributePage = (): ReactElement => {
-  return <AddAttribute />;
+  return <div>Страница со списком аттрибутов</div>;
 };
 
 export default CreateAttributePage;
