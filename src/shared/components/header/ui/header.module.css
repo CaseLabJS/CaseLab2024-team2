@@ -1,7 +1,7 @@
 ul {
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
 }
 
 .header {
@@ -10,36 +10,36 @@ ul {
 }
 
 .userHeader {
-    max-width: 1920px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 0 auto;
+  max-width: 1920px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 0 auto;
 }
 
 .userHeader__link {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .userHeader__button {
-    width: 1.5rem;
-    padding: 0;
-    border: none;
-    display: flex;
-    align-items: center;
-    position: relative;
-    justify-content: center;
+  width: 1.5rem;
+  padding: 0;
+  border: none;
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
 }
 
 .userHeader__button_menu {
-    padding: 0;
-    border: none;
-    display: flex;
-    align-items: center;
-    position: relative;
-    justify-content: center;
+  padding: 0;
+  border: none;
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
 }
 
 .userHeader__button:focus {
@@ -47,95 +47,95 @@ ul {
 }
 
 .useHeader__logo {
-    width: 70px;
+  width: 70px;
 }
 
 .userHeader__icons {
-    display: flex;
-    gap: 5px;
-    align-items: center;
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 
 .userHeader__userIcon {
-    width: 20px;
-    background-color: #fff;
+  width: 20px;
+  background-color: #fff;
 }
 
 .userHeader__userIcon:hover {
-    transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 .userHeader__userIconBell {
-    position: relative;
+  position: relative;
 }
 
 .userHeader__notifications {
-    width: 15px;
-    border-radius: 50%;
-    background-color: rgb(245, 103, 103);
-    position: absolute;
-    font-size: 10px;
-    text-align: center;
-    top: 0px;
-    left: 20px;
+  width: 15px;
+  border-radius: 50%;
+  background-color: rgb(245, 103, 103);
+  position: absolute;
+  font-size: 10px;
+  text-align: center;
+  top: 0px;
+  left: 20px;
 }
 
 .userMenu {
-    width: 15em;
-    background: #fff;
-    padding: 5px 15px 5px 5px;
-    border-radius: 5px;
-    box-shadow: 1px 1px 20px 3px rgb(0 0 0 / 14%);
-    position: absolute;
-    top: 60px;
-    right: 35px;
-    z-index: 10;
+  width: 15em;
+  background: #fff;
+  padding: 5px 15px 5px 5px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 20px 3px rgb(0 0 0 / 14%);
+  position: absolute;
+  top: 60px;
+  right: 35px;
+  z-index: 10;
 
-    font-weight: normal;
-    font-size: 12px;
-    text-align: left;
+  font-weight: normal;
+  font-size: 12px;
+  text-align: left;
 }
 
 .userMenu__user {
-    font-family: Arial, Helvetica, sans-serif;
-    border-bottom: 1px solid rgba(0, 0, 0, 12%);
+  font-family: Arial, Helvetica, sans-serif;
+  border-bottom: 1px solid rgba(0, 0, 0, 12%);
 }
 
 .userMenu__user_name {
-    font-weight: 600;
-    padding: 5px 0px 10px 0px;
-    margin: 0px;
+  font-weight: 600;
+  padding: 5px 0px 10px 0px;
+  margin: 0px;
 }
 
 .userMenu__user_email {
-    padding: 0px 0px 5px 0px;
-    margin: 0px;
-    color: rgba(0, 0, 0, 60%);
+  padding: 0px 0px 5px 0px;
+  margin: 0px;
+  color: rgba(0, 0, 0, 60%);
 }
 
 .userMenu__userMenu_link {
-    margin-top: 7px;
-    margin-bottom: 7px;
+  margin-top: 7px;
+  margin-bottom: 7px;
 }
 
 .userNotes {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 13em;
-    border-radius: 5px;
-    box-shadow: 1px 1px 20px 3px rgb(0 0 0 / 14%);
-    background: #fff;
-    margin: 1px 0 0;
-    padding: 5px;
-    max-height: 500px;
-    position: absolute;
-    top: 60px;
-    right: 80px;
-    z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 13em;
+  border-radius: 5px;
+  box-shadow: 1px 1px 20px 3px rgb(0 0 0 / 14%);
+  background: #fff;
+  margin: 1px 0 0;
+  padding: 5px;
+  max-height: 500px;
+  position: absolute;
+  top: 60px;
+  right: 80px;
+  z-index: 10;
 
-    font-weight: normal;
-    font-size: 12px;
-    text-align: left;
-    cursor: pointer;
+  font-weight: normal;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
 }
