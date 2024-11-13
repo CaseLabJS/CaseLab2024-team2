@@ -25,5 +25,5 @@
     "noUncheckedSideEffectImports": true,
     "noImplicitAny": true
   },
-  "include": ["src", "src/entities/ts-split-types.tssrc/entities/gen-types.jss.js"]
+  "include": ["src", "src/entities/gen-types.jss.js"]
 }

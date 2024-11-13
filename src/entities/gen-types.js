@@ -40,9 +40,13 @@ async function generateSchemas() {
       if (
         name.toLowerCase().startsWith('create') ||
         name.toLowerCase().startsWith('update') ||
-        name.toLowerCase().startsWith('patch')
+        name.toLowerCase().startsWith('patch') ||
+        name.toLowerCase().startsWith('document')
       ) {
-        groupName = 'document';
+        groupName = 'documents';
+      }
+      if (name.toLowerCase().startsWith('voting')) {
+        groupName = 'vote';
       }
       groupedSchemas[groupName] = groupedSchemas[groupName] || [];
       groupedSchemas[groupName].push({ name, schema });
@@ -56,12 +60,15 @@ async function generateSchemas() {
       for (const { name, schema } of interfaces) {
         const interfaceImportStatements = [];
         const interfaceContent = generateInterface(name, schema, nestedSchemas, interfaceImportStatements);
-        const filePath = path.join(groupDir, `${name}.ts`);
+        const nameLow = name[0].toLowerCase() + name.slice(1);
+        const filePath = path.join(groupDir, `${nameLow}.type.ts`);
         const dirPath = path.posix.dirname(filePath);
         await ensureDirectoryExists(dirPath); // Создаем директорию в нижнем регистре
         fs.writeFileSync(filePath, interfaceContent, 'utf8');
         console.log(`Создан файл: ${filePath}`);
-        importStatements.push(`export * from './model/types/${name}';`);
+        importStatements.push(
+          `export type * from '@/entities/${groupName.toLowerCase()}/model/types/${nameLow}.type';`,
+        );
         if (schema.properties) {
           for (const [, value] of Object.entries(schema.properties)) {
             const refType = value.items?.$ref
@@ -71,8 +78,18 @@ async function generateSchemas() {
                 : undefined;
             if (refType) {
               const firstWord = refType.split(/(?=[A-Z])/)[0].toLowerCase();
-              const relativePath = path.join(firstWord, 'model', 'types', `${refType}.ts`).replace(/\\/g, '/');
-              const key = `${groupName.toLowerCase()}/model/types/${name}`;
+              const refTypeLow = refType[0].toLowerCase() + refType.slice(1);
+              let firstWordChenged;
+              if (firstWord === 'document') {
+                firstWordChenged = firstWord + 's';
+              } else {
+                firstWordChenged = firstWord;
+              }
+              const relativePath = path
+                .join(firstWordChenged, 'model', 'types', `${refTypeLow}.type.ts`)
+                .replace(/\\/g, '/');
+              const refNameLow = name[0].toLowerCase() + name.slice(1);
+              const key = `${groupName.toLowerCase()}/model/types/${refNameLow}`;
               console.log(`Добавляем вложенный тип: ${key} -> ${relativePath}`);
               nestedSchemas[key] = nestedSchemas[key] || [];
               nestedSchemas[key].push({ place: relativePath, nameRef: refType });
@@ -103,7 +120,7 @@ async function generateSchemas() {
     await fs.promises.writeFile(valueFilePath, JSON.stringify(valueData, null, 2), 'utf8');
     console.log(`Типы с вложенными типами успешно сохранены в ${valueFilePath}`);
     for (const parentName in valueData) {
-      const parentFilePath = path.join(outputDir, `${parentName.toLowerCase()}.ts`);
+      const parentFilePath = path.join(outputDir, `${parentName.toLowerCase()}.type.ts`);
       if (fs.existsSync(parentFilePath)) {
         let parentFileContent = await fs.promises.readFile(parentFilePath, 'utf8');
         const importStatementsToAdd = [];
@@ -129,7 +146,16 @@ async function generateSchemas() {
 function generateInterface(name, schema, nestedSchemas, importStatements = []) {
   const properties = Object.entries(schema.properties).map(([key, value]) => {
     let type;
-    if (value.$ref) {
+    // Проверка, если это `VotingProcessRequest`
+    if (name === 'VotingProcessRequest' && key === 'deadline') {
+      // Используем тип `Deadline` из файла `deadline.type.ts`
+      const importStatement = `import { Deadline } from './deadline.type';`;
+      type = 'Deadline';
+      // Добавляем импорт только если его еще нет в списке importStatements
+      if (!importStatements.includes(importStatement)) {
+        importStatements.push(importStatement);
+      }
+    } else if (value.$ref) {
       const refName = value.$ref.split('/').pop();
       type = refName;
       if (nestedSchemas[refName] && Array.isArray(nestedSchemas[refName])) {
@@ -166,7 +192,7 @@ function getTypeFromSchemaProperty(value) {
     case 'array':
       return `${generateTypeForArray(value.items)}[]`;
     case 'object':
-      return '{ [key: string]: unknown }';
+      return 'Record<string, string | number>';
     default:
       return 'unknown';
   }

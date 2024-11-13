@@ -4,5 +4,5 @@ export interface ProblemDetail {
   status: number;
   detail: string;
   instance: string;
-  properties: { [key: string]: unknown };
+  properties: Record<string, string | number>;
 }

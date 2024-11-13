@@ -1,7 +1,6 @@
-export type * from './model/types/UserUpdateRequest';
-export type * from './model/types/UserResponse';
-export type * from './model/types/UserToDocumentResponse';
-export type * from './model/types/RegisterRequest';
-export type * from './model/types/AuthenticationRequest';
-export type * from './model/types/AuthenticationResponse';
-export { userStore } from './model/userStore';
+export type * from '@/entities/user/model/types/userUpdateRequest.type';
+export type * from '@/entities/user/model/types/userResponse.type';
+export type * from '@/entities/user/model/types/userToDocumentResponse.type';
+export type * from '@/entities/user/model/types/registerRequest.type';
+export type * from '@/entities/user/model/types/authenticationRequest.type';
+export type * from '@/entities/user/model/types/authenticationResponse.type';

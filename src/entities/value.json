@@ -1,76 +1,76 @@
 {
-  "user/model/types/UserToDocumentResponse": [
+  "user/model/types/userToDocumentResponse": [
     {
-      "place": "document/model/types/DocumentPermissionResponse.ts",
+      "place": "documents/model/types/documentPermissionResponse.type.ts",
       "nameRef": "DocumentPermissionResponse"
     }
   ],
-  "document/model/types/UpdateDocumentRequest": [
+  "documents/model/types/updateDocumentRequest": [
     {
-      "place": "attribute/model/types/AttributeValueRequest.ts",
+      "place": "attribute/model/types/attributeValueRequest.type.ts",
       "nameRef": "AttributeValueRequest"
     }
   ],
-  "document/model/types/DocumentFacadeResponse": [
+  "documents/model/types/documentFacadeResponse": [
     {
-      "place": "document/model/types/DocumentResponse.ts",
+      "place": "documents/model/types/documentResponse.type.ts",
       "nameRef": "DocumentResponse"
     },
     {
-      "place": "document/model/types/DocumentVersionResponse.ts",
+      "place": "documents/model/types/documentVersionResponse.type.ts",
       "nameRef": "DocumentVersionResponse"
     },
     {
-      "place": "signature/model/types/SignatureResponse.ts",
+      "place": "signature/model/types/signatureResponse.type.ts",
       "nameRef": "SignatureResponse"
     }
   ],
-  "document/model/types/DocumentResponse": [
+  "documents/model/types/documentResponse": [
     {
-      "place": "user/model/types/UserToDocumentResponse.ts",
+      "place": "user/model/types/userToDocumentResponse.type.ts",
       "nameRef": "UserToDocumentResponse"
     }
   ],
-  "document/model/types/DocumentVersionResponse": [
+  "documents/model/types/documentVersionResponse": [
     {
-      "place": "attribute/model/types/AttributeValueResponse.ts",
+      "place": "attribute/model/types/attributeValueResponse.type.ts",
       "nameRef": "AttributeValueResponse"
     }
   ],
-  "document/model/types/DocumentTypeRequest": [
+  "documents/model/types/documentTypeRequest": [
     {
-      "place": "document/model/types/DocumentTypeToAttributeRequest.ts",
+      "place": "documents/model/types/documentTypeToAttributeRequest.type.ts",
       "nameRef": "DocumentTypeToAttributeRequest"
     }
   ],
-  "document/model/types/DocumentTypeResponse": [
+  "documents/model/types/documentTypeResponse": [
     {
-      "place": "document/model/types/DocumentTypeToAttributeResponse.ts",
+      "place": "documents/model/types/documentTypeToAttributeResponse.type.ts",
       "nameRef": "DocumentTypeToAttributeResponse"
     }
   ],
-  "document/model/types/CreateDocumentRequest": [
+  "documents/model/types/createDocumentRequest": [
     {
-      "place": "attribute/model/types/AttributeValueRequest.ts",
+      "place": "attribute/model/types/attributeValueRequest.type.ts",
       "nameRef": "AttributeValueRequest"
     }
   ],
-  "document/model/types/PatchDocumentRequest": [
+  "documents/model/types/patchDocumentRequest": [
     {
-      "place": "attribute/model/types/AttributeValueRequest.ts",
+      "place": "attribute/model/types/attributeValueRequest.type.ts",
       "nameRef": "AttributeValueRequest"
     }
   ],
-  "voting/model/types/VotingProcessResponse": [
+  "vote/model/types/voteResponse": [
     {
-      "place": "vote/model/types/VoteResponse.ts",
-      "nameRef": "VoteResponse"
-    }
-  ],
-  "vote/model/types/VoteResponse": [
-    {
-      "place": "vote/model/types/VoteUserResponse.ts",
+      "place": "vote/model/types/voteUserResponse.type.ts",
       "nameRef": "VoteUserResponse"
+    }
+  ],
+  "vote/model/types/votingProcessResponse": [
+    {
+      "place": "vote/model/types/voteResponse.type.ts",
+      "nameRef": "VoteResponse"
     }
   ]
 }

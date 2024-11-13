@@ -1,7 +1,6 @@
 import { api } from '@/shared/http';
 
-import type { AttributeRequest } from '../model/types/AttributeRequest';
-import type { AttributeResponse } from '../model/types/AttributeResponse';
+import type { AttributeRequest, AttributeResponse } from '../index';
 
 // получить атрибут по id
 export const getAttributeDoc = async (id: number): Promise<AttributeResponse> => {
