@@ -260,7 +260,7 @@ function getTypeFromSchemaProperty(value: SchemaProperty): string {
     case 'array':
       return `${generateTypeForArray(value.items)}[]`;
     case 'object':
-      return '{ [key: string]: unknown }';
+      return 'Record<string, string | number>';
     default:
       return 'unknown';
   }
