@@ -40,7 +40,7 @@ const TabsPanel = ({ tabs, created }: TabsPanelProps): ReactElement => {
   const createdIcons = [<ViewModuleIcon />, <ViewStreamIcon />, <PersonAddIcon />];
   const docNames = ['документы', 'голосования', 'подпись'];
   const createdNames = ['типы', 'атрибуты', 'пользователи'];
-  const handleChange = (event: React.SyntheticEvent, newValue: number): void => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number): void => {
     setValue(newValue);
   };
   return (
