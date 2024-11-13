@@ -1,10 +1,6 @@
-import type { VotingProcessRequest } from '@/entities/voting/model/types/VotingProcessRequest';
-import type { VotingProcessResponse } from '@/entities/voting/model/types/VotingProcessResponse';
+import type { VoteRequest, VoteResponse, VotingProcessResponse, VotingProcessRequest } from '@/entities/vote';
 
 import { api } from '@/shared/http';
-
-import type { VoteRequest } from '../model/types/VoteRequest';
-import type { VoteResponse } from '../model/types/VoteResponse';
 
 // получение голосование по id документа
 export const getVotingProcess = async (documentId: number): Promise<VotingProcessResponse> => {

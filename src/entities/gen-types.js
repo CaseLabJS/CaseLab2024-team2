@@ -146,7 +146,16 @@ async function generateSchemas() {
 function generateInterface(name, schema, nestedSchemas, importStatements = []) {
   const properties = Object.entries(schema.properties).map(([key, value]) => {
     let type;
-    if (value.$ref) {
+    // Проверка, если это `VotingProcessRequest`
+    if (name === 'VotingProcessRequest' && key === 'deadline') {
+      // Используем тип `Deadline` из файла `deadline.type.ts`
+      const importStatement = `import { Deadline } from './deadline.type';`;
+      type = 'Deadline';
+      // Добавляем импорт только если его еще нет в списке importStatements
+      if (!importStatements.includes(importStatement)) {
+        importStatements.push(importStatement);
+      }
+    } else if (value.$ref) {
       const refName = value.$ref.split('/').pop();
       type = refName;
       if (nestedSchemas[refName] && Array.isArray(nestedSchemas[refName])) {

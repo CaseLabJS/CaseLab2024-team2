@@ -1,7 +1,9 @@
+import type { Deadline } from './deadline.type';
+
 export interface VotingProcessRequest {
   name: string;
   threshold: number;
-  deadline: { [key: string]: unknown };
+  deadline: Deadline;
   documentId: number;
   emails: string[];
 }
