@@ -63,7 +63,7 @@ const AppRouter = observer((): ReactElement => {
           ),
           children: [
             {
-              path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.CREATE_ATTRIBUTE.path}`,
+              path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.ATTRIBUTES.path}`,
               element: <CreateAttributePage />,
             },
           ],
