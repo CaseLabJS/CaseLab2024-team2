@@ -1,6 +1,11 @@
+import type { VotingProcessRequest } from '@/entities/voting/model/types/VotingProcessRequest';
+import type { VotingProcessResponse } from '@/entities/voting/model/types/VotingProcessResponse';
+
 import { makeAutoObservable, runInAction } from 'mobx';
+
+import type { VoteRequest } from './types/VoteRequest';
+
 import { addVote, createVotingProcess, getVotingProcess } from '../api';
-import { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '..';
 type ISimpleState = 'error' | 'success' | 'loading';
 
 class VotingStore {
@@ -21,6 +26,7 @@ class VotingStore {
     } catch (error) {
       runInAction(() => {
         this.state = 'error';
+        console.log(error);
         alert('Ошибка. Что-то пошло не так');
       });
       return null;
@@ -37,6 +43,7 @@ class VotingStore {
     } catch (error) {
       runInAction(() => {
         this.state = 'error';
+        console.log(error);
         alert('Ошибка при создании голосования. Что-то пошло не так');
       });
     }
@@ -52,6 +59,8 @@ class VotingStore {
     } catch (error) {
       runInAction(() => {
         this.state = 'error';
+        console.log(error);
+
         alert('Ошибка при голосовании. Повторите попытку');
       });
     }
