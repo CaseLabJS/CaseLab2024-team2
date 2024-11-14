@@ -26,7 +26,7 @@ class AttributesStore {
     makeAutoObservable(this);
   }
 
-  *load(reload: boolean = false): Generator<Promise<AttributesPageResponse>, void, AttributesPageResponse> {
+  async load(reload: boolean = false): Promise<void> {
     if (this.status === Status.LOADING && !reload) return;
 
     let pageNumber = 0;
@@ -36,7 +36,7 @@ class AttributesStore {
     this.status = Status.LOADING;
     try {
       do {
-        attibutesPage = yield getAllAttributeDocs({ pageNum: pageNumber, pageSize: 32 });
+        attibutesPage = await getAllAttributeDocs({ pageNum: pageNumber, pageSize: 32 });
         attibutes.push(...attibutesPage.content);
         pageNumber++;
       } while (!attibutesPage.last);
@@ -54,14 +54,14 @@ class AttributesStore {
     }
   }
 
-  *create(attibute: AttributeRequest): Generator<Promise<AttributeResponse>, void, AttributeResponse> {
+  async create(attibute: AttributeRequest): Promise<void> {
     const statefulAttrubute = observable.object(
       Object.assign(attibute, { id: 0, status: Status.LOADING }) as StatefulAttribute,
     );
     this.attributes.push(statefulAttrubute);
 
     try {
-      const createdAttribute = (yield addAttributeDoc(attibute)) as StatefulAttribute;
+      const createdAttribute = await addAttributeDoc(attibute) as StatefulAttribute;
       Object.assign(statefulAttrubute, createdAttribute, { status: Status.SUCCESS });
     } catch (error) {
       this.attributes.remove(statefulAttrubute);
@@ -78,10 +78,10 @@ class AttributesStore {
     return this.attributes.slice(pageNum * pageSize, pageSize);
   }
 
-  *update(
+  async update(
     id: AttributeResponse['id'],
     attribute: AttributeRequest,
-  ): Generator<Promise<AttributeResponse>, void, AttributeResponse> {
+  ): Promise<void> {
     const attributeToUpdate = this.attributes.find((attribute) => attribute.id === id);
 
     if (!attributeToUpdate) return;
@@ -89,7 +89,7 @@ class AttributesStore {
     try {
       attributeToUpdate.status = Status.LOADING;
 
-      const updatedAttribute = (yield updateAttributeDoc(id, attribute)) as StatefulAttribute;
+      const updatedAttribute = await updateAttributeDoc(id, attribute) as StatefulAttribute;
       updatedAttribute.status = Status.SUCCESS;
 
       Object.assign(attributeToUpdate, updatedAttribute, { status: Status.SUCCESS });
@@ -100,7 +100,7 @@ class AttributesStore {
     }
   }
 
-  *delete(id: AttributeResponse['id']): Generator<Promise<void>, void, void> {
+  async delete(id: AttributeResponse['id']): Promise<void> {
     const attributeToDeleteIndex = this.attributes.findIndex((attribute) => attribute.id === id);
 
     if (attributeToDeleteIndex === -1) return;
@@ -108,7 +108,7 @@ class AttributesStore {
     try {
       this.attributes[attributeToDeleteIndex].status = Status.LOADING;
 
-      yield deleteAttributeDoc(id);
+      await deleteAttributeDoc(id);
 
       this.attributes = observable.array(this.attributes.filter((attribute) => attribute.id !== id));
     } catch (error) {
