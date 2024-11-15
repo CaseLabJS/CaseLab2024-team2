@@ -1,7 +1,7 @@
-import type { RegisterRequest } from '@/entities/user';
+import type { RegisterRequest } from '@/entities/user/model/@x';
 import type { FormikHelpers } from 'formik';
 
-import { userStore } from '@/entities/user/model/userStore';
+import { userStore } from '@/entities/user/model/@x';
 import { SignupSchema } from '@/features/auth';
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';

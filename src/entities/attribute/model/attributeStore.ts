@@ -1,9 +1,9 @@
-import type { DocumentTypeResponse, DocumentTypeToAttributeResponse } from '@/entities/documents';
+import type { DocumentTypeResponse, DocumentTypeToAttributeResponse } from '@/entities/documentsType/model/@x';
 
 import { getAllAttributeDocs } from '@/entities/attribute/api/api-attribute';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
-import type { AttributeResponse } from '../index';
+import type { AttributeResponse } from './@x';
 
 export interface CombinedAttribute extends AttributeResponse, DocumentTypeToAttributeResponse {}
 

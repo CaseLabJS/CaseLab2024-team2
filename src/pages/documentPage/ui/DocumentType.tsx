@@ -1,4 +1,4 @@
-import type { DocumentTypeResponse } from '@/entities/documents';
+import type { DocumentTypeResponse } from '@/entities/documentsType/model/@x';
 import type { ReactElement } from 'react';
 
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';

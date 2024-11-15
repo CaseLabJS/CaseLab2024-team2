@@ -1,6 +1,6 @@
-import type { RegisterRequest, UserResponse } from '@/entities/user';
-
 import { api } from '@/shared/http';
+
+import type { RegisterRequest, UserResponse } from '../model/@x';
 
 // получить информацию о пользователе по email
 export const getUserData = async (email: string): Promise<UserResponse> => {

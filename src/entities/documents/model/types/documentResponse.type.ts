@@ -1,4 +1,5 @@
-import type { UserToDocumentResponse } from '@/entities/user/model/types/userToDocumentResponse.type.ts';
+import type { UserToDocumentResponse } from '@/entities/user/model/@x/documents';
+
 export interface DocumentResponse {
   id: number;
   document_type_id: number;
