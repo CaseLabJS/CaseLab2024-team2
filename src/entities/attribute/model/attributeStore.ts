@@ -62,7 +62,7 @@ class AttributesStore {
 
   async create(attribute: AttributeRequest): Promise<void> {
     const statefulAttribute = observable.object(
-      Object.assign(attribute, { id: 0, status: Status.LOADING }) as StatefulAttribute,
+      Object.assign(attribute, { id: Date.now(), status: Status.LOADING }) as StatefulAttribute,
     );
     this.attributes.push(statefulAttribute);
 
