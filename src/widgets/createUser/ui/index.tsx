@@ -1,29 +1,38 @@
 import type { ReactElement } from 'react';
 
+import LaunchIcon from '@mui/icons-material/Launch';
+import Button from '@mui/material/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { NavLink } from "react-router-dom";
 import * as Yup from 'yup';
 
 import styles from './userForm.module.css';
 
-export const CreateUserForm = (): ReactElement => {
+export const CreateUser = (): ReactElement => {
+
   return (
     <div className={styles.userForm}>
-      <p className={styles.userForm__title}>Создать пользователя</p>
+      <div className={styles.userForm__head}>
+        <p className={styles.userForm__title}>Создать пользователя</p>
+        <NavLink className={styles.userForm__link} to={'ROUTE_CONSTANTS.ROOT'}>
+          <LaunchIcon />
+        </NavLink>
+      </div>
       <Formik
         initialValues={{ user: '', email: '', password: '' }}
         validationSchema={Yup.object({
           user: Yup.string()
-            .max(15, 'Must be 15 characters or less')
-            .required('Required'),
+            .max(15, 'Введите не более 15 символов')
+            .required('Введите имя пользователя'),
           email: Yup.string()
-            .email('Invalid email address')
-            .required('Required'),
+            .email('Email не действительный')
+            .required('Введите Email'),
           password: Yup.string()
-            .min(8, 'Must be 8 characters or more')
-            .required('Required'),
-
+            .min(8, 'Введите не менее 8 символов')
+            .required('Введите пароль'),
         })}
         onSubmit={(values, { setSubmitting }) => {
+          /**code to send data */
           setTimeout(() => {
             alert(JSON.stringify(values, null, 2));
             setSubmitting(false);
@@ -31,17 +40,35 @@ export const CreateUserForm = (): ReactElement => {
         }}
       >
         <Form className={styles.userForm__form}>
-          <div>
-            <Field name="user" type="text" placeholder='Имя пользователя' />
-            <ErrorMessage className={styles.userFrom__error} name="user" />
-
-            <Field name="email" type="email" placeholder='Email' />
-            <ErrorMessage className={styles.userFrom__error} name="email" />
-
-            <Field name="password" type="text" placeholder='Пароль' />
-            <ErrorMessage className={styles.userFrom__error} name="password" />
+          <div className={styles.userForm__inputs}>
+            <Field
+              name="user"
+              type="text"
+              placeholder='Имя пользователя'
+            />
+            <div className={styles.userFrom__errorBox}>
+              <ErrorMessage component="p" className={styles.userFrom__error} name="user" />
+            </div>
+            <Field
+              name="email"
+              type="email"
+              placeholder='Email'
+            />
+            <div className={styles.userFrom__errorBox}>
+              <ErrorMessage component="p" className={styles.userFrom__error} name="email" />
+            </div>
+            <Field
+              name="password"
+              type="password"
+              placeholder='Пароль'
+            />
+            <div className={styles.userFrom__errorBox}>
+              <ErrorMessage component="p" className={styles.userFrom__error} name="password" />
+            </div>
           </div>
-          <button className={styles.userForm__button} type="submit">Создать</button>
+          <div className={styles.userForm__buttonContainer}>
+            <Button variant="contained" type="submit" size="small">Создать</Button>
+          </div>
         </Form>
       </Formik>
     </div>
