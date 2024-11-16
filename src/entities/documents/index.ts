@@ -1,0 +1,11 @@
+export type * from '@/entities/documents/model/types/updateDocumentRequest.type';
+export type * from '@/entities/documents/model/types/documentFacadeResponse.type';
+export type * from '@/entities/documents/model/types/documentPermissionResponse.type';
+export type * from '@/entities/documents/model/types/documentResponse.type';
+export type * from '@/entities/documents/model/types/documentVersionResponse.type';
+export type * from '@/entities/documents/model/types/documentTypeRequest.type';
+export type * from '@/entities/documents/model/types/documentTypeToAttributeRequest.type';
+export type * from '@/entities/documents/model/types/documentTypeResponse.type';
+export type * from '@/entities/documents/model/types/documentTypeToAttributeResponse.type';
+export type * from '@/entities/documents/model/types/createDocumentRequest.type';
+export type * from '@/entities/documents/model/types/patchDocumentRequest.type';

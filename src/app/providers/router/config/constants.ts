@@ -1,7 +1,8 @@
 export const ROUTE_CONSTANTS = {
-  ROOT: '/',
-  SIGN_IN: '/signin',
-  USER: '/user',
-  ADMIN: '/admin',
-  CREATE_ATTRIBUTE: '/admin/create-attribute',
-};
+  ROOT: { path: '/', ruTitle: 'Главная' },
+  SIGN_IN: { path: '/signin', ruTitle: 'Авторизация' },
+  USER: { path: '/user', ruTitle: 'Пользователь' },
+  ADMIN: { path: '/admin', ruTitle: 'Администратор' },
+  ATTRIBUTES: { path: '/attributes', ruTitle: 'Аттрибуты' },
+  DOCUMENT_TYPES: { path: '/document-types', ruTitle: 'Типы документов' },
+} as const;

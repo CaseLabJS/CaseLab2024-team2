@@ -1,42 +1,43 @@
 import type { ReactElement, ReactNode } from 'react';
 
-import Admin from '@/pages/Admin/Admin';
-import CreateAttributePage from '@/pages/CreateAttributePage/CreateAttributePage';
-import ErrorPage from '@/pages/ErrorPage/ErrorPage';
-import SignIn from '@/pages/SignIn/SignIn';
-import User from '@/pages/User/User';
-import { devCheckUserAuth, devCheckIsAdmin } from '@/shared/utils/dev/dev-utils';
-import { useEffect, useState } from 'react';
+import { authStore } from '@/entities/auth';
+import { Admin } from '@/pages/adminPage';
+import { CreateAttributePage } from '@/pages/createAttributePage';
+import { DocumentTypesPage } from '@/pages/documentPage';
+import { ErrorPage } from '@/pages/errorPage';
+import { SignIn } from '@/pages/signin';
+import { User } from '@/pages/user';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
-import Layout from '../layout/Layout';
+import { Layout } from '../layout';
 import { ROUTE_CONSTANTS } from './config/constants';
 
-const AppRouter = (): ReactElement => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+const AppRouter = observer((): ReactElement => {
+  //Если реализуем функцию получения пользователя по токену в userStore, то эту можно снести в будущем
   useEffect(() => {
-    const isAuth = devCheckUserAuth();
-    const isAdmin = devCheckIsAdmin();
-    setIsAuthenticated(isAuth);
-    setIsAdmin(isAdmin);
-  }, []);
+    const checkAuthAsync = (): void => {
+      void authStore.checkAuth();
+    };
 
+    checkAuthAsync();
+  }, []);
   const ProtectedUserRoute = ({ children }: { children: ReactNode }): ReactElement => {
-    return isAuthenticated ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN} replace />;
+    return authStore.isAuth ? <>{children}</> : <Navigate to={ROUTE_CONSTANTS.SIGN_IN.path} replace />;
   };
 
   const ProtectedAdminRoute = ({ children }: { children: ReactNode }): ReactElement => {
-    return isAuthenticated && isAdmin ? (
+    return authStore.isAuth && authStore.isAdmin ? (
       <>{children}</>
     ) : (
-      <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} replace />
+      <Navigate to={authStore.isAdmin ? ROUTE_CONSTANTS.ADMIN.path : ROUTE_CONSTANTS.USER.path} replace />
     );
   };
 
   const router = createBrowserRouter([
     {
-      path: ROUTE_CONSTANTS.ROOT,
+      path: ROUTE_CONSTANTS.ROOT.path,
       element: (
         <ProtectedUserRoute>
           <Layout />
@@ -44,12 +45,17 @@ const AppRouter = (): ReactElement => {
       ),
       children: [
         {
-          path: ROUTE_CONSTANTS.USER,
+          path: ROUTE_CONSTANTS.USER.path,
           element: <User />,
-          children: [],
+          children: [
+            {
+              path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
+              element: <DocumentTypesPage />,
+            },
+          ],
         },
         {
-          path: ROUTE_CONSTANTS.ADMIN,
+          path: ROUTE_CONSTANTS.ADMIN.path,
           element: (
             <ProtectedAdminRoute>
               <Admin />
@@ -57,7 +63,7 @@ const AppRouter = (): ReactElement => {
           ),
           children: [
             {
-              path: ROUTE_CONSTANTS.CREATE_ATTRIBUTE,
+              path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.ATTRIBUTES.path}`,
               element: <CreateAttributePage />,
             },
           ],
@@ -66,12 +72,16 @@ const AppRouter = (): ReactElement => {
       errorElement: <ErrorPage />,
     },
     {
-      path: ROUTE_CONSTANTS.SIGN_IN,
-      element: isAuthenticated ? <Navigate to={isAdmin ? ROUTE_CONSTANTS.ADMIN : ROUTE_CONSTANTS.USER} /> : <SignIn />,
+      path: ROUTE_CONSTANTS.SIGN_IN.path,
+      element: authStore.isAuth ? (
+        <Navigate to={authStore.isAdmin ? ROUTE_CONSTANTS.ADMIN.path : ROUTE_CONSTANTS.USER.path} />
+      ) : (
+        <SignIn />
+      ),
     },
   ]);
 
   return <RouterProvider router={router} />;
-};
+});
 
 export default AppRouter;
