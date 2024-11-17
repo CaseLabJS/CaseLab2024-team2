@@ -7,7 +7,8 @@ type ISimpleState = 'error' | 'success' | 'loading';
 
 class AuthStore {
   isAuth: boolean = !!localStorage.getItem('token');
-  isAdmin: boolean = false;
+  isAdmin: boolean = !!localStorage.getItem('isAdmin');
+  isUser: boolean = !!localStorage.getItem('isUser');
   state: ISimpleState = 'success';
 
   constructor() {
@@ -32,26 +33,12 @@ class AuthStore {
     }
   }
 
-  //Если реализуем функцию получения пользователя по токену в userStore, то эту можно снести в будущем
-  async checkAuth(): Promise<void> {
-    if (!this.isAuth) return;
-    try {
-      const data = await this.fetchCurrentUser();
-      if (data) {
-        runInAction(() => {
-          this.isAdmin = data.roles.includes('ADMIN');
-        });
-      } else {
-        this.logout();
-      }
-    } catch {
-      this.logout();
-    }
-  }
-
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('isUser');
     this.isAdmin = false;
+    this.isUser = false;
     this.isAuth = false;
     this.state = 'success';
   }
@@ -61,7 +48,10 @@ class AuthStore {
       this.state = 'error';
       this.isAuth = false;
       this.isAdmin = false;
+      this.isUser = false;
       localStorage.removeItem('token');
+      localStorage.removeItem('isAdmin');
+      localStorage.removeItem('isUser');
     });
   }
 
@@ -80,7 +70,14 @@ class AuthStore {
       localStorage.setItem('token', token);
       this.state = 'success';
       this.isAuth = true;
-      this.isAdmin = roles.includes('ADMIN');
+      if (roles.includes('ADMIN')) {
+        localStorage.setItem('isAdmin', JSON.stringify(roles.includes('ADMIN')));
+        this.isAdmin = true;
+      }
+      if (roles.includes('USER')) {
+        localStorage.setItem('isUser', JSON.stringify(roles.includes('USER')));
+        this.isUser = true;
+      }
     });
   }
 }
