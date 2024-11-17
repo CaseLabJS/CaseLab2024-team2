@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { Layout } from '@/shared/layout';
+import { Layout } from '@/shared/components/layout';
 import { Outlet } from 'react-router-dom';
 
 const User = (): ReactElement => {

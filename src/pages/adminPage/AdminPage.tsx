@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { Layout } from '@/shared/layout';
+import { Layout } from '@/shared/components/layout';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { Typography } from '@mui/material';
 import { Link, Outlet } from 'react-router-dom';
