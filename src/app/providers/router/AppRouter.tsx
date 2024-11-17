@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 import { authStore } from '@/entities/auth';
 import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
+import { DocumentCardPage } from '@/pages/documentCardPage';
 import { DocumentTypesPage } from '@/pages/documentPage';
 import { ErrorPage } from '@/pages/errorPage';
 import { SignIn } from '@/pages/signin';
@@ -53,6 +54,10 @@ const AppRouter = observer((): ReactElement => {
               element: <DocumentTypesPage />,
             },
           ],
+        },
+        {
+          path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT.path}/:id`,
+          element: <DocumentCardPage />,
         },
         {
           path: ROUTE_CONSTANTS.ADMIN.path,
