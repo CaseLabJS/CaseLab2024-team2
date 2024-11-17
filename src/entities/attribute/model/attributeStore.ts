@@ -77,15 +77,15 @@ class AttributesStore {
     }
   }
 
-  get(id: AttributeResponse['id']): AttributeResponse | undefined {
+  getById(id: AttributeResponse['id']): AttributeResponse | undefined {
     return this.attributes.find((attribute) => attribute.id === id);
   }
 
-  getAll({ pageNum, pageSize }: PaginationRequest): AttributeResponse[] {
+  getAttributesPage({ pageNum, pageSize }: PaginationRequest): AttributeResponse[] {
     return this.attributes.slice(pageNum * pageSize, pageSize);
   }
 
-  async update(id: AttributeResponse['id'], attribute: AttributeRequest): Promise<void> {
+  async updateById(id: AttributeResponse['id'], attribute: AttributeRequest): Promise<void> {
     const attributeToUpdate = this.attributes.find((attribute) => attribute.id === id);
 
     if (!attributeToUpdate) return;
@@ -104,7 +104,7 @@ class AttributesStore {
     }
   }
 
-  async delete(id: AttributeResponse['id']): Promise<void> {
+  async deleteById(id: AttributeResponse['id']): Promise<void> {
     const attributeToDeleteIndex = this.attributes.findIndex((attribute) => attribute.id === id);
 
     if (attributeToDeleteIndex === -1) return;
@@ -126,7 +126,7 @@ class AttributesStore {
     return documentType.attributes.map((attribute) => {
       return {
         ...attribute,
-        ...this.get(attribute.attribute_id),
+        ...this.getById(attribute.attribute_id),
       } as CombinedAttribute;
     });
   }
