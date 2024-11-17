@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 
 import styles from './userForm.module.css';
 
-export const CreateUser = (): ReactElement => {
+const CreateUser = (): ReactElement => {
 
   return (
     <div className={styles.userForm}>
@@ -74,3 +74,5 @@ export const CreateUser = (): ReactElement => {
     </div>
   );
 };
+
+export default CreateUser;
