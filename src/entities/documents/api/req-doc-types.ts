@@ -1,51 +1,29 @@
 import { api } from '@/shared/http';
 
-type DocTypes = {
-  attributes: [
-    {
-      attribute_id: number;
-      is_optional: boolean;
-    },
-  ];
-  id: number;
-  name: string;
-};
-
-type DocTypesCreate = {
-  name: string;
-  attributes: [
-    {
-      attribute_id: number;
-      is_optional: boolean;
-    },
-  ];
-};
+import type { DocumentTypeRequest } from '../model/types/documentTypeRequest.type';
+import type { DocumentTypeResponse } from '../model/types/documentTypeResponse.type';
 
 // получение типа документа по id
-export const getDocType = async (id: number): Promise<DocTypes> => {
-  const response = await api.get<DocTypes>(`/document_types/${id}`);
+export const getDocType = async (id: number): Promise<DocumentTypeResponse> => {
+  const response = await api.get<DocumentTypeResponse>(`/document_types/${id}`);
   return response.data;
 };
 
 // получение всех типов документов
-export const getAllDocTypes = async (): Promise<DocTypes[]> => {
-  const response = await api.get<DocTypes[]>('/document_types');
+export const getAllDocTypes = async (): Promise<DocumentTypeResponse[]> => {
+  const response = await api.get<DocumentTypeResponse[]>('/document_types');
   return response.data;
 };
 
 // добавление типа документа
-export const addDocType = async (createTypesDoc: DocTypesCreate): Promise<DocTypes> => {
-  const response = await api.post<DocTypes>('/document_types', {
-    createTypesDoc,
-  });
+export const addDocType = async (createTypesDoc: DocumentTypeRequest): Promise<DocumentTypeResponse> => {
+  const response = await api.post<DocumentTypeResponse>('/document_types', createTypesDoc);
   return response.data;
 };
 
 // обновление типа документа
-export const updateDocType = async (id: number, updateTypesDoc: DocTypesCreate): Promise<DocTypes> => {
-  const response = await api.put<DocTypes>(`/document_types/${id}`, {
-    updateTypesDoc,
-  });
+export const updateDocType = async (id: number, updateTypesDoc: DocumentTypeRequest): Promise<DocumentTypeResponse> => {
+  const response = await api.put<DocumentTypeResponse>(`/document_types/${id}`, updateTypesDoc);
   return response.data;
 };
 

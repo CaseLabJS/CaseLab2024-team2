@@ -1,5 +1,4 @@
-import type { AuthenticationRequest } from '@/entities/user';
-import type { UserResponse } from '@/entities/user';
+import type { AuthenticationRequest, UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -8,6 +7,8 @@ type ISimpleState = 'error' | 'success' | 'loading';
 class AuthStore {
   isAuth: boolean = !!localStorage.getItem('token');
   isAdmin: boolean = false;
+  displayName: string = '';
+  email: string = '';
   state: ISimpleState = 'success';
 
   constructor() {
@@ -21,10 +22,7 @@ class AuthStore {
       if (!authResponse) {
         this.handleAuthError();
       } else {
-        const userData = await this.fetchCurrentUser();
-        if (userData) {
-          this.processAuthResponse(authResponse.token, userData.roles);
-        }
+        await this.processAuthResponse();
       }
     } catch (error) {
       this.handleAuthError();
@@ -36,14 +34,7 @@ class AuthStore {
   async checkAuth(): Promise<void> {
     if (!this.isAuth) return;
     try {
-      const data = await this.fetchCurrentUser();
-      if (data) {
-        runInAction(() => {
-          this.isAdmin = data.roles.includes('ADMIN');
-        });
-      } else {
-        this.logout();
-      }
+      await this.processAuthResponse();
     } catch {
       this.logout();
     }
@@ -53,6 +44,8 @@ class AuthStore {
     localStorage.removeItem('token');
     this.isAdmin = false;
     this.isAuth = false;
+    this.displayName = '';
+    this.email = '';
     this.state = 'success';
   }
 
@@ -75,13 +68,22 @@ class AuthStore {
     }
   }
 
-  private processAuthResponse(token: string, roles: string[]): void {
-    runInAction(() => {
-      localStorage.setItem('token', token);
-      this.state = 'success';
-      this.isAuth = true;
-      this.isAdmin = roles.includes('ADMIN');
-    });
+  private async processAuthResponse(): Promise<void> {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const userData = await this.fetchCurrentUser();
+      if (userData) {
+        runInAction(() => {
+          this.state = 'success';
+          this.isAuth = true;
+          this.displayName = userData.display_name;
+          this.email = userData.email;
+          this.isAdmin = userData.roles.includes('ADMIN');
+        });
+      } else {
+        this.logout();
+      }
+    }
   }
 }
 
