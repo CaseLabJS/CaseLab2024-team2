@@ -1,14 +1,34 @@
+import type { RegisterRequest } from '@/entities/user';
+import type { FormikHelpers } from 'formik';
 import type { ReactElement } from 'react';
 
+import { userStore } from '@/entities/user/model/userStore';
+import { SignupSchema } from '@/features/auth';
 import LaunchIcon from '@mui/icons-material/Launch';
 import Button from '@mui/material/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { NavLink } from "react-router-dom";
-import * as Yup from 'yup';
 
 import styles from './userForm.module.css';
 
 const CreateUser = (): ReactElement => {
+  const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
+
+  const submitFormHandler = async (
+    values: RegisterRequest,
+    { setSubmitting }: FormikHelpers<RegisterRequest>,
+  ): Promise<void> => {
+    try {
+      const body: RegisterRequest = { ...values };
+      await userStore.createUser(body);
+      alert('Пользователь успешно зарегистрирован!');
+    } catch (error) {
+      alert('Ошибка регистрации пользователя. Попробуйте снова.');
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className={styles.userForm}>
@@ -19,25 +39,9 @@ const CreateUser = (): ReactElement => {
         </NavLink>
       </div>
       <Formik
-        initialValues={{ user: '', email: '', password: '' }}
-        validationSchema={Yup.object({
-          user: Yup.string()
-            .max(15, 'Введите не более 15 символов')
-            .required('Введите имя пользователя'),
-          email: Yup.string()
-            .email('Email не действительный')
-            .required('Введите Email'),
-          password: Yup.string()
-            .min(8, 'Введите не менее 8 символов')
-            .required('Введите пароль'),
-        })}
-        onSubmit={(values, { setSubmitting }) => {
-          /**code to send data */
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
+        initialValues={initialValues}
+        validationSchema={SignupSchema}
+        onSubmit={submitFormHandler}
       >
         <Form className={styles.userForm__form}>
           <div className={styles.userForm__inputs}>
