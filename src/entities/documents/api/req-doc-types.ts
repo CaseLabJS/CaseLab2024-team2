@@ -17,17 +17,13 @@ export const getAllDocTypes = async (): Promise<DocumentTypeResponse[]> => {
 
 // добавление типа документа
 export const addDocType = async (createTypesDoc: DocumentTypeRequest): Promise<DocumentTypeResponse> => {
-  const response = await api.post<DocumentTypeResponse>('/document_types', {
-    createTypesDoc,
-  });
+  const response = await api.post<DocumentTypeResponse>('/document_types', createTypesDoc);
   return response.data;
 };
 
 // обновление типа документа
 export const updateDocType = async (id: number, updateTypesDoc: DocumentTypeRequest): Promise<DocumentTypeResponse> => {
-  const response = await api.put<DocumentTypeResponse>(`/document_types/${id}`, {
-    updateTypesDoc,
-  });
+  const response = await api.put<DocumentTypeResponse>(`/document_types/${id}`, updateTypesDoc);
   return response.data;
 };
 
