@@ -16,7 +16,7 @@ import type { AttributesPageResponse } from './types/attributePageResponse.type'
 
 export interface CombinedAttribute extends AttributeResponse, DocumentTypeToAttributeResponse {}
 
-export interface StatefulAttribute extends AttributeResponse, Stateful {}
+export type StatefulAttribute = Stateful<AttributeResponse>;
 
 class AttributesStore {
   attributes = observable.array<StatefulAttribute>([]);
@@ -30,21 +30,27 @@ class AttributesStore {
     if (this.status === Status.LOADING && !reload) return;
 
     let pageNumber = 0;
-    const attibutes: AttributeResponse[] = [];
-    let attibutesPage: AttributesPageResponse;
+    const attributes: AttributeResponse[] = [];
+    let attributesPage: AttributesPageResponse;
 
     this.status = Status.LOADING;
     try {
       do {
-        attibutesPage = await getAllAttributeDocs({ pageNum: pageNumber, pageSize: 32 });
-        attibutes.push(...attibutesPage.content);
+        attributesPage = await getAllAttributeDocs({ pageNum: pageNumber, pageSize: 32 });
+        attributes.push(...attributesPage.content);
         pageNumber++;
-      } while (!attibutesPage.last);
+      } while (!attributesPage.last);
 
       runInAction(() => {
         this.status = Status.SUCCESS;
-        this.attributes = observable.array<StatefulAttribute>(
-          attibutes.map((attribute) => Object.assign(attribute, { status: Status.SUCCESS }) as StatefulAttribute),
+        this.attributes.replace(
+          attributes.map((attribute) => {
+            return {
+              ...attribute,
+              status: Status.SUCCESS,
+              getOriginal: (): AttributeResponse => attribute,
+            } as StatefulAttribute;
+          }),
         );
       });
     } catch (error) {
@@ -54,34 +60,32 @@ class AttributesStore {
     }
   }
 
-  async create(attibute: AttributeRequest): Promise<void> {
-    const statefulAttrubute = observable.object(
-      Object.assign(attibute, { id: 0, status: Status.LOADING }) as StatefulAttribute,
+  async create(attribute: AttributeRequest): Promise<void> {
+    const statefulAttribute = observable.object(
+      Object.assign(attribute, { id: Date.now(), status: Status.LOADING }) as StatefulAttribute,
     );
-    this.attributes.push(statefulAttrubute);
+    this.attributes.push(statefulAttribute);
 
     try {
-      const createdAttribute = await addAttributeDoc(attibute) as StatefulAttribute;
-      Object.assign(statefulAttrubute, createdAttribute, { status: Status.SUCCESS });
+      const createdAttribute = (await addAttributeDoc(attribute)) as StatefulAttribute;
+
+      Object.assign(statefulAttribute, createdAttribute, { status: Status.SUCCESS });
     } catch (error) {
-      this.attributes.remove(statefulAttrubute);
+      this.attributes.remove(statefulAttribute);
       console.error(error);
       alert('Не удалось создать атрибут');
     }
   }
 
-  get(id: AttributeResponse['id']): AttributeResponse | undefined {
+  getById(id: AttributeResponse['id']): AttributeResponse | undefined {
     return this.attributes.find((attribute) => attribute.id === id);
   }
 
-  getAll({ pageNum, pageSize }: PaginationRequest): AttributeResponse[] {
+  getAttributesPage({ pageNum, pageSize }: PaginationRequest): AttributeResponse[] {
     return this.attributes.slice(pageNum * pageSize, pageSize);
   }
 
-  async update(
-    id: AttributeResponse['id'],
-    attribute: AttributeRequest,
-  ): Promise<void> {
+  async updateById(id: AttributeResponse['id'], attribute: AttributeRequest): Promise<void> {
     const attributeToUpdate = this.attributes.find((attribute) => attribute.id === id);
 
     if (!attributeToUpdate) return;
@@ -89,7 +93,7 @@ class AttributesStore {
     try {
       attributeToUpdate.status = Status.LOADING;
 
-      const updatedAttribute = await updateAttributeDoc(id, attribute) as StatefulAttribute;
+      const updatedAttribute = (await updateAttributeDoc(id, attribute)) as StatefulAttribute;
       updatedAttribute.status = Status.SUCCESS;
 
       Object.assign(attributeToUpdate, updatedAttribute, { status: Status.SUCCESS });
@@ -100,7 +104,7 @@ class AttributesStore {
     }
   }
 
-  async delete(id: AttributeResponse['id']): Promise<void> {
+  async deleteById(id: AttributeResponse['id']): Promise<void> {
     const attributeToDeleteIndex = this.attributes.findIndex((attribute) => attribute.id === id);
 
     if (attributeToDeleteIndex === -1) return;
@@ -122,7 +126,7 @@ class AttributesStore {
     return documentType.attributes.map((attribute) => {
       return {
         ...attribute,
-        ...this.get(attribute.attribute_id),
+        ...this.getById(attribute.attribute_id),
       } as CombinedAttribute;
     });
   }
