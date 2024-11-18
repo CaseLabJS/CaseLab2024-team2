@@ -1,4 +1,4 @@
-import type { AttributeValueRequest } from '@/entities/attribute/model/@x/documents';
+import type { AttributeValueRequest } from '@/entities/attribute/@x/documents';
 
 export interface CreateDocumentRequest {
   document_type_id: number;
