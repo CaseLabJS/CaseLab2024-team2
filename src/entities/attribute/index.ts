@@ -4,4 +4,4 @@ export type * from './model/types/attributeRequest.type';
 export type * from './model/types/attributeResponse.type';
 export type * from './model/types/attributePageResponse.type';
 
-export * from './model/attributeStore';
+export * from './model/store/attributeStore';

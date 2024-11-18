@@ -11,7 +11,7 @@ import {
 import { Status } from '@/shared/types/status.type';
 import { makeAutoObservable, runInAction, observable } from 'mobx';
 
-import type { AttributeRequest, AttributeResponse, AttributesPageResponse } from '../index';
+import type { AttributeRequest, AttributeResponse, AttributesPageResponse } from '../../index';
 
 export interface CombinedAttribute extends AttributeResponse, DocumentTypeToAttributeResponse {}
 

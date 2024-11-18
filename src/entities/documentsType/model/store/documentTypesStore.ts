@@ -1,7 +1,7 @@
 import { getAllDocTypes } from '@/entities/documents/api';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
-import type { DocumentTypeResponse } from '..';
+import type { DocumentTypeResponse } from '../..';
 
 class DocumentTypesStore {
   documentTypes: DocumentTypeResponse[];

@@ -1,8 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '..';
+import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '../..';
 
-import { addVote, createVotingProcess, getVotingProcess } from '../api';
+import { addVote, createVotingProcess, getVotingProcess } from '../../api';
 type ISimpleState = 'error' | 'success' | 'loading';
 
 class VotingStore {
