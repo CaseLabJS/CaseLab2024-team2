@@ -3,8 +3,8 @@ import type { PaginationRequest } from '@/shared/types/paginationRequest';
 import { api } from '@/shared/http';
 import { buildSearchParams } from '@/shared/utils/buildSearchParams';
 
-import type { AttributeRequest, AttributeResponse } from '../index';
 import type { AttributesPageResponse } from '../';
+import type { AttributeRequest, AttributeResponse } from '../index';
 
 // получить атрибут по id
 export const getAttributeDoc = async (id: number): Promise<AttributeResponse> => {
