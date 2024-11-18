@@ -1,4 +1,4 @@
-import type { RegisterRequest, UserResponse } from '@/entities/user/model/@x';
+import type { RegisterRequest, UserResponse } from '@/entities/user';
 
 import { api } from '@/shared/http';
 
