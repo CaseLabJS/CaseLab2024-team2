@@ -1,5 +1,7 @@
-import { Autocomplete, Drawer, TextField, Box, Typography, Button, Backdrop } from '@mui/material';
-import { ReactElement, useState, useEffect } from 'react';
+import type { ReactElement } from 'react';
+
+import { Drawer, Typography, Button, Backdrop, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { useState, useEffect } from 'react';
 
 interface Option {
   email: string;
@@ -27,7 +29,7 @@ const SignatureDrawer = ({
     { email: 'user2@gmail.com', name: 'Сидоров Казимир' },
   ];
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     if (!selectedUser) {
       alert('Пожалуйста, выберите пользователя.');
       return;
@@ -50,7 +52,7 @@ const SignatureDrawer = ({
       document.body.style.overflow = '';
     }
 
-    return () => {
+    return (): void => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
@@ -87,40 +89,24 @@ const SignatureDrawer = ({
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 5 }}>
           {`Отправить документ ${documentName} на подпись`}
         </Typography>
-        <Autocomplete
-          disablePortal
-          options={userOptions}
-          fullWidth
-          getOptionLabel={(option) => option.name}
-          renderOption={(props, option) => {
-            const { key, ...otherProps } = props;
-            return (
-              <Box
-                key={key}
-                {...otherProps}
-                component="li"
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
+        <FormControl fullWidth sx={{ mb: 15 }}>
+          <InputLabel>Выберите пользователя</InputLabel>
+          <Select
+            value={selectedUser ? selectedUser.email : ''}
+            onChange={(e) => {
+              const userEmail = e.target.value;
+              const user = userOptions.find((option) => option.email === userEmail);
+              setSelectedUser(user || null);
+            }}
+            label="Выберите пользователя"
+          >
+            {userOptions.map((option) => (
+              <MenuItem key={option.email} value={option.email}>
                 <Typography>{option.name}</Typography>
-              </Box>
-            );
-          }}
-          onChange={(_, value) => setSelectedUser(value)}
-          value={selectedUser}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Имя пользователя"
-              variant="standard"
-              placeholder="Выберите пользователя"
-              fullWidth
-              sx={{ mb: 15 }}
-            />
-          )}
-        />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Button
           variant="contained"
           size="medium"
