@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from './@x';
+import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '..';
 
 import { addVote, createVotingProcess, getVotingProcess } from '../api';
 type ISimpleState = 'error' | 'success' | 'loading';

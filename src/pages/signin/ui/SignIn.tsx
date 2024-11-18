@@ -1,8 +1,8 @@
-import type { AuthenticationRequest } from '@/entities/auth/model/@x';
+import type { AuthenticationRequest } from '@/entities/auth';
 import type { FormikHelpers } from 'formik';
 import type React from 'react';
 
-import { authStore } from '@/entities/auth/model/@x';
+import { authStore } from '@/entities/auth';
 import { AuthSchema } from '@/features/auth';
 import { Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';

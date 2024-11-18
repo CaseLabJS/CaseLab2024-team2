@@ -2,7 +2,7 @@ import type { RegisterRequest, UserResponse } from '@/entities/user/model/@x';
 
 import { api } from '@/shared/http';
 
-import type { AuthenticationRequest } from '../model/@x';
+import type { AuthenticationRequest } from '..';
 
 // регистрация пользователя
 export const registerUser = async (user: RegisterRequest): Promise<number> => {

@@ -1,5 +1,5 @@
-import type { DocumentResponse } from '@/entities/documents/model/@x';
-import type { DocumentVersionResponse } from '@/entities/documents/model/@x';
+import type { DocumentResponse } from '@/entities/documents';
+import type { DocumentVersionResponse } from '@/entities/documents';
 import type { SignatureResponse } from '@/entities/signature/model/@x/documents';
 
 export interface DocumentFacadeResponse {

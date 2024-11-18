@@ -1,9 +1,9 @@
-import type { UserResponse } from '@/entities/user/model/@x';
+import type { UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import type { AuthenticationRequest } from './@x';
+import type { AuthenticationRequest } from '..';
 type ISimpleState = 'error' | 'success' | 'loading';
 
 class AuthStore {

@@ -1,4 +1,4 @@
-import type { UserToDocumentResponse } from '@/entities/user/model/@x/documents';
+import type { UserToDocumentResponse } from '@/entities/user/@x/documents';
 
 export interface DocumentResponse {
   id: number;

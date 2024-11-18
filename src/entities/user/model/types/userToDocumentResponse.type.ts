@@ -1,4 +1,4 @@
-import type { DocumentPermissionResponse } from '@/entities/documents/model/@x/user';
+import type { DocumentPermissionResponse } from '@/entities/documents/@x/user';
 
 export interface UserToDocumentResponse {
   email: string;

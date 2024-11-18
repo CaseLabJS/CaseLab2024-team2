@@ -2,7 +2,7 @@ import { registerUser } from '@/entities/auth/api/api-auth';
 import { deleteUserData, editUserData, getAllUserData, getUserData } from '@/entities/user/api';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
-import type { RegisterRequest, UserResponse } from './@x';
+import type { RegisterRequest, UserResponse } from '..';
 
 class UserStore {
   users: UserResponse[];

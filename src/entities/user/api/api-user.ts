@@ -1,6 +1,6 @@
 import { api } from '@/shared/http';
 
-import type { RegisterRequest, UserResponse } from '../model/@x';
+import type { RegisterRequest, UserResponse } from '..';
 
 // получить информацию о пользователе по email
 export const getUserData = async (email: string): Promise<UserResponse> => {
