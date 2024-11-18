@@ -15,16 +15,32 @@
   --icon-color: rgba(0, 0, 0, 0.56);
 }
 
+html {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100vh;
+}
+
 /* Основные стили */
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+  box-sizing: inherit;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 body {
   margin: 0;
   padding: 0;
+  min-width: 1200px;
   color: var(--font-color-primary);
   background-color: var(--background-color-primary);
   font-family: var(--font-family-primary);
