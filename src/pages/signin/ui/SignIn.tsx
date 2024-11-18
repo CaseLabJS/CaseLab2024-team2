@@ -7,14 +7,10 @@ import { AuthSchema } from '@/features/auth';
 import { Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { useState, type ReactElement } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import style from './signIn.module.css';
-import { SignatureDrawer } from '@/widgets/signatureDrawer';
 
 const SignIn = (): ReactElement => {
-  const navigate = useNavigate();
-  const [modalWindowOpen, setModalWindowOpen] = useState<boolean>(false);
   const initialValues: AuthenticationRequest = {
     email: 'admin@gmail.com',
     password: '',
@@ -33,7 +29,6 @@ const SignIn = (): ReactElement => {
       const body: AuthenticationRequest = { ...values };
       await authStore.login(body);
       alert('Пользователь успешно авторизирован!');
-      navigate('/user');
     } catch (error) {
       alert('Ошибка авторизации пользователя. Попробуйте снова.');
       throw error;
@@ -92,8 +87,6 @@ const SignIn = (): ReactElement => {
           )}
         </Formik>
       </Box>
-      <button onClick={() => setModalWindowOpen((prev) => !prev)}>отправить на подпись</button>
-      <SignatureDrawer isOpen={modalWindowOpen} onClose={() => setModalWindowOpen((prev) => !prev)} />
     </Box>
   );
 };
