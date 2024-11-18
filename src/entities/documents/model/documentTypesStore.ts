@@ -6,6 +6,7 @@ import { Status } from '@/shared/types/status.type';
 import { makeAutoObservable, runInAction, observable } from 'mobx';
 
 import type { DocumentTypeRequest, DocumentTypeResponse } from '../index';
+import type { DocumentTypesPageResponse } from './types/documentTypesPageResponse.type';
 
 export type StatefulDocumentType = Stateful<DocumentTypeResponse>;
 
@@ -20,9 +21,17 @@ class DocumentTypesStore {
   async load(reload: boolean = false): Promise<void> {
     if (this.status === Status.LOADING && !reload) return;
 
+    let pageNumber = 0;
+    const documentTypes: DocumentTypeResponse[] = [];
+    let documentTypesPage: DocumentTypesPageResponse;
+
     this.status = Status.LOADING;
     try {
-      const documentTypes = await getAllDocTypes();
+      do {
+        documentTypesPage = await getAllDocTypes({ pageNum: pageNumber, pageSize: 32 });
+        documentTypes.push(...documentTypesPage.content);
+        pageNumber++;
+      } while (!documentTypesPage.last);
 
       runInAction(() => {
         this.status = Status.SUCCESS;
