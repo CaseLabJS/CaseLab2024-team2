@@ -1,6 +1,10 @@
+import type { PaginationRequest } from '@/shared/types/paginationRequest';
+
 import { api } from '@/shared/http';
+import { buildSearchParams } from '@/shared/utils/buildSearchParams';
 
 import type { AttributeRequest, AttributeResponse } from '../index';
+import type { AttributesPageResponse } from '../model/types/attributePageResponse.type';
 
 // получить атрибут по id
 export const getAttributeDoc = async (id: number): Promise<AttributeResponse> => {
@@ -9,8 +13,10 @@ export const getAttributeDoc = async (id: number): Promise<AttributeResponse> =>
 };
 
 // получить все атрибуты
-export const getAllAttributeDocs = async (): Promise<AttributeResponse[]> => {
-  const response = await api.get<AttributeResponse[]>(`/attributes`);
+export const getAllAttributeDocs = async (paginationRequest: PaginationRequest): Promise<AttributesPageResponse> => {
+  const response = await api.get<AttributesPageResponse>(`/attributes`, {
+    params: buildSearchParams(paginationRequest),
+  });
   return response.data;
 };
 

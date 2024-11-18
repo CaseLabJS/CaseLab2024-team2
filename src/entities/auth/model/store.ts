@@ -1,5 +1,4 @@
-import type { AuthenticationRequest } from '@/entities/user';
-import type { UserResponse } from '@/entities/user';
+import type { AuthenticationRequest, UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -9,6 +8,8 @@ class AuthStore {
   isAuth: boolean = !!localStorage.getItem('token');
   isAdmin: boolean = !!localStorage.getItem('isAdmin');
   isUser: boolean = !!localStorage.getItem('isUser');
+  displayName: string = '';
+  email: string = '';
   state: ISimpleState = 'success';
 
   constructor() {
@@ -22,10 +23,7 @@ class AuthStore {
       if (!authResponse) {
         this.handleAuthError();
       } else {
-        const userData = await this.fetchCurrentUser();
-        if (userData) {
-          this.processAuthResponse(authResponse.token, userData.roles);
-        }
+        await this.processAuthResponse();
       }
     } catch (error) {
       this.handleAuthError();
@@ -40,6 +38,8 @@ class AuthStore {
     this.isAdmin = false;
     this.isUser = false;
     this.isAuth = false;
+    this.displayName = '';
+    this.email = '';
     this.state = 'success';
   }
 
@@ -65,20 +65,29 @@ class AuthStore {
     }
   }
 
-  private processAuthResponse(token: string, roles: string[]): void {
-    runInAction(() => {
-      localStorage.setItem('token', token);
-      this.state = 'success';
-      this.isAuth = true;
-      if (roles.includes('ADMIN')) {
-        localStorage.setItem('isAdmin', JSON.stringify(roles.includes('ADMIN')));
-        this.isAdmin = true;
+  private async processAuthResponse(): Promise<void> {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const userData = await this.fetchCurrentUser();
+      if (userData) {
+        runInAction(() => {
+          this.state = 'success';
+          this.isAuth = true;
+          this.displayName = userData.display_name;
+          this.email = userData.email;
+          if (userData.roles.includes('ADMIN')) {
+            localStorage.setItem('isAdmin', JSON.stringify(userData.roles.includes('ADMIN')));
+            this.isAdmin = true;
+          }
+          if (userData.roles.includes('USER')) {
+            localStorage.setItem('isUser', JSON.stringify(userData.roles.includes('USER')));
+            this.isUser = true;
+          }
+        });
+      } else {
+        this.logout();
       }
-      if (roles.includes('USER')) {
-        localStorage.setItem('isUser', JSON.stringify(roles.includes('USER')));
-        this.isUser = true;
-      }
-    });
+    }
   }
 }
 
