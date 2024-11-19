@@ -9,3 +9,4 @@ export type * from '@/entities/documents/model/types/documentTypeResponse.type';
 export type * from '@/entities/documents/model/types/documentTypeToAttributeResponse.type';
 export type * from '@/entities/documents/model/types/createDocumentRequest.type';
 export type * from '@/entities/documents/model/types/patchDocumentRequest.type';
+export { documentsStore } from './model/documentsStore';
