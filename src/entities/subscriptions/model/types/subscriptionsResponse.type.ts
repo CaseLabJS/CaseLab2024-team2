@@ -1,3 +1,3 @@
 export interface SubscriptionsResponse {
-  id: number;
+  id: number,
 }

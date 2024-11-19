@@ -2,7 +2,7 @@ import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 
 import type { SubscriptionsResponse } from './types/subscriptionsResponse.type';
 
-import { addSubscriptionToDoc, deleteAllSubscriptions, deleteSubscriptionDoc, getAllSubscriptionsData, getSubscriptionStatusData } from '../api/api-subscriptions';
+import { addSubscriptionToDoc, deleteAllSubscriptions, deleteSubscriptionDoc, getAllSubscriptionsData, checkSubscriptionStatus } from '../api/api-subscriptions';
 
 class SubscriptionsStore {
   subscriptions: SubscriptionsResponse[];
@@ -27,15 +27,15 @@ class SubscriptionsStore {
         if (error.message) {
           alert(error.message);
         } else {
-          alert('Something went wrong');
+          alert('Что-то не так...');
         }
       }
     }
   }
 
-  async checkSubscription({id}: {id: number}): Promise<void> {
+  async checkSubscription({ id }: { id: number }): Promise<void> {
     try {
-      const response = await getSubscriptionStatusData(id);
+      const response = await checkSubscriptionStatus(id);
       if (response) {
         alert('Вы подписаны!')
       } else alert('Вы не подписаны!')
@@ -44,7 +44,7 @@ class SubscriptionsStore {
         if (error.message) {
           alert(error.message);
         } else {
-          alert('Something went wrong');
+          alert('Что-то не так...');
         }
       }
     }
@@ -52,18 +52,18 @@ class SubscriptionsStore {
 
   async addSubscription({ id }: { id: number }): Promise<void> {
     try {
-      const response = await addSubscriptionToDoc(id);
+      const isTrue = await addSubscriptionToDoc(id);
       runInAction(() => {
-        if (response === 200) {
-        this.subscriptions.push(id);
-      }
+        if (isTrue) {
+          this.subscriptions.push({ id });
+        }
       });
     } catch (error) {
       if (error instanceof Error) {
         if (error.message) {
           alert(error.message);
         } else {
-          alert('Something went wrong');
+          alert('Что-то не так...');
         }
       }
     }
@@ -71,16 +71,16 @@ class SubscriptionsStore {
 
   async removeSubscription({ id }: { id: number }): Promise<void> {
     try {
-      const response = await deleteSubscriptionDoc(id);
+      const isTrue = await deleteSubscriptionDoc(id);
       runInAction(() => {
-        if (response === 200) this.subscriptions = this.subscriptions.filter((subscription) => subscription.id !== id);
+        if (isTrue) this.subscriptions = this.subscriptions.filter((subscription) => subscription.id !== id);
       });
     } catch (error) {
       if (error instanceof Error) {
         if (error.message) {
           alert(error.message);
         } else {
-          alert('Something went wrong');
+          alert('Что-то не так...');
         }
       }
     }
@@ -88,16 +88,16 @@ class SubscriptionsStore {
 
   async removeAllSubscriptions(): Promise<void> {
     try {
-      const response = await deleteAllSubscriptions();
+      const isTrue = await deleteAllSubscriptions();
       runInAction(() => {
-        if (response === 200) this.subscriptions.length = 0;
+        if (isTrue) this.subscriptions = [];
       });
     } catch (error) {
       if (error instanceof Error) {
         if (error.message) {
           alert(error.message);
         } else {
-          alert('Something went wrong');
+          alert('Что-то не так...');
         }
       }
     }
