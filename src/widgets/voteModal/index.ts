@@ -1,0 +1,1 @@
+export { VoteModal } from './ui';

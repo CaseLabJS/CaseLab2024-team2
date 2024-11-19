@@ -49,7 +49,10 @@ class VotingStore {
   async addVoteDocument(newVoteUser: VoteRequest): Promise<void> {
     try {
       this.state = 'loading';
-      await addVote(newVoteUser);
+      const newVote = await addVote(newVoteUser);
+      if (newVote) {
+        alert('Ваш голос записан');
+      }
       runInAction(() => {
         this.state = 'success';
       });
