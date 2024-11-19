@@ -1,5 +1,8 @@
+import type { DocumentTypeResponse } from '@/entities/documents';
+import type { GridColDef } from '@mui/x-data-grid';
 import type { ReactElement } from 'react';
 
+import { attributesStore } from '@/entities/attribute/model/attributeStore';
 import { documentTypesStore } from '@/entities/documents/model/documentTypesStore';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -8,10 +11,10 @@ import { Button, IconButton, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import { DataGrid, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import ManageDocumentTypeDialog from '../manageDocumentType/ManageDocumentTypeDialog';
 import AttributesDialog from './AttributesDialog';
-import ManageDocumentTypeDialog from './ManageDocumentTypeDialog';
 
 const CustomToolbar = ({ openAddNewTypeDialog }: { openAddNewTypeDialog: () => void }): ReactElement => (
   <GridToolbarContainer sx={{ justifyContent: 'space-between', padding: '0.5rem 1rem' }}>
@@ -23,26 +26,37 @@ const CustomToolbar = ({ openAddNewTypeDialog }: { openAddNewTypeDialog: () => v
 );
 
 const DocumentTypesTable = observer((): ReactElement => {
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-
   const [isAttbutesDialogOpen, setIsAttbutesDialogOpen] = useState(false);
+  const [currentDocType, setCurrentDocType] = useState<DocumentTypeResponse | null>(null);
+  const [isManageDocumentDialogOpen, setIsManageDocumentDialogOpen] = useState(false);
 
   const openAttributesDialog = (): void => setIsAttbutesDialogOpen(true);
   const closeAttributesDialog = (): void => setIsAttbutesDialogOpen(false);
 
-  const [isManageDocumentDialogOpen, setIsManageDocumentDialogOpen] = useState(false);
+  const closeManageDocumentDialog = (): void => {
+    setCurrentDocType(null);
+    setIsManageDocumentDialogOpen(false);
+  };
 
   const openCreateDocumentTypeDialog = (): void => {
+    setCurrentDocType(null);
     setIsManageDocumentDialogOpen(true);
-    setIsEditDialogOpen(false);
   };
-  const openEditDocumentDialog = (): void => {
-    setIsManageDocumentDialogOpen(true);
-    setIsEditDialogOpen(true);
-  };
-  const closeManageDocumentDialog = (): void => setIsManageDocumentDialogOpen(false);
 
-  const columns = [
+  const openEditDocumentDialog = (documentType: DocumentTypeResponse): void => {
+    setCurrentDocType(documentType);
+    setIsManageDocumentDialogOpen(true);
+  };
+
+  useEffect(() => {
+    void documentTypesStore.load();
+  }, []);
+
+  useEffect(() => {
+    void attributesStore.load();
+  }, []);
+
+  const columns: GridColDef<DocumentTypeResponse>[] = [
     {
       field: 'edit',
       headerName: '',
@@ -51,8 +65,12 @@ const DocumentTypesTable = observer((): ReactElement => {
       resizable: false,
       disableColumnMenu: true,
       flex: 1,
-      renderCell: (): ReactElement => (
-        <IconButton onClick={openEditDocumentDialog}>
+      renderCell: ({ row }: { row: DocumentTypeResponse }): ReactElement => (
+        <IconButton
+          onClick={() => {
+            openEditDocumentDialog(row);
+          }}
+        >
           <EditIcon />
         </IconButton>
       ),
@@ -73,9 +91,16 @@ const DocumentTypesTable = observer((): ReactElement => {
       disableColumnMenu: true,
       headerName: 'Атрибуты',
       field: 'attributes',
+      align: 'center',
+      headerAlign: 'center',
       flex: 1,
-      renderCell: (): ReactElement => (
-        <IconButton onClick={openAttributesDialog}>
+      renderCell: ({ row }: { row: DocumentTypeResponse }): ReactElement => (
+        <IconButton
+          onClick={() => {
+            setCurrentDocType(row);
+            openAttributesDialog();
+          }}
+        >
           <FormatListBulletedIcon />
         </IconButton>
       ),
@@ -91,7 +116,9 @@ const DocumentTypesTable = observer((): ReactElement => {
             disableColumnFilter
             disableColumnSelector
             disableDensitySelector
-            rows={documentTypesStore.documentTypes}
+            rows={documentTypesStore.documentTypes.map(
+              (e) => ({ id: e.id, name: e.name, attributes: e.attributes }) as DocumentTypeResponse,
+            )}
             columns={columns}
             slots={{
               toolbar: () => <CustomToolbar openAddNewTypeDialog={openCreateDocumentTypeDialog}></CustomToolbar>,
@@ -109,11 +136,18 @@ const DocumentTypesTable = observer((): ReactElement => {
           />
         </Box>
       </Paper>
-      <AttributesDialog open={isAttbutesDialogOpen} handleClose={closeAttributesDialog} />
+      {currentDocType && (
+        <AttributesDialog
+          open={isAttbutesDialogOpen}
+          handleClose={closeAttributesDialog}
+          documentType={currentDocType}
+        />
+      )}
+
       <ManageDocumentTypeDialog
         open={isManageDocumentDialogOpen}
         handleClose={closeManageDocumentDialog}
-        edit={isEditDialogOpen}
+        documentType={currentDocType}
       />
     </React.Fragment>
   );

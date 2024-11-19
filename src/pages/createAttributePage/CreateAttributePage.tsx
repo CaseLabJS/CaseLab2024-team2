@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import DocumentTypesTable from '@/features/document-types-table/ui/DocumentTypesTable';
+import DocumentTypesTable from '@/features/documentTypesManagement/ui/documentTypesTable/DocumentTypesTable';
 import { TabsPanel } from '@/shared/components';
 
 const CreateAttributePage = (): ReactElement => {

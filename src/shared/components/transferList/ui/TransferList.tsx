@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 
 import { Paper, List, ListItemButton, ListItemIcon, Checkbox, ListItemText, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function not<T>(a: T[], b: T[]): T[] {
   return a.filter((value) => !b.includes(value));
@@ -12,10 +12,25 @@ function intersection<T>(a: T[], b: T[]): T[] {
   return a.filter((value) => b.includes(value));
 }
 
-function TransferList<T>({ leftData, rightData }: { leftData: T[]; rightData: T[] }): ReactElement {
+export function TransferList<T>({
+  leftData,
+  rightData,
+  onTransfer,
+  renderListItem,
+}: {
+  leftData: T[];
+  rightData: T[];
+  onTransfer: (newLeftData: T[], newRightData: T[]) => void;
+  renderListItem: (e: T) => React.ReactElement;
+}): ReactElement {
   const [checked, setChecked] = React.useState<T[]>([]);
   const [left, setLeft] = React.useState<T[]>(leftData);
   const [right, setRight] = React.useState<T[]>(rightData);
+
+  useEffect(() => {
+    setLeft(leftData);
+    setRight(rightData);
+  }, [leftData, rightData]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -34,38 +49,63 @@ function TransferList<T>({ leftData, rightData }: { leftData: T[]; rightData: T[
   };
 
   const handleAllRight = (): void => {
-    setRight(right.concat(left));
-    setLeft([]);
+    const newLeft: T[] = [];
+    const newRight = right.concat(left);
+    setRight(newRight);
+    setLeft(newLeft);
+    onTransfer(newLeft, newRight);
   };
 
   const handleCheckedRight = (): void => {
-    setRight(right.concat(leftChecked));
-    setLeft(not(left, leftChecked));
-    setChecked(not(checked, leftChecked));
+    const newLeft = not(left, leftChecked);
+    const newRight = right.concat(leftChecked);
+    const newChecked = not(checked, leftChecked);
+
+    setLeft(newLeft);
+    setRight(newRight);
+    setChecked(newChecked);
+
+    onTransfer(newLeft, newRight);
   };
 
   const handleCheckedLeft = (): void => {
-    setLeft(left.concat(rightChecked));
-    setRight(not(right, rightChecked));
-    setChecked(not(checked, rightChecked));
+    const newLeft = left.concat(rightChecked);
+    const newRight = not(right, rightChecked);
+    const newChecked = not(checked, rightChecked);
+
+    setLeft(newLeft);
+    setRight(newRight);
+    setChecked(newChecked);
+
+    onTransfer(newLeft, newRight);
   };
 
   const handleAllLeft = (): void => {
-    setLeft(left.concat(right));
-    setRight([]);
+    const newLeft = left.concat(right);
+    const newRight: typeof right = [];
+
+    setLeft(newLeft);
+    setRight(newRight);
+
+    onTransfer(newLeft, newRight);
   };
 
   function customList(items: T[]): ReactElement {
     return (
-      <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
+      <Paper sx={{ width: 300, height: 230, overflow: 'auto' }}>
         <List dense component="div" role="list">
-          {items.map((value: T) => {
+          {items.map((value: T, index: number) => {
             return (
-              <ListItemButton key={String(value)} role="listitem" onClick={handleToggle(value)}>
+              <ListItemButton
+                key={index}
+                role="listitem"
+                onClick={handleToggle(value)}
+                selected={checked.includes(value)}
+              >
                 <ListItemIcon>
                   <Checkbox checked={checked.includes(value)} tabIndex={-1} disableRipple />
                 </ListItemIcon>
-                <ListItemText primary={String(value)} />
+                <ListItemText primary={renderListItem(value)} />
               </ListItemButton>
             );
           })}
@@ -85,7 +125,6 @@ function TransferList<T>({ leftData, rightData }: { leftData: T[]; rightData: T[
             size="small"
             onClick={handleAllRight}
             disabled={left.length === 0}
-            aria-label="move all right"
           >
             ≫
           </Button>
@@ -95,7 +134,6 @@ function TransferList<T>({ leftData, rightData }: { leftData: T[]; rightData: T[
             size="small"
             onClick={handleCheckedRight}
             disabled={leftChecked.length === 0}
-            aria-label="move selected right"
           >
             &gt;
           </Button>
@@ -105,7 +143,6 @@ function TransferList<T>({ leftData, rightData }: { leftData: T[]; rightData: T[
             size="small"
             onClick={handleCheckedLeft}
             disabled={rightChecked.length === 0}
-            aria-label="move selected left"
           >
             &lt;
           </Button>
@@ -115,7 +152,6 @@ function TransferList<T>({ leftData, rightData }: { leftData: T[]; rightData: T[
             size="small"
             onClick={handleAllLeft}
             disabled={right.length === 0}
-            aria-label="move all left"
           >
             ≪
           </Button>
@@ -125,5 +161,3 @@ function TransferList<T>({ leftData, rightData }: { leftData: T[]; rightData: T[
     </Grid>
   );
 }
-
-export default TransferList;
