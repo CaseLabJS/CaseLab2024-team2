@@ -1,4 +1,4 @@
-import type { DocumentTypeResponse, DocumentTypeToAttributeResponse } from '@/entities/documents';
+import type { DocumentTypeResponse, DocumentTypeToAttributeResponse } from '@/entities/documentsType';
 import type { PaginationRequest } from '@/shared/types/paginationRequest';
 import type { Stateful } from '@/shared/types/status.type';
 
@@ -11,8 +11,7 @@ import {
 import { Status } from '@/shared/types/status.type';
 import { makeAutoObservable, runInAction, observable } from 'mobx';
 
-import type { AttributeRequest, AttributeResponse } from '../index';
-import type { AttributesPageResponse } from './types/attributePageResponse.type';
+import type { AttributeRequest, AttributeResponse, AttributesPageResponse } from '../../index';
 
 export interface CombinedAttribute extends AttributeResponse, DocumentTypeToAttributeResponse {}
 
