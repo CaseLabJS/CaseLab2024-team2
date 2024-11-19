@@ -2,7 +2,7 @@ import type { RegisterRequest } from '@/entities/user';
 import type { FormikHelpers } from 'formik';
 import type { ReactElement } from 'react';
 
-import { userStore } from '@/entities/user/model/userStore';
+import { userStore } from '@/entities/user/model/store/userStore';
 import { SignupSchema } from '@/features/auth';
 import LaunchIcon from '@mui/icons-material/Launch';
 import Button from '@mui/material/Button';
