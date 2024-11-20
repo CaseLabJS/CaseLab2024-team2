@@ -1,12 +1,15 @@
-import type { AuthenticationRequest, UserResponse } from '@/entities/user';
+import type { AuthenticationRequest } from '@/entities/auth';
+import type { UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
 import { makeAutoObservable, runInAction } from 'mobx';
+
 type ISimpleState = 'error' | 'success' | 'loading';
 
 class AuthStore {
-  isAuth: boolean = !!localStorage.getItem('token');
-  isAdmin: boolean = false;
+  isAuth: boolean = !!localStorage.getItem('accessToken');
+  isAdmin: boolean = !!localStorage.getItem('isAdmin');
+  isUser: boolean = !!localStorage.getItem('isUser');
   displayName: string = '';
   email: string = '';
   state: ISimpleState = 'success';
@@ -30,19 +33,13 @@ class AuthStore {
     }
   }
 
-  //Если реализуем функцию получения пользователя по токену в userStore, то эту можно снести в будущем
-  async checkAuth(): Promise<void> {
-    if (!this.isAuth) return;
-    try {
-      await this.processAuthResponse();
-    } catch {
-      this.logout();
-    }
-  }
-
   logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('isUser');
     this.isAdmin = false;
+    this.isUser = false;
     this.isAuth = false;
     this.displayName = '';
     this.email = '';
@@ -54,7 +51,11 @@ class AuthStore {
       this.state = 'error';
       this.isAuth = false;
       this.isAdmin = false;
-      localStorage.removeItem('token');
+      this.isUser = false;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('isAdmin');
+      localStorage.removeItem('isUser');
     });
   }
 
@@ -69,7 +70,7 @@ class AuthStore {
   }
 
   private async processAuthResponse(): Promise<void> {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     if (token) {
       const userData = await this.fetchCurrentUser();
       if (userData) {
@@ -78,7 +79,14 @@ class AuthStore {
           this.isAuth = true;
           this.displayName = userData.display_name;
           this.email = userData.email;
-          this.isAdmin = userData.roles.includes('ADMIN');
+          if (userData.roles.includes('ADMIN')) {
+            localStorage.setItem('isAdmin', JSON.stringify(userData.roles.includes('ADMIN')));
+            this.isAdmin = true;
+          }
+          if (userData.roles.includes('USER')) {
+            localStorage.setItem('isUser', JSON.stringify(userData.roles.includes('USER')));
+            this.isUser = true;
+          }
         });
       } else {
         this.logout();
