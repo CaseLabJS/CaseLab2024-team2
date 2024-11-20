@@ -1,5 +1,5 @@
 import iconLink from '@/assets/iconLink.svg';
-import { votingStore } from '@/entities/vote';
+import { votingStore } from '@/entities/vote/model/store/voteStore';
 import { Button, Box, Modal, Typography, FormControlLabel, Checkbox, Stack } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
