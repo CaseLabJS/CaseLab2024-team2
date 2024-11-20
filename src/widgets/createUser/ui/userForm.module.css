@@ -2,12 +2,18 @@
     box-sizing: border-box;
     width: 448px;
     padding: 30px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.userForm__head {
+    display: flex;
+    justify-content: space-between;
 }
 
 .userForm__form {
-    width: 275px;
     display: flex;
-    gap: 5px;
+    gap: 25px;
     flex-direction: column;
 }
 
@@ -26,9 +32,27 @@
     line-height: 32px;
 }
 
+.userForm__inputs {
+    width: 275px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
 .userFrom__error {
     color: red;
-    font-size: 10px;
+    font-size: 12px;
+    margin: 0;
+}
+
+.userFrom__errorBox {
+    height: 30px;
+}
+
+.userForm__buttonContainer {
+    width: 365px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .userForm__button {
