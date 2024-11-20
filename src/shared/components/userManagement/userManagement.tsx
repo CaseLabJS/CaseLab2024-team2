@@ -1,3 +1,5 @@
+import type { UserResponse } from '@/entities/user';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import Visibility from '@mui/icons-material/Visibility';
@@ -13,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 
-import { userStore } from '../../../entities/user/model/userStore';
+import { userStore } from '../../../entities/user/model/store/userStore';
 
 import styles from './userManagement.module.css';
 const SearchContainer = styled('div')({
@@ -29,7 +31,7 @@ const UserManagement = observer(() => {
   const [searchTerm, setSearchTerm] = useState('');
 
 
-  const filteredUsers = searchTerm ? userStore.users.filter((user) => {
+  const filteredUsers = searchTerm ? userStore.users.filter((user:UserResponse) => {
     return (
       // user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.display_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -131,7 +133,7 @@ const UserManagement = observer(() => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredUsers.map((user, index) => (
+              {filteredUsers.map((user:UserResponse, index) => (
                 <TableRow key={index}>
                   <TableCell align="left">
                     <DeleteIcon
