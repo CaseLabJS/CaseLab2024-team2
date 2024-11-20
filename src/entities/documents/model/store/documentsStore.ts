@@ -15,7 +15,7 @@ import type {
   DocumentFacadeResponse,
   PatchDocumentRequest,
   UpdateDocumentRequest,
-} from '../index';
+} from '../../index';
 
 class DocumentsStore {
   documents = observable.array<DocumentFacadeResponse>([]);

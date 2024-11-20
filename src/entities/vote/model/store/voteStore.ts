@@ -1,8 +1,8 @@
-import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '@/entities/vote';
-
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { addVote, createVotingProcess, getVotingProcess } from '../api';
+import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '../..';
+
+import { addVote, createVotingProcess, getVotingProcess } from '../../api';
 type ISimpleState = 'error' | 'success' | 'loading';
 
 class VotingStore {
