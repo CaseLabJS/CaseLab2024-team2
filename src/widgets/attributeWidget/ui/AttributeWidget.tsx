@@ -16,7 +16,7 @@ const AddAttribute = (): ReactElement => {
   }
   return (
     <Box className={style.boxCreateAttribute}>
-      <Link to={ROUTE_CONSTANTS.ATTRIBUTES.path} className={style.stylelinkIcon}>
+      <Link to={`${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.ATTRIBUTES.path}`} className={style.stylelinkIcon}>
         <img src={iconLink} alt="Изображение икноки перехода на следующую страницу" />
       </Link>
       <Stack direction="column" gap="13px" marginBottom="80px">
