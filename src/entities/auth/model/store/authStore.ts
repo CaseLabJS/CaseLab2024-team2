@@ -18,6 +18,10 @@ class AuthStore {
     makeAutoObservable(this);
   }
 
+  get currentEmail () {return this.email};
+  get currentName () {return this.displayName};
+  get isAdminStatus () {return this.isAdmin}
+
   async login(values: AuthenticationRequest): Promise<void> {
     this.state = 'loading';
     try {

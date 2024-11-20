@@ -11,16 +11,17 @@ import { NavLink } from 'react-router-dom';
 import logo from './images/logo.svg';
 
 import styles from './header.module.css';
+import { observer } from 'mobx-react-lite';
 
-export const Header = (): ReactElement => {
+export const Header = observer( (): ReactElement => {
   /**Пример данных о пользователе - должно приходить с backend (для разработки) */
-  const user = {
-    //инфо из стор, обсервебл header
-    id: 1,
-    userName: 'Сергей Орлов',
-    email: 'orel-dev@inbox.com',
-    isAdmin: true,
-  };
+  // const user = {
+  //   //инфо из стор, обсервебл header
+  //   id: 1,
+  //   userName: authStore.currentName,
+  //   email: authStore.currentEmail,
+  //   isAdmin: true,
+  // };
 
   /**Пример уведомлений - должно приходить с backend (для разработки) */
   const notifications = [
@@ -133,7 +134,7 @@ export const Header = (): ReactElement => {
   /** Проверка пользователя на права администратора, для рендеринга сообветствующего меню пользователя*/
   let menuForUser;
 
-  if (authStore.isAdmin) {
+  if (authStore.isAdminStatus) {
     menuForUser = itemsAdmin;
   } else menuForUser = itemsUser;
 
@@ -188,8 +189,8 @@ export const Header = (): ReactElement => {
             {isOpenMenu && (
               <div className={styles.userMenu}>
                 <div className={styles.userMenu__user}>
-                  <p className={styles.userMenu__user_name}>{user.userName}</p>
-                  <p className={styles.userMenu__user_email}>{user.email}</p>
+                  <p className={styles.userMenu__user_name}>{authStore.currentName}</p>
+                  <p className={styles.userMenu__user_email}>{authStore.currentEmail}</p>
                 </div>
                 <ul>
                   {menuForUser.map((item, i) => (
@@ -213,4 +214,4 @@ export const Header = (): ReactElement => {
       </div>
     </header>
   );
-};
+});
