@@ -1,0 +1,32 @@
+.boxCreateAttribute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+}
+.stylelinkIcon {
+  margin: 9px 9px 10px auto;
+  cursor: pointer;
+}
+.titleAddAttribute {
+  margin-top: 30px;
+  color: #0056b3;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 0.15000000596046448px;
+  text-align: center;
+}
+.inputAttribute {
+  margin-top: 30px;
+}
+.formControl {
+  display: flex;
+  justify-content: center;
+}
