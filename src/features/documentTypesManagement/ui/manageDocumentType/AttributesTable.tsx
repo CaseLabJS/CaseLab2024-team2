@@ -1,5 +1,5 @@
-import type { CombinedAttribute } from '@/entities/attribute/model/attributeStore';
-import type { DocumentTypeToAttributeRequest } from '@/entities/documents';
+import type { CombinedAttribute } from '@/entities/attribute';
+import type { DocumentTypeToAttributeRequest } from '@/entities/documentsType';
 import type { ReactElement } from 'react';
 
 import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';

@@ -1,7 +1,7 @@
-import type { DocumentTypeToAttributeRequest } from '@/entities/documents';
+import type { DocumentTypeToAttributeRequest } from '@/entities/documentsType';
 import type { DialogProps } from '@mui/material';
 
-import { attributesStore } from '@/entities/attribute/model/attributeStore';
+import { attributesStore } from '@/entities/attribute';
 import { TransferList } from '@/shared/components';
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogTitle, IconButton, DialogContent, DialogActions, Button } from '@mui/material';

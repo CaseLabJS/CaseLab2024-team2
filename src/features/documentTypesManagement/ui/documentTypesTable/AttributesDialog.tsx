@@ -1,8 +1,8 @@
-import type { CombinedAttribute } from '@/entities/attribute/model/attributeStore';
-import type { DocumentTypeResponse } from '@/entities/documents';
+import type { CombinedAttribute} from '@/entities/attribute';
+import type { DocumentTypeResponse } from '@/entities/documentsType';
 import type { DialogProps } from '@mui/material';
 
-import { attributesStore } from '@/entities/attribute/model/attributeStore';
+import { attributesStore } from '@/entities/attribute';
 import CloseIcon from '@mui/icons-material/Close';
 import {
   Dialog,

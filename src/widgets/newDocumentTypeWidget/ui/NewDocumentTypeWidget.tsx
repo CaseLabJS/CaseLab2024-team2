@@ -1,8 +1,9 @@
-import type { CombinedAttribute } from '@/entities/attribute/model/attributeStore';
-import type { DocumentTypeToAttributeRequest } from '@/entities/documents';
+
+import type { CombinedAttribute } from '@/entities/attribute';
+import type { DocumentTypeToAttributeRequest } from '@/entities/documentsType';
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
-import { attributesStore } from '@/entities/attribute/model/attributeStore';
+import { attributesStore } from '@/entities/attribute';
 import { documentTypesStore } from '@/entities/documents/model/documentTypesStore';
 import AddAttributesDialog from '@/features/documentTypesManagement/ui/manageDocumentType/AddAttributesDialog';
 import AttributesTable from '@/features/documentTypesManagement/ui/manageDocumentType/AttributesTable';

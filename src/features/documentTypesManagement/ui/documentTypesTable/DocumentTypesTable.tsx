@@ -1,8 +1,8 @@
-import type { DocumentTypeResponse } from '@/entities/documents';
+import type { DocumentTypeResponse } from '@/entities/documentsType';
 import type { GridColDef } from '@mui/x-data-grid';
 import type { ReactElement } from 'react';
 
-import { attributesStore } from '@/entities/attribute/model/attributeStore';
+import { attributesStore } from '@/entities/attribute/model/store/attributeStore';
 import { documentTypesStore } from '@/entities/documents/model/documentTypesStore';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -117,6 +117,7 @@ const DocumentTypesTable = observer((): ReactElement => {
             disableColumnSelector
             disableDensitySelector
             rows={documentTypesStore.documentTypes.map(
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
               (e) => ({ id: e.id, name: e.name, attributes: e.attributes }) as DocumentTypeResponse,
             )}
             columns={columns}
