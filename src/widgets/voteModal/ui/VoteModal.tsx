@@ -1,9 +1,8 @@
 import iconLink from '@/assets/iconLink.svg';
-import { votingStore } from '@/entities/vote/model/store/voteStore';
+import { votingStore } from '@/entities/vote';
 import { Button, Box, Modal, Typography, FormControlLabel, Checkbox, Stack } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
-import { Link } from 'react-router-dom';
 
 import style from './voteModal.module.css';
 
@@ -25,16 +24,20 @@ const VoteModal = observer(({ documentId, isOpen, handleClose }: VoteModalProps)
   }
 
   return (
-    <Modal open={isOpen} onClose={handleClose} sx={{ margin: '128px' }}>
+    <Modal open={isOpen} onClose={handleClose}>
       <Box className={style.boxCreateAttribute}>
-        <Link to={`/document/${documentId}`} className={style.stylelinkIcon}>
+        <Box className={style.stylelinkIcon} onClick={handleClose}>
           <img src={iconLink} alt="Изображение икноки вернуться" />
-        </Link>
-        <Stack direction="column" gap="13px" marginBottom="80px">
+        </Box>
+        <Stack direction="column" gap="46px" marginBottom="56px">
           <Typography variant="h6" className={style.titleAddAttribute}>
             Проголосовать
           </Typography>
-          <FormControlLabel control={<Checkbox checked={isChecked} onChange={handleChange} />} label="Поддерживаю" />
+          <FormControlLabel
+            className={style.formControl}
+            control={<Checkbox checked={isChecked} onChange={handleChange} />}
+            label="Поддерживаю"
+          />
           <Stack direction="row" justifyContent="center" gap="20px">
             <Button variant="contained" onClick={sendVoteUser}>
               Сохранить
