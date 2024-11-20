@@ -7,4 +7,4 @@ export {
   searchDocumentsData,
   patchDocumentData,
 } from './req-doc-data';
-export { getAllDocTypes, getDocType, addDocType, updateDocType, deleteDocType } from './req-doc-types';
+export { getAllDocTypes, getDocType, addDocType, updateDocType, deleteDocType } from '../../documentsType/api/req-doc-types';

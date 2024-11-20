@@ -59,7 +59,7 @@ class DocumentTypesStore {
     this.documentTypes.push(documentTypeToCreate);
 
     try {
-      const createdDocumentType = (await addDocType(documentType)) as DocumentTypeResponse;
+      const createdDocumentType = await addDocType(documentType);
 
       runInAction(() => {
         Object.assign(documentTypeToCreate, createdDocumentType, {
@@ -90,7 +90,7 @@ class DocumentTypesStore {
     try {
       documentTypeToUpdate.status = Status.LOADING;
 
-      const updatedDocumentType = (await updateDocType(id, documentType)) as DocumentTypeResponse;
+      const updatedDocumentType = (await updateDocType(id, documentType));
 
       runInAction(() => {
         Object.assign(documentTypeToUpdate, updatedDocumentType, {

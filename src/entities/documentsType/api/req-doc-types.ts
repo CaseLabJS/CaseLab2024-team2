@@ -1,10 +1,9 @@
+import type { DocumentTypeRequest, DocumentTypeResponse } from '@/entities/documentsType';
 import type { PaginationRequest } from '@/shared/types/paginationRequest';
 
 import { api } from '@/shared/http';
 import { buildSearchParams } from '@/shared/utils/buildSearchParams';
 
-import type { DocumentTypeRequest } from '../model/types/documentTypeRequest.type';
-import type { DocumentTypeResponse } from '../model/types/documentTypeResponse.type';
 import type { DocumentTypesPageResponse } from '../model/types/documentTypesPageResponse.type';
 
 // получение типа документа по id
