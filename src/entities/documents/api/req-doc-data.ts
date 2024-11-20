@@ -1,56 +1,71 @@
+import type { PaginationRequest } from '@/shared/types/paginationRequest';
+
 import { api } from '@/shared/http';
+import { buildSearchParams } from '@/shared/utils/buildSearchParams';
 
-type Document = {
-  id: number;
-  document_type_id: number;
-  name: string;
-  document_versions_ids: number[];
-  user_permissions: {
-    email: string;
-    document_permissions: {
-      id: number;
-      name: string;
-    }[];
-  }[];
-};
+import type { CreateDocumentRequest, DocumentFacadeResponse, PatchDocumentRequest, UpdateDocumentRequest } from '..';
 
-type CreateDocument = {
-  document_type_id: number;
-  name: string;
-  users_permissions: [
-    {
-      email: string;
-      document_permissions: number[];
-    },
-  ];
-};
+export interface DocumentPageResponse {
+  content: DocumentFacadeResponse[];
+  empty: boolean;
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  totalElements: number;
+  totalPages: number;
+}
 
+export interface SearchDocumentRequest extends PaginationRequest {
+  query: string;
+}
 // получение документа по id
-export const getDocumentData = async (id: number): Promise<Document> => {
-  const response = await api.get<Document>(`/documents/${id}`);
+export const getDocumentData = async (id: number): Promise<DocumentFacadeResponse> => {
+  const response = await api.get<DocumentFacadeResponse>(`/documents-fasade/${id}`);
   return response.data;
 };
 
-// получение всех документов
-export const getAllDocumentsData = async (): Promise<Document[]> => {
-  const response = await api.get<Document[]>('/documents');
-  return response.data;
+// получение всех документов пользователя текущего
+export const getAllDocumentsData = async (paginationRequest: PaginationRequest): Promise<DocumentFacadeResponse[]> => {
+  const response = await api.get<DocumentPageResponse>('/documents-fasade/', {
+    params: buildSearchParams(paginationRequest),
+  });
+  return response.data.content;
+};
+
+// получение всех документов по поиску
+export const searchDocumentsData = async (searchRequest: SearchDocumentRequest): Promise<DocumentFacadeResponse[]> => {
+  const response = await api.get<DocumentPageResponse>('/documents-fasade/', {
+    params: buildSearchParams(searchRequest),
+  });
+  return response.data.content;
 };
 
 // создание документа
-export const createDocumentData = async (createDocument: CreateDocument): Promise<Document> => {
-  const response = await api.post<Document>('/documents', createDocument);
+export const createDocumentData = async (createDocument: CreateDocumentRequest): Promise<DocumentFacadeResponse> => {
+  const response = await api.post<DocumentFacadeResponse>('/documents-fasade/', createDocument);
   return response.data;
 };
 
 // обновление документа
-export const updateDocumentData = async (id: number, updeteDocument: CreateDocument): Promise<Document> => {
-  const response = await api.put<Document>(`/documents/${id}`, updeteDocument);
+export const updateDocumentData = async (
+  id: number,
+  updateDocument: UpdateDocumentRequest,
+): Promise<DocumentFacadeResponse> => {
+  const response = await api.put<DocumentFacadeResponse>(`/documents-fasade/${id}`, updateDocument);
   return response.data;
 };
 
-// удаление документа
+// частичное обновление документа
+export const patchDocumentData = async (
+  id: number,
+  updateDocument: PatchDocumentRequest,
+): Promise<DocumentFacadeResponse> => {
+  const response = await api.put<DocumentFacadeResponse>(`/documents-fasade/${id}`, updateDocument);
+  return response.data;
+};
+
+// отправка документа в архив
 export const deleteDocumentData = async (id: number): Promise<void> => {
-  await api.delete(`/documents/${id}`);
+  await api.delete(`/documents-fasade/${id}`);
   return;
 };
