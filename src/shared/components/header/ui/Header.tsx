@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
-import { authStore } from '@/entities/auth/model/store';
+import { authStore } from '@/entities/auth/model/store/authStore';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { IconButton } from '@mui/material';

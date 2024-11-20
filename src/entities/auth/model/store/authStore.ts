@@ -1,11 +1,13 @@
-import type { AuthenticationRequest, UserResponse } from '@/entities/user';
+import type { AuthenticationRequest } from '@/entities/auth';
+import type { UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
 import { makeAutoObservable, runInAction } from 'mobx';
+
 type ISimpleState = 'error' | 'success' | 'loading';
 
 class AuthStore {
-  isAuth: boolean = !!localStorage.getItem('token');
+  isAuth: boolean = !!localStorage.getItem('accessToken');
   isAdmin: boolean = !!localStorage.getItem('isAdmin');
   isUser: boolean = !!localStorage.getItem('isUser');
   displayName: string = '';
@@ -32,7 +34,8 @@ class AuthStore {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('isAdmin');
     localStorage.removeItem('isUser');
     this.isAdmin = false;
@@ -49,7 +52,8 @@ class AuthStore {
       this.isAuth = false;
       this.isAdmin = false;
       this.isUser = false;
-      localStorage.removeItem('token');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       localStorage.removeItem('isAdmin');
       localStorage.removeItem('isUser');
     });
@@ -66,7 +70,7 @@ class AuthStore {
   }
 
   private async processAuthResponse(): Promise<void> {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     if (token) {
       const userData = await this.fetchCurrentUser();
       if (userData) {
