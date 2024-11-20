@@ -8,7 +8,7 @@ import {
   searchDocumentsData,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
-import { makeAutoObservable, onBecomeObserved, autorun, runInAction, observable } from 'mobx';
+import { makeAutoObservable, onBecomeObserved, autorun, runInAction } from 'mobx';
 
 import type {
   CreateDocumentRequest,
@@ -18,7 +18,8 @@ import type {
 } from '../../index';
 
 class DocumentsStore {
-  documents = observable.array<DocumentFacadeResponse>([]);
+  documents: DocumentFacadeResponse[] = [];
+  currentDocument: DocumentFacadeResponse | null = null;
   status: Status = Status.UNSET;
   pageNumber: number = 0;
   searchQuery: string | null = null;
@@ -71,9 +72,8 @@ class DocumentsStore {
         pageSize: 32,
         query: this.searchQuery,
       });
-      this.documents.clear();
-      this.documents = observable.array(documentPage);
       runInAction(() => {
+        this.documents = documentPage;
         this.status = Status.SUCCESS;
       });
     } catch {
@@ -87,10 +87,9 @@ class DocumentsStore {
     try {
       this.status = Status.LOADING;
       const documentPage = await getAllDocumentsData({ pageNum: this.pageNumber, pageSize: 32 });
-      this.documents.clear();
-      this.documents = observable.array(documentPage);
       runInAction(() => {
         this.searchQuery = null;
+        this.documents = documentPage;
         this.status = Status.SUCCESS;
       });
     } catch {
@@ -100,18 +99,17 @@ class DocumentsStore {
   }
 
   //получить документ по id
-  async getDocumentById(id: number): Promise<DocumentFacadeResponse | null> {
+  async getDocumentById(id: number): Promise<void> {
     try {
       this.status = Status.LOADING;
       const data = await getDocumentData(id);
       runInAction(() => {
         this.status = Status.SUCCESS;
+        this.currentDocument = data;
       });
-      return data;
     } catch {
       this.status = Status.ERROR;
       alert('Не удалось получить документ');
-      return null;
     }
   }
 
@@ -122,9 +120,11 @@ class DocumentsStore {
       const createdDocument = await createDocumentData(newDocument);
       if (!createdDocument) {
         alert('Не удалось создать документ');
+        return;
       } else {
         runInAction(() => {
           this.status = Status.SUCCESS;
+          this.currentDocument = createdDocument;
         });
       }
     } catch {
@@ -139,9 +139,9 @@ class DocumentsStore {
     if (documentToUpdate) {
       try {
         this.status = Status.LOADING;
-        const updatedAttribute = await updateDocumentData(id, document);
-        Object.assign(documentToUpdate, updatedAttribute);
+        const updatedDocument = await updateDocumentData(id, document);
         runInAction(() => {
+          this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
         });
       } catch {
@@ -157,9 +157,9 @@ class DocumentsStore {
     if (documentToUpdate) {
       try {
         this.status = Status.LOADING;
-        const updatedAttribute = await patchDocumentData(id, document);
-        Object.assign(documentToUpdate, updatedAttribute);
+        const updatedDocument = await patchDocumentData(id, document);
         runInAction(() => {
+          this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
         });
       } catch {
@@ -174,12 +174,10 @@ class DocumentsStore {
     try {
       this.status = Status.LOADING;
       await deleteDocumentData(id);
-      const deletedItem = this.documents.find((item) => item.document.id === id);
-      if (deletedItem) {
-        this.documents.remove(deletedItem);
-      }
       runInAction(() => {
+        this.documents = this.documents.filter((item) => item.document.id !== id);
         this.status = Status.SUCCESS;
+        this.currentDocument = null;
       });
     } catch {
       this.status = Status.ERROR;
