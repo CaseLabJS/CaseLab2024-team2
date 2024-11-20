@@ -75,7 +75,7 @@ class AttributesStore {
         });
       });
     } catch (error) {
-      this.attributes.remove(attributeToCreate);
+      attributeToCreate.status = Status.ERROR;
       console.error(error);
       alert('Не удалось создать атрибут');
     }
@@ -97,7 +97,7 @@ class AttributesStore {
     try {
       attributeToUpdate.status = Status.LOADING;
 
-      const updatedAttribute = (await updateAttributeDoc(id, attribute)) as StatefulAttribute;
+      const updatedAttribute = await updateAttributeDoc(id, attribute) as StatefulAttribute;
       updatedAttribute.status = Status.SUCCESS;
 
       runInAction(() => {
@@ -114,18 +114,18 @@ class AttributesStore {
   }
 
   async deleteById(id: AttributeResponse['id']): Promise<void> {
-    const attributeToDeleteIndex = this.attributes.findIndex((attribute) => attribute.id === id);
+    const attributeToDelete = this.attributes.find((attribute) => attribute.id === id);
 
-    if (attributeToDeleteIndex === -1) return;
+    if (!attributeToDelete) return;
 
     try {
-      this.attributes[attributeToDeleteIndex].status = Status.LOADING;
+      attributeToDelete.status = Status.LOADING;
 
       await deleteAttributeDoc(id);
 
-      this.attributes = observable.array(this.attributes.filter((attribute) => attribute.id !== id));
+      this.attributes.remove(attributeToDelete);
     } catch (error) {
-      this.attributes[attributeToDeleteIndex].status = Status.ERROR;
+      attributeToDelete.status = Status.ERROR;
       alert('Не удалось удалить атрибут');
       console.error(error);
     }

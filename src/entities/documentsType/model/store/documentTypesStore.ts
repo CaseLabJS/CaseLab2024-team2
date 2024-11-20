@@ -6,6 +6,7 @@ import { Status } from '@/shared/types/status.type';
 import { makeAutoObservable, runInAction, observable } from 'mobx';
 
 import type { DocumentTypeRequest, DocumentTypeResponse } from '../..';
+import type { DocumentTypesPageResponse } from '../types/documentTypesPageResponse.type';
 
 export type StatefulDocumentType = Stateful<DocumentTypeResponse>;
 
@@ -20,9 +21,17 @@ class DocumentTypesStore {
   async load(reload: boolean = false): Promise<void> {
     if (this.status === Status.LOADING && !reload) return;
 
+    let pageNumber = 0;
+    const documentTypes: DocumentTypeResponse[] = [];
+    let documentTypesPage: DocumentTypesPageResponse;
+
     this.status = Status.LOADING;
     try {
-      const documentTypes = await getAllDocTypes();
+      do {
+        documentTypesPage = await getAllDocTypes({ pageNum: pageNumber, pageSize: 32 });
+        documentTypes.push(...documentTypesPage.content);
+        pageNumber++;
+      } while (!documentTypesPage.last);
 
       runInAction(() => {
         this.status = Status.SUCCESS;
@@ -50,7 +59,7 @@ class DocumentTypesStore {
     this.documentTypes.push(documentTypeToCreate);
 
     try {
-      const createdDocumentType = await addDocType(documentType);
+      const createdDocumentType = (await addDocType(documentType)) as DocumentTypeResponse;
 
       runInAction(() => {
         Object.assign(documentTypeToCreate, createdDocumentType, {
@@ -59,7 +68,7 @@ class DocumentTypesStore {
         });
       });
     } catch (error) {
-      this.documentTypes.remove(documentTypeToCreate);
+      documentTypeToCreate.status = Status.ERROR;
       console.error(error);
       alert('Не удалось создать тип документа');
     }
@@ -81,7 +90,7 @@ class DocumentTypesStore {
     try {
       documentTypeToUpdate.status = Status.LOADING;
 
-      const updatedDocumentType = await updateDocType(id, documentType);
+      const updatedDocumentType = (await updateDocType(id, documentType)) as DocumentTypeResponse;
 
       runInAction(() => {
         Object.assign(documentTypeToUpdate, updatedDocumentType, {
