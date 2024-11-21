@@ -1,16 +1,24 @@
-import { addAttributeDoc } from '@/entities/attribute/api';
+import { attributesStore } from '@/entities/attribute';
 import { Button, TextField, Typography, Stack } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
 
 import style from './createAttribute.module.css';
 
-const CreateAttribute = (): ReactElement => {
+const CreateAttribute = observer((): ReactElement => {
   const [name, setName] = useState<string>('');
   const [type, setType] = useState<string>('');
 
   async function handleSubmit(): Promise<void> {
-    await addAttributeDoc({ name, type }); //при изменении attribute store, можно вызывать оттуда
+    try {
+      await attributesStore.create({ name, type });
+      setName('');
+      setType('');
+    } catch {
+      alert('Что-то пошло не так. Ошибка создания аттрибута');
+    }
   }
+
   return (
     <>
       <Stack direction="column" gap="13px" marginBottom="80px">
@@ -43,6 +51,6 @@ const CreateAttribute = (): ReactElement => {
       </Button>
     </>
   );
-};
+});
 
 export default CreateAttribute;

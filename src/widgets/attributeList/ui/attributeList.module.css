@@ -1,31 +1,41 @@
-.deleteIcon {
-  padding: 3%;
-  background-color: #fff;
-  width: 80%;
-  margin: 0 auto;
-  height: fit-content;
-  cursor: pointer;
-  margin-left: 5px;
-}
-
 .container {
   background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+}
+.boxCreateAttribute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  padding-bottom: 40px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+}
+.styleExitIcon {
+  margin: 9px 9px 10px auto;
+  cursor: pointer;
 }
 .buttonAdd {
+  padding: 10px;
   display: flex;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
   gap: 5px;
+  cursor: pointer;
+  border-radius: 10px;
 }
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
+.buttonAdd:hover {
+  transition: all 0.2s;
+  box-shadow:
+    0 7px 14px rgb(65 132 144 / 10%),
+    0 3px 6px rgb(0 0 0 / 8%);
 }
-
-.table th,
-.table td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+.buttonAdd:active {
+  background-color: #0056b3;
+  color: #ffffff;
 }

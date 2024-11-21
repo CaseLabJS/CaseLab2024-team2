@@ -1,8 +1,9 @@
-import { CreateAttribute } from '@/features/createAttribute';
+import type { ReactElement } from 'react';
+
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import iconLink from '@/assets/iconLink.svg';
+import { CreateAttribute } from '@/features/createAttribute';
 import { Box } from '@mui/material';
-import { type ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 
 import style from './attributeWidget.module.css';
