@@ -2,30 +2,22 @@ import type { ReactElement } from 'react';
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth/model/store/authStore';
-
+import Dashboard from '@/shared/components/dashboard/ui/Dashboard';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { IconButton } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import logo from './images/logo.svg';
 
 import styles from './header.module.css';
-import { observer } from 'mobx-react-lite';
-import { Dashboard } from '@mui/icons-material';
-import { userContext } from '@/shared/contexts/userContext';
 
-export const Header = observer( (): ReactElement => {
+export const Header = observer((): ReactElement => {
 
-  /**Пример данных о пользователе - должно приходить с backend (для разработки) */
-  const [user] = useState({name: authStore.currentName, email: authStore.currentEmail});
-  // const user = {
-  //   //инфо из стор, обсервебл header
-  //   id: 1,
-  //   userName: authStore.currentName,
-  //   email: authStore.currentEmail,
-  //   isAdmin: true,
-  // };
+  useEffect(() => {
+    authStore.processAuthResponse().catch(() => alert('Ошибка'));
+  })
 
   /**Пример уведомлений - должно приходить с backend (для разработки) */
   const notifications = [
@@ -56,29 +48,17 @@ export const Header = observer( (): ReactElement => {
     },
   ];
 
-  /**Функционал выпадающего меню пользователя: */
-  const [isOpenMenu, setOpenMenu] = useState(false);
-  const handleOpenMenu = (): void => {
-    setOpenMenu(!isOpenMenu);
-  }; // меню выпадает и исчезает по клику на иконку user
-  const closeMenu = (): void => {
-    // меню исчезает если открывают другое меню
-    if (isOpenMenu === true) {
-      handleOpenMenu();
-    }
-  };
-
   /**Функционал выпадающего меню уведомлений */
   const [isOpenNotes, setOpenNotes] = useState(false);
   const handleOpenNotes = (): void => {
     setOpenNotes(!isOpenNotes);
   }; // меню выпадает и исчезает по клику на иконку bell
-  const closeNote = (): void => {
-    // меню исчезает если открывают другое меню
-    if (isOpenNotes === true) {
-      handleOpenNotes();
-    }
-  };
+  // const closeNote = (): void => {
+  //   // меню исчезает если открывают другое меню
+  //   if (isOpenNotes === true) {
+  //     handleOpenNotes();
+  //   }
+  // };
 
   /**Функционал клика по уведомлениям */
   // положить данные в localStorage:
@@ -153,7 +133,7 @@ export const Header = observer( (): ReactElement => {
             <IconButton
               onClick={() => {
                 handleOpenNotes();
-                closeMenu();
+                // closeNote();
               }}
             >
               <NotificationsNoneIcon />
@@ -177,48 +157,10 @@ export const Header = observer( (): ReactElement => {
               </ul>
             )}
           </div>
-          <userContext.Provider value={user}>
-            <Dashboard onClick={() => {closeNote()}}/> 
-          </userContext.Provider>
-          {/* <div>
-            <IconButton
-              onClick={() => {
-                {
-                  handleOpenMenu();
-                  closeNote();
-                }
-              }}
-              aria-label="account"
-              size="large"
-            >
-              <AccountCircleOutlinedIcon />
-            </IconButton>
-            {isOpenMenu && (
-              <div className={styles.userMenu}>
-                <div className={styles.userMenu__user}>
-                  <p className={styles.userMenu__user_name}>{authStore.currentName}</p>
-                  <p className={styles.userMenu__user_email}>{authStore.currentEmail}</p>
-                </div>
-                <ul>
-                  {menuForUser.map((item, i) => (
-                    <li className={styles.userMenu__userMenu_link} key={i}>
-                      <NavLink to={item.link}>{item.name}</NavLink>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  className={styles.userHeader__button_menu}
-                  onClick={() => {
-                    authStore.logout();
-                  }}
-                >
-                  Sign out
-                </button>
-              </div>
-            )}
-          </div> */}
+          <Dashboard />
         </nav>
       </div>
     </header>
   );
-});
+}
+);
