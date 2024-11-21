@@ -7,10 +7,14 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
-import { ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Link, ListItemIcon, ListItemText} from '@mui/material';
 import DraftsIcon from '@mui/icons-material/Drafts';
+import WorkIcon from '@mui/icons-material/Work';
 import SendIcon from '@mui/icons-material/Send';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import {userContext} from '@/shared/contexts/userContext'
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
@@ -26,10 +30,12 @@ export default function Dashboard(): React.ReactElement {
     {
       name: 'Профиль',
       link: ROUTE_CONSTANTS.ADMIN.path,
+      icon: <AccountCircleIcon fontSize="small" />,
     },
     {
       name: 'Admin menu',
       link: ROUTE_CONSTANTS.ADMIN.path,
+      icon: <ErrorOutlineIcon fontSize="small" />,
     },
   ];
 
@@ -38,6 +44,7 @@ export default function Dashboard(): React.ReactElement {
     {
       name: 'Профиль',
       link: ROUTE_CONSTANTS.USER.path,
+      icon: <AccountCircleIcon fontSize="small" />,
     },
   ];
 
@@ -119,11 +126,11 @@ export default function Dashboard(): React.ReactElement {
                   <div>
                     <MenuItem>
                       <ListItemIcon>
-                        <SendIcon fontSize="small" />
+                        <WorkIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText>
-                        <ListItemText>{authStore.currentName}</ListItemText>
-                        <ListItemText>{authStore.currentEmail}</ListItemText>
+                        <ListItemText>{name}</ListItemText>
+                        <ListItemText>{email}</ListItemText>
                       </ListItemText>
                     </MenuItem>
                   <MenuList
@@ -132,24 +139,30 @@ export default function Dashboard(): React.ReactElement {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem>
-                      <ListItemIcon>
-                        <PriorityHighIcon fontSize="small" />
-                      </ListItemIcon>
-                      <Typography variant="inherit">Профиль</Typography>
-                    </MenuItem>
-                    <MenuItem>
-                      <ListItemIcon>
-                        <DraftsIcon fontSize="small" />
-                      </ListItemIcon>
-                      <Typography variant="inherit">Admin menu</Typography>
-                    </MenuItem>
-                    <MenuItem>
-                      <ListItemIcon>
-                        <DraftsIcon fontSize="small" />
-                      </ListItemIcon>
-                      <Typography variant="inherit">Sign out</Typography>
-                    </MenuItem>
+                    {menuForUser.map((item) => (
+                      <MenuItem>
+                        <ListItemIcon>
+                          {item.icon}
+                        </ListItemIcon>
+                        <Link href={item.link} underline="none">{item.name}</Link>
+                      </MenuItem>
+
+                    ))}
+                      <MenuItem>
+                        <ListItemIcon>
+                          <ExitToAppIcon/>
+                        </ListItemIcon>
+                        <Link
+                          component="button"
+                          variant="body2"
+                          underline="none"
+                          onClick={() => {
+                            authStore.logout();
+                          }}
+                        >
+                          Sign out
+                        </Link>
+                      </MenuItem>
                   </MenuList>
                   </div>
                 </ClickAwayListener>

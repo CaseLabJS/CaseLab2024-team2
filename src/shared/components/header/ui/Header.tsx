@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth/model/store/authStore';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { IconButton } from '@mui/material';
 import { useState, useEffect } from 'react';
@@ -12,9 +12,13 @@ import logo from './images/logo.svg';
 
 import styles from './header.module.css';
 import { observer } from 'mobx-react-lite';
+import { Dashboard } from '@mui/icons-material';
+import { userContext } from '@/shared/contexts/userContext';
 
 export const Header = observer( (): ReactElement => {
+
   /**Пример данных о пользователе - должно приходить с backend (для разработки) */
+  const [user] = useState({name: authStore.currentName, email: authStore.currentEmail});
   // const user = {
   //   //инфо из стор, обсервебл header
   //   id: 1,
@@ -110,33 +114,33 @@ export const Header = observer( (): ReactElement => {
 
   const isRead = localNotifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
 
-  /**Массив пунктов выпадающего меню пользователя: */
-  const itemsAdmin = [
-    // пункты меню в случае администратора
-    {
-      name: 'Профиль',
-      link: ROUTE_CONSTANTS.ADMIN.path,
-    },
-    {
-      name: 'Admin menu',
-      link: ROUTE_CONSTANTS.ADMIN.path,
-    },
-  ];
+  // /**Массив пунктов выпадающего меню пользователя: */
+  // const itemsAdmin = [
+  //   // пункты меню в случае администратора
+  //   {
+  //     name: 'Профиль',
+  //     link: ROUTE_CONSTANTS.ADMIN.path,
+  //   },
+  //   {
+  //     name: 'Admin menu',
+  //     link: ROUTE_CONSTANTS.ADMIN.path,
+  //   },
+  // ];
 
-  const itemsUser = [
-    // пункты меню в случае простого пользователя
-    {
-      name: 'Профиль',
-      link: ROUTE_CONSTANTS.USER.path,
-    },
-  ];
+  // const itemsUser = [
+  //   // пункты меню в случае простого пользователя
+  //   {
+  //     name: 'Профиль',
+  //     link: ROUTE_CONSTANTS.USER.path,
+  //   },
+  // ];
 
-  /** Проверка пользователя на права администратора, для рендеринга сообветствующего меню пользователя*/
-  let menuForUser;
+  // /** Проверка пользователя на права администратора, для рендеринга сообветствующего меню пользователя*/
+  // let menuForUser;
 
-  if (authStore.isAdminStatus) {
-    menuForUser = itemsAdmin;
-  } else menuForUser = itemsUser;
+  // if (authStore.isAdminStatus) {
+  //   menuForUser = itemsAdmin;
+  // } else menuForUser = itemsUser;
 
   return (
     <header className={styles.header}>
@@ -173,7 +177,10 @@ export const Header = observer( (): ReactElement => {
               </ul>
             )}
           </div>
-          <div>
+          <userContext.Provider value={user}>
+            <Dashboard onClick={() => {closeNote()}}/> 
+          </userContext.Provider>
+          {/* <div>
             <IconButton
               onClick={() => {
                 {
@@ -209,7 +216,7 @@ export const Header = observer( (): ReactElement => {
                 </button>
               </div>
             )}
-          </div>
+          </div> */}
         </nav>
       </div>
     </header>
