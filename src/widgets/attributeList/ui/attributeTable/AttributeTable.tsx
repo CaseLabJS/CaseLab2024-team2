@@ -1,15 +1,58 @@
-import type { AttributeResponse, StatefulAttribute } from '@/entities/attribute';
+import type { AttributeResponse } from '@/entities/attribute';
 
 import { attributesStore } from '@/entities/attribute';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Table, TableCell, TableHead, TableBody, TableRow, TableContainer } from '@mui/material';
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableContainer,
+  TablePagination,
+  Typography,
+} from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { useState, type ReactElement, useMemo, useEffect } from 'react';
 
 import style from './attributeTable.module.css';
 
-const AttributeTable = observer(({ debounceValue }: { debounceValue: string }) => {
-  const [filteredAttributes, setFilteredAttributes] = useState<StatefulAttribute[]>();
+const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): ReactElement => {
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+
+  const handleChangePage = (event: unknown, newPage: number): void => {
+    console.log(newPage);
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  useEffect(() => {
+    attributesStore
+      .load(true)
+      .then(() => setRowsPerPage(5))
+      .catch(() => alert('Ошибка'));
+  }, []);
+
+  const { filtered, count } = useMemo(() => {
+    const init = debounceValue
+      ? attributesStore.attributes.filter((item: AttributeResponse) =>
+          item.name.toLowerCase().includes(debounceValue.toLowerCase()),
+        )
+      : attributesStore.attributes;
+    return {
+      filtered: init.slice(rowsPerPage * page, page * rowsPerPage + rowsPerPage),
+      count: init.length,
+    };
+  }, [debounceValue, page, rowsPerPage]);
+
+  if (!filtered) {
+    return <Typography>Нет аттрибутов</Typography>;
+  }
 
   const handleRemoveAttribute = async (id: number): Promise<void> => {
     try {
@@ -18,29 +61,6 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }) =
       alert('Ошибка удаления');
     }
   };
-
-  useEffect(() => {
-    attributesStore
-      .load()
-      .then(() => {
-        const filtered = debounceValue
-          ? attributesStore.attributes.filter((item: AttributeResponse) =>
-              item.name.toLowerCase().includes(debounceValue.toLowerCase()),
-            )
-          : attributesStore.attributes;
-        setFilteredAttributes(filtered);
-      })
-      .catch(() => alert('Ошибка'));
-  }, []);
-
-  useEffect(() => {
-    const filtered = debounceValue
-      ? attributesStore.attributes.filter((item: AttributeResponse) =>
-          item.name.toLowerCase().includes(debounceValue.toLowerCase()),
-        )
-      : attributesStore.attributes;
-    setFilteredAttributes(filtered);
-  }, [debounceValue]);
 
   return (
     <TableContainer component="div" className={style.table}>
@@ -58,20 +78,35 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }) =
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredAttributes &&
-            filteredAttributes.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell align="left">
-                  <DeleteIcon className={style.deleteIcon} onClick={() => handleRemoveAttribute(item.id)} />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {item.name}
-                </TableCell>
-                <TableCell>{item.type}</TableCell>
-              </TableRow>
-            ))}
+          {filtered.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell align="left">
+                <DeleteIcon className={style.deleteIcon} onClick={() => handleRemoveAttribute(item.id)} />
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {item.name}
+              </TableCell>
+              <TableCell>{item.type}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
+      <TablePagination
+        component="div"
+        rowsPerPageOptions={[5, 10, 15, 20]}
+        count={count}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        slotProps={{
+          actions: {
+            nextButton: {
+              disabled: count ? page + 1 >= count : false,
+            },
+          },
+        }}
+      />
     </TableContainer>
   );
 });
