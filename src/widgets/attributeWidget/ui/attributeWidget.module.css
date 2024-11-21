@@ -9,20 +9,3 @@
 .stylelinkIcon {
   margin: 9px 9px 10px auto;
 }
-.titleAddAttribute {
-  margin-top: 30px;
-  color: #0056b3;
-  font-size: 1.25rem;
-  font-weight: 500;
-  line-height: 32px;
-  letter-spacing: 0.15000000596046448px;
-}
-.inputAttribute {
-  margin-top: 30px;
-}
-.btnCreate {
-  margin-bottom: 30px;
-  background-color: #0056b3;
-  padding: 5px 10px;
-  color: #ffffff;
-}
