@@ -3,7 +3,7 @@ import type { GridColDef } from '@mui/x-data-grid';
 import type { ReactElement } from 'react';
 
 import { attributesStore } from '@/entities/attribute/model/store/attributeStore';
-import { documentTypesStore } from '@/entities/documents/model/documentTypesStore';
+import { documentTypesStore } from '@/entities/documentsType/model/store/documentTypesStore';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
@@ -117,7 +117,6 @@ const DocumentTypesTable = observer((): ReactElement => {
             disableColumnSelector
             disableDensitySelector
             rows={documentTypesStore.documentTypes.map(
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
               (e) => ({ id: e.id, name: e.name, attributes: e.attributes }) as DocumentTypeResponse,
             )}
             columns={columns}

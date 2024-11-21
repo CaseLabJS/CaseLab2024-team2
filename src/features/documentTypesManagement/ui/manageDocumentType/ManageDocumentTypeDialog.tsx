@@ -1,11 +1,9 @@
-
-
 import type { CombinedAttribute } from '@/entities/attribute';
 import type { DocumentTypeResponse, DocumentTypeToAttributeRequest } from '@/entities/documentsType';
 import type { DialogProps } from '@mui/material';
 
 import { attributesStore } from '@/entities/attribute';
-import { documentTypesStore } from '@/entities/documents/model/documentTypesStore';
+import { documentTypesStore } from '@/entities/documentsType/model/store/documentTypesStore';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';

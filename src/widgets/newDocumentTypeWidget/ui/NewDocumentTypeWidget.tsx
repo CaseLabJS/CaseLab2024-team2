@@ -1,10 +1,9 @@
-
 import type { CombinedAttribute } from '@/entities/attribute';
 import type { DocumentTypeToAttributeRequest } from '@/entities/documentsType';
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { attributesStore } from '@/entities/attribute';
-import { documentTypesStore } from '@/entities/documents/model/documentTypesStore';
+import { documentTypesStore } from '@/entities/documentsType/model/store/documentTypesStore';
 import AddAttributesDialog from '@/features/documentTypesManagement/ui/manageDocumentType/AddAttributesDialog';
 import AttributesTable from '@/features/documentTypesManagement/ui/manageDocumentType/AttributesTable';
 import AddIcon from '@mui/icons-material/Add';
