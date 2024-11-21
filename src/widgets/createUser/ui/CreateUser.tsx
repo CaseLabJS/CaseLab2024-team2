@@ -46,12 +46,12 @@ const CreateUser = (): ReactElement => {
         <Form className={styles.userForm__form}>
           <div className={styles.userForm__inputs}>
             <Field
-              name="user"
+              name="display_name"
               type="text"
               placeholder='Имя пользователя'
             />
             <div className={styles.userFrom__errorBox}>
-              <ErrorMessage component="p" className={styles.userFrom__error} name="user" />
+              <ErrorMessage component="p" className={styles.userFrom__error} name="display_name" />
             </div>
             <Field
               name="email"
