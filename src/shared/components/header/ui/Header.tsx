@@ -66,8 +66,6 @@ export const Header = observer((): ReactElement => {
     localStorage.setItem(localStorageKey, JSON.stringify(data));
   };
 
-  //TODO сделать чтобы при клике по уведомлению появлялся текст уведомления и исчезал при повторном клике
-  //TODO сделать чтобы после обновления страницы, статус прочитанных сообщений не обновлялся
   const localStorageKey: string = 'notifications';
   const read = [...notifications];
   toLocalStorage(read);
@@ -93,34 +91,6 @@ export const Header = observer((): ReactElement => {
   };
 
   const isRead = localNotifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
-
-  // /**Массив пунктов выпадающего меню пользователя: */
-  // const itemsAdmin = [
-  //   // пункты меню в случае администратора
-  //   {
-  //     name: 'Профиль',
-  //     link: ROUTE_CONSTANTS.ADMIN.path,
-  //   },
-  //   {
-  //     name: 'Admin menu',
-  //     link: ROUTE_CONSTANTS.ADMIN.path,
-  //   },
-  // ];
-
-  // const itemsUser = [
-  //   // пункты меню в случае простого пользователя
-  //   {
-  //     name: 'Профиль',
-  //     link: ROUTE_CONSTANTS.USER.path,
-  //   },
-  // ];
-
-  // /** Проверка пользователя на права администратора, для рендеринга сообветствующего меню пользователя*/
-  // let menuForUser;
-
-  // if (authStore.isAdminStatus) {
-  //   menuForUser = itemsAdmin;
-  // } else menuForUser = itemsUser;
 
   return (
     <header className={styles.header}>
