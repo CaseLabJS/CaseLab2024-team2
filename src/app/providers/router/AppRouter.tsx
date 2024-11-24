@@ -49,11 +49,15 @@ const AppRouter = observer((): ReactElement => {
             path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
             element: <DocumentTypesPage />,
           },
-          {
-            path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT.path}/:id`,
-            element: <DocumentCardPage />,
-          },
         ],
+      },
+      {
+        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}/:id`,
+        element: (
+          <ProtectedUserRoute>
+            <DocumentCardPage />
+          </ProtectedUserRoute>
+        ),
       },
       {
         path: ROUTE_CONSTANTS.ADMIN.path,

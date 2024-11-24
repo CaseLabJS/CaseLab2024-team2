@@ -9,6 +9,7 @@ import {
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
 import { makeAutoObservable, onBecomeObserved, autorun, runInAction } from 'mobx';
+import { useParams } from 'react-router-dom';
 
 import type {
   CreateDocumentRequest,
@@ -29,6 +30,13 @@ class DocumentsStore {
 
     onBecomeObserved(this, 'documents', () => {
       this.getDocumentsPage().catch(() => alert('Ошибка'));
+    });
+
+    onBecomeObserved(this, 'currentDocument', () => {
+      const id = useParams().id;
+      if (id) {
+        this.getDocumentById(Number(id)).catch(() => alert('Ошибка'));
+      }
     });
 
     autorun(async (): Promise<void> => {
