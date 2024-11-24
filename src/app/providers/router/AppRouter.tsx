@@ -67,7 +67,7 @@ const AppRouter = observer((): ReactElement => {
       },
       {
         path: ROUTE_CONSTANTS.DOCUMENTS.path,
-        element: <DocumentsPage/>
+        element: <DocumentsPage />,
       },
       {
         path: ROUTE_CONSTANTS.SIGN_IN.path,

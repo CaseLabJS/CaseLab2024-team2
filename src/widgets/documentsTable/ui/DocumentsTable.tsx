@@ -34,7 +34,7 @@ const DocumentsTable = ({ data }: DocumentsTableProps): ReactElement => {
   const displayedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <TableContainer component={Paper} sx={{padding: 4}}>
+    <TableContainer component={Paper} sx={{ padding: 4 }}>
       <DocumentsTableToolbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
       <Table>
         <TableHead>
