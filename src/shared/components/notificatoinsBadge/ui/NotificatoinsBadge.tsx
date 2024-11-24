@@ -1,107 +1,102 @@
-import * as React from 'react';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import MailIcon from '@mui/icons-material/Mail';
+import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Collapse from '@mui/material/Collapse';
 import Grow from '@mui/material/Grow';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Stack from '@mui/material/Stack';
-import Badge from '@mui/material/Badge';
-import MailIcon from '@mui/icons-material/Mail';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
+import * as React from 'react';
+
+import styles from './notifications.module.css';
 
 export default function NotificatoinsBadge(): React.ReactElement {
 
-    /**Пример уведомлений - должно приходить с backend (для разработки) */
-    const notifications = [
-      // уведомления
-      {
-        id: 1,
-        note: 'Уведомление',
-        content: 'Все будет хорошо!',
-        isRead: false,
-      },
-      {
-        id: 2,
-        note: 'Голосование',
-        content: 'Пройдите в кабинет №112',
-        isRead: false,
-      },
-      {
-        id: 3,
-        note: 'Новый сотрудник',
-        content: 'Теперь Иосиф Виссарионович с нами',
-        isRead: false,
-      },
-      {
-        id: 4,
-        note: 'Анекдот',
-        content: 'Не могу пройти мимо безобразия. Так и хочется принять участие!',
-        isRead: false,
-      },
-    ];
-  
-    /**Функционал выпадающего меню уведомлений */
-    // const [isOpenNotes, setOpenNotes] = React.useState(false);
-    // const handleOpenNotes = (): void => {
-    //   setOpenNotes(!isOpenNotes);
-    // }; // меню выпадает и исчезает по клику на иконку bell
-    // const closeNote = (): void => {
-    //   // меню исчезает если открывают другое меню
-    //   if (isOpenNotes === true) {
-    //     handleOpenNotes();
-    //   }
-    // };
-  
-    /**Функционал клика по уведомлениям */
-    // положить данные в localStorage:
-    const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean }[]): void => {
-      localStorage.setItem(localStorageKey, JSON.stringify(data));
-    };
-  
-    const localStorageKey: string = 'notifications';
-    const read = [...notifications];
-    toLocalStorage(read);
-  
-    const [localNotifications, setLocalNotifications] = React.useState(read);
-    // Получение данных из localStorage
-    React.useEffect(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
-    }, []);
-  
-    //обновление localStorage и статуса прочтения уведомления
-    const readEl = (id: number): void => {
-      const noteIndex = localNotifications.findIndex((note) => note.id === id);
-      const updataNote = { ...localNotifications[noteIndex] }; // получение копии нужного уведомления
-      updataNote.isRead = true; // Обновление статуса уведомления
-      setLocalNotifications((localNotifications) => {
-        const modifiedData = [...localNotifications];
-        modifiedData[noteIndex] = updataNote;
-        toLocalStorage(modifiedData);
-        return modifiedData;
-      });
-    };
-  
-    const isRead = localNotifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
+  /**Пример уведомлений - должно приходить с backend (для разработки) */
+  const notifications = [
+    // уведомления
+    {
+      id: 1,
+      note: 'Уведомление',
+      content: 'Все будет хорошо!',
+      isRead: false,
+    },
+    {
+      id: 2,
+      note: 'Голосование',
+      content: 'Пройдите в кабинет №112',
+      isRead: false,
+    },
+    {
+      id: 3,
+      note: 'Новый сотрудник',
+      content: 'Теперь Иосиф Виссарионович с нами',
+      isRead: false,
+    },
+    {
+      id: 4,
+      note: 'Анекдот',
+      content: 'Не могу пройти мимо безобразия. Так и хочется принять участие!',
+      isRead: false,
+    },
+  ];
+
+  /**Функционал выпадающего меню уведомлений */
+  // const [isOpenNotes, setOpenNotes] = React.useState(false);
+  // const handleOpenNotes = (): void => {
+  //   setOpenNotes(!isOpenNotes);
+  // }; // меню выпадает и исчезает по клику на иконку bell
+  // const closeNote = (): void => {
+  //   // меню исчезает если открывают другое меню
+  //   if (isOpenNotes === true) {
+  //     handleOpenNotes();
+  //   }
+  // };
+
+  /**Функционал клика по уведомлениям */
+  // положить данные в localStorage:
+  const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean }[]): void => {
+    localStorage.setItem(localStorageKey, JSON.stringify(data));
+  };
+
+  const localStorageKey: string = 'notifications';
+  const read = [...notifications];
+  toLocalStorage(read);
+
+  const [localNotifications, setLocalNotifications] = React.useState(read);
+  // Получение данных из localStorage
+  React.useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
+  }, []);
+
+  //обновление localStorage и статуса прочтения уведомления
+  const readEl = (id: number): void => {
+    const noteIndex = localNotifications.findIndex((note) => note.id === id);
+    const updataNote = { ...localNotifications[noteIndex] }; // получение копии нужного уведомления
+    updataNote.isRead = true; // Обновление статуса уведомления
+    setLocalNotifications((localNotifications) => {
+      const modifiedData = [...localNotifications];
+      modifiedData[noteIndex] = updataNote;
+      toLocalStorage(modifiedData);
+      return modifiedData;
+    });
+  };
+
+  const isRead = localNotifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
 
   //**Функционал MUI */
 
-    const [open, setOpenB] = React.useState(true);
+  const [hasOpen, setOpenB] = React.useState(true);
 
-  const handleClick = () => {
-    setOpenB(!open);
+  const handleClick = (): void => {
+    setOpenB(!hasOpen);
   };
 
   const [isOpen, setOpen] = React.useState(false);
@@ -179,39 +174,41 @@ export default function NotificatoinsBadge(): React.ReactElement {
                       component="nav"
                       aria-labelledby="nested-list-subheader"
                     >
-                    {localNotifications.map((item) => (
-                    <>
-                      <ListItemButton
-                         onClick={(event) => {
-                          event.stopPropagation();
-                                handleClick();
-                                readEl(Number(event.currentTarget.getAttribute('data-id')));
-                        }}
-                        onKeyDown={handleListKeyDown}
-                        data-id={item.id}
-                        key={item.id}
-                        style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }}
-                       >
-                          {/* <ListItemIcon>
+                      {localNotifications.map((item) => (
+                        <>
+                          <ListItemButton
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleClick();
+                              readEl(Number(event.currentTarget.getAttribute('data-id')));
+                            }}
+                            onKeyDown={handleListKeyDown}
+                            data-id={item.id}
+                            key={item.id}
+                          >
+                            {/* <ListItemIcon>
                             <InboxIcon />
                           </ListItemIcon> */}
-                          <ListItemText primary={item.note} />
-                          {open ? <ExpandLess /> : <ExpandMore />}
-                        </ListItemButton>
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                          <List component="div" disablePadding>
-                            <ListItemButton sx={{ pl: 4 }}>
-                              {/* <ListItemIcon>
+                            <ListItemText primary={item.note}
+                              className={(!item.isRead) && styles.notifications__note}
+                            // style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }}
+                            />
+                            {hasOpen ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          <Collapse in={hasOpen} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                              <ListItemButton sx={{ pl: 4 }}>
+                                {/* <ListItemIcon>
                                 <StarBorder />
                               </ListItemIcon> */}
-                              <ListItemText primary={item.content} />
-                            </ListItemButton>
-                          </List>
-                        </Collapse>
-                      </> 
-                )
-              )}
-                      </List>
+                                <ListItemText primary={item.content} />
+                              </ListItemButton>
+                            </List>
+                          </Collapse>
+                        </>
+                      )
+                      )}
+                    </List>
                   </div>
                 </ClickAwayListener>
               </Paper>

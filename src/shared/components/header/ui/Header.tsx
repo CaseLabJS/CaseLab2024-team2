@@ -3,10 +3,11 @@ import type { ReactElement } from 'react';
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth/model/store/authStore';
 import Dashboard from '@/shared/components/dashboard/ui/Dashboard';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import { IconButton } from '@mui/material';
+import NotificatoinsBadge from '@/shared/components/notificatoinsBadge/ui/NotificatoinsBadge'
+// import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+// import { IconButton } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import logo from './images/logo.svg';
@@ -20,39 +21,39 @@ export const Header = observer((): ReactElement => {
   })
 
   /**Пример уведомлений - должно приходить с backend (для разработки) */
-  const notifications = [
-    // уведомления
-    {
-      id: 1,
-      note: 'Уведомление',
-      content: 'Все будет хорошо!',
-      isRead: false,
-    },
-    {
-      id: 2,
-      note: 'Голосование',
-      content: 'Пройдите в кабинет №112',
-      isRead: false,
-    },
-    {
-      id: 3,
-      note: 'Новый сотрудник',
-      content: 'Теперь Иосиф Виссарионович с нами',
-      isRead: false,
-    },
-    {
-      id: 4,
-      note: 'Анекдот',
-      content: 'Не могу пройти мимо безобразия. Так и хочется принять участие!',
-      isRead: false,
-    },
-  ];
+  // const notifications = [
+  //   // уведомления
+  //   {
+  //     id: 1,
+  //     note: 'Уведомление',
+  //     content: 'Все будет хорошо!',
+  //     isRead: false,
+  //   },
+  //   {
+  //     id: 2,
+  //     note: 'Голосование',
+  //     content: 'Пройдите в кабинет №112',
+  //     isRead: false,
+  //   },
+  //   {
+  //     id: 3,
+  //     note: 'Новый сотрудник',
+  //     content: 'Теперь Иосиф Виссарионович с нами',
+  //     isRead: false,
+  //   },
+  //   {
+  //     id: 4,
+  //     note: 'Анекдот',
+  //     content: 'Не могу пройти мимо безобразия. Так и хочется принять участие!',
+  //     isRead: false,
+  //   },
+  // ];
 
   /**Функционал выпадающего меню уведомлений */
-  const [isOpenNotes, setOpenNotes] = useState(false);
-  const handleOpenNotes = (): void => {
-    setOpenNotes(!isOpenNotes);
-  }; // меню выпадает и исчезает по клику на иконку bell
+  // const [isOpenNotes, setOpenNotes] = useState(false);
+  // const handleOpenNotes = (): void => {
+  //   setOpenNotes(!isOpenNotes);
+  // }; // меню выпадает и исчезает по клику на иконку bell
   // const closeNote = (): void => {
   //   // меню исчезает если открывают другое меню
   //   if (isOpenNotes === true) {
@@ -62,35 +63,35 @@ export const Header = observer((): ReactElement => {
 
   /**Функционал клика по уведомлениям */
   // положить данные в localStorage:
-  const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean }[]): void => {
-    localStorage.setItem(localStorageKey, JSON.stringify(data));
-  };
+  // const toLocalStorage = (data: { id: number; note: string; content: string; isRead: boolean }[]): void => {
+  //   localStorage.setItem(localStorageKey, JSON.stringify(data));
+  // };
 
-  const localStorageKey: string = 'notifications';
-  const read = [...notifications];
-  toLocalStorage(read);
+  // const localStorageKey: string = 'notifications';
+  // const read = [...notifications];
+  // toLocalStorage(read);
 
-  const [localNotifications, setLocalNotifications] = useState(read);
-  // Получение данных из localStorage
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
-  }, []);
+  // const [localNotifications, setLocalNotifications] = useState(read);
+  // // Получение данных из localStorage
+  // useEffect(() => {
+  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  //   setLocalNotifications(JSON.parse(localStorage.getItem(localStorageKey) || '[]'));
+  // }, []);
 
   //обновление localStorage и статуса прочтения уведомления
-  const readEl = (id: number): void => {
-    const noteIndex = localNotifications.findIndex((note) => note.id === id);
-    const updataNote = { ...localNotifications[noteIndex] }; // получение копии нужного уведомления
-    updataNote.isRead = true; // Обновление статуса уведомления
-    setLocalNotifications((localNotifications) => {
-      const modifiedData = [...localNotifications];
-      modifiedData[noteIndex] = updataNote;
-      toLocalStorage(modifiedData);
-      return modifiedData;
-    });
-  };
+  // const readEl = (id: number): void => {
+  //   const noteIndex = localNotifications.findIndex((note) => note.id === id);
+  //   const updataNote = { ...localNotifications[noteIndex] }; // получение копии нужного уведомления
+  //   updataNote.isRead = true; // Обновление статуса уведомления
+  //   setLocalNotifications((localNotifications) => {
+  //     const modifiedData = [...localNotifications];
+  //     modifiedData[noteIndex] = updataNote;
+  //     toLocalStorage(modifiedData);
+  //     return modifiedData;
+  //   });
+  // };
 
-  const isRead = localNotifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
+  // const isRead = localNotifications.filter((item) => item.isRead === false).map((notif) => notif.isRead); //создание массива непрочитанных уведомлений, для определения их количества
 
   return (
     <header className={styles.header}>
@@ -99,7 +100,7 @@ export const Header = observer((): ReactElement => {
           <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
         </NavLink>
         <nav className={styles.userHeader__icons}>
-          <div>
+          {/* <div>
             <IconButton
               onClick={() => {
                 handleOpenNotes();
@@ -126,7 +127,8 @@ export const Header = observer((): ReactElement => {
                 ))}
               </ul>
             )}
-          </div>
+          </div> */}
+          <NotificatoinsBadge />
           <Dashboard />
         </nav>
       </div>
