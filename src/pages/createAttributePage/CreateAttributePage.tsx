@@ -1,13 +1,14 @@
 import type { ReactElement } from 'react';
 
+import DocumentTypesTable from '@/features/documentTypesManagement/ui/documentTypesTable/DocumentTypesTable';
 import { TabsPanel } from '@/shared/components';
-import AttributeList from '@/widgets/attributeList/ui/AttributeList';
+import UserManagement from '@/shared/components/userManagement/userManagement';
 
 const CreateAttributePage = (): ReactElement => {
   return (
     <>
-      <TabsPanel tabs={[<div>1</div>, <div>2</div>, <div>3</div>]} created />
-      <AttributeList />
+      <TabsPanel tabs={[<DocumentTypesTable />, <div>2</div>, <UserManagement />]} created />
+      <div>Страница со списком аттрибутов</div>
     </>
   );
 };
