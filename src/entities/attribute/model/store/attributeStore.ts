@@ -105,12 +105,8 @@ class AttributesStore {
 
   async deleteById(id: AttributeResponse['id']): Promise<void> {
     const attributeToDeleteIndex = this.attributes.findIndex((attribute) => attribute.id === id);
-
-    if (attributeToDeleteIndex === -1) return;
-
     try {
       this.attributes[attributeToDeleteIndex].status = Status.LOADING;
-
       await deleteAttributeDoc(id);
 
       this.attributes = observable.array(this.attributes.filter((attribute) => attribute.id !== id));
