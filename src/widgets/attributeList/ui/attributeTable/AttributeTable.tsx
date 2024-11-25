@@ -102,7 +102,7 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
         slotProps={{
           actions: {
             nextButton: {
-              disabled: count ? page + 1 >= count : false,
+              disabled: count <= page * rowsPerPage + rowsPerPage,
             },
           },
         }}

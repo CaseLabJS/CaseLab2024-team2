@@ -10,7 +10,7 @@ const SearchForm = (props: TextFieldProps): ReactElement => {
       type="text"
       slotProps={{
         input: {
-          startAdornment: <SearchIcon fontSize="small" color="disabled" />,
+          startAdornment: <SearchIcon fontSize="small" />,
         },
       }}
       placeholder="Search..."
