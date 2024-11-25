@@ -5,4 +5,6 @@ export const ROUTE_CONSTANTS = {
   ADMIN: { path: '/admin', ruTitle: 'Администратор' },
   ATTRIBUTES: { path: '/attributes', ruTitle: 'Аттрибуты' },
   DOCUMENT_TYPES: { path: '/document-types', ruTitle: 'Типы документов' },
+  USER_DOCUMENTS: { path: '/documents', ruTitle: 'Документы пользователя' },
+  DOCUMENT_CARD: { path: '/:documentId', ruTitle: 'Документ' },
 } as const;

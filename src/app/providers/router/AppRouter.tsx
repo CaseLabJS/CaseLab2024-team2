@@ -4,6 +4,7 @@ import { authStore } from '@/entities/auth';
 import { AdminMainPage } from '@/pages/adminMainPage';
 import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
+import { DocumentCardPage } from '@/pages/documentCardPage';
 import { DocumentTypesPage } from '@/pages/documentPage';
 import { ErrorPage } from '@/pages/errorPage';
 import { SignIn } from '@/pages/signin';
@@ -50,6 +51,14 @@ const AppRouter = observer((): ReactElement => {
             element: <DocumentTypesPage />,
           },
         ],
+      },
+      {
+        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}`,
+        element: (
+          <ProtectedUserRoute>
+            <DocumentCardPage />
+          </ProtectedUserRoute>
+        ),
       },
       {
         path: ROUTE_CONSTANTS.ADMIN.path,

@@ -2,7 +2,7 @@ import type { AuthenticationRequest } from '@/entities/auth';
 import type { UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { autorun, makeAutoObservable, runInAction } from 'mobx';
 
 type ISimpleState = 'error' | 'success' | 'loading';
 
@@ -16,6 +16,12 @@ class AuthStore {
 
   constructor() {
     makeAutoObservable(this);
+
+    autorun(async (): Promise<void> => {
+      if (this.isAuth) {
+        await this.fetchCurrentUser().catch(console.error);
+      }
+    });
   }
 
   async login(values: AuthenticationRequest): Promise<void> {
@@ -62,6 +68,10 @@ class AuthStore {
   private async fetchCurrentUser(): Promise<UserResponse | null> {
     try {
       const data = await getCurrentUser();
+      runInAction(() => {
+        this.displayName = data.display_name;
+        this.email = data.email;
+      });
       return data;
     } catch (error) {
       console.error('Error fetching current user:', error);
