@@ -1,4 +1,5 @@
 import MailIcon from '@mui/icons-material/Mail';
+import { ListItem } from '@mui/material';
 import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -11,7 +12,6 @@ import Stack from '@mui/material/Stack';
 import * as React from 'react';
 
 import styles from './notifications.module.css';
-import { ListItem } from '@mui/material';
 
 export default function NotificatoinsBadge(): React.ReactElement {
 
@@ -33,7 +33,7 @@ export default function NotificatoinsBadge(): React.ReactElement {
     {
       id: 3,
       note: 'Новый сотрудник',
-      content: 'Теперь Иосиф Виссарионович с нами',
+      content: 'Иосиф Виссарионович теперь с нами',
       isRead: false,
     },
     {
@@ -180,7 +180,7 @@ export default function NotificatoinsBadge(): React.ReactElement {
                              </React.Fragment>
                            }
                          />
-                       </ListItem>)
+                       </ListItem>
                       </>
                       ))}
                     </List>
