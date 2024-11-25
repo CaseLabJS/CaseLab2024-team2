@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 
+import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
@@ -30,6 +31,10 @@ const DocumentCardPage = observer((): ReactElement => {
     { field: 'attributeValue', headerName: 'Значение' },
   ];
 
+  const userMail = authStore.email;
+  const permission = documentsStore.currentDocument.document.user_permissions.find((user) => user.email === userMail);
+  const isCreator = permission?.document_permissions[0].name === 'CREATOR';
+
   return (
     <Layout>
       <Breadcrumbs pageTitle={documentsStore.currentDocument?.document.name} />
@@ -40,12 +45,16 @@ const DocumentCardPage = observer((): ReactElement => {
         <Button variant="contained" onClick={() => alert('В разработке')}>
           Скачать документ
         </Button>
-        <Button variant="contained" onClick={() => alert('В разработке')}>
-          Редактировать документ
-        </Button>
-        <Button variant="contained" onClick={() => alert('В разработке')}>
-          Удалить документ
-        </Button>
+        {isCreator && (
+          <>
+            <Button variant="contained" onClick={() => alert('В разработке')}>
+              Редактировать документ
+            </Button>
+            <Button variant="contained" onClick={() => alert('В разработке')}>
+              Отправить в архив
+            </Button>
+          </>
+        )}
       </Paper>
       <Box sx={{ backgroundColor: 'white', padding: '20px', marginTop: '20px', borderRadius: '10px' }}>
         <DataGrid columns={columns} rows={rows} hideFooter autosizeOnMount autosizeOptions={{ expand: true }} />
@@ -56,17 +65,29 @@ const DocumentCardPage = observer((): ReactElement => {
               : 'Документ еще не подписан'}
           </Typography>
         </Paper>
-        <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-          <Button variant="contained" onClick={() => alert('В разработке')}>
-            Отправить на подпись
-          </Button>
-          <Button variant="contained" onClick={() => alert('В разработке')}>
-            Отправить на согласование
-          </Button>
-          <Button variant="contained" onClick={() => alert('В разработке')}>
-            Дать доступ к документу
-          </Button>
-        </Box>
+        {isCreator && (
+          <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+            <Button variant="contained" onClick={() => alert('В разработке')}>
+              Отправить на подпись
+            </Button>
+            <Button variant="contained" onClick={() => alert('В разработке')}>
+              Отправить на согласование
+            </Button>
+            <Button variant="contained" onClick={() => alert('В разработке')}>
+              Дать доступ к документу
+            </Button>
+          </Box>
+        )}
+        {!isCreator && (
+          <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+            <Button variant="contained" onClick={() => alert('В разработке')}>
+              Проголосовать
+            </Button>
+            <Button variant="contained" onClick={() => alert('В разработке')}>
+              Подписаться
+            </Button>
+          </Box>
+        )}
         <Paper sx={{ margin: '20px auto', padding: '20px' }}>
           <Typography sx={{ fontSize: '18px' }}>
             Этот документ доступен для:{' '}
