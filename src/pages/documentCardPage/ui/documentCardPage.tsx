@@ -32,7 +32,7 @@ const DocumentCardPage = observer((): ReactElement => {
 
   return (
     <Layout>
-      <Breadcrumbs />
+      <Breadcrumbs pageTitle={documentsStore.currentDocument?.document.name} />
       <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px' }}>
         Документ: {documentsStore.currentDocument?.document.name}
       </Typography>

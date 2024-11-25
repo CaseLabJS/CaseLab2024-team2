@@ -33,7 +33,7 @@ class DocumentsStore {
     });
 
     onBecomeObserved(this, 'currentDocument', () => {
-      const id = useParams().id;
+      const id = useParams().documentId;
       if (id) {
         this.getDocumentById(Number(id)).catch(() => alert('Ошибка'));
       }
