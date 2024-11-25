@@ -26,7 +26,7 @@ const DocumentCardPage = observer((): ReactElement => {
   }));
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 60 },
+    { field: 'id', headerName: 'ID', maxWidth: 60 },
     { field: 'attributeName', headerName: 'Атрибут' },
     { field: 'attributeType', headerName: 'Тип атрибута' },
     { field: 'attributeValue', headerName: 'Значение' },

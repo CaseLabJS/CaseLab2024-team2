@@ -2,7 +2,7 @@ import type { AuthenticationRequest } from '@/entities/auth';
 import type { UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
-import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
+import { autorun, makeAutoObservable, runInAction } from 'mobx';
 
 type ISimpleState = 'error' | 'success' | 'loading';
 
@@ -17,8 +17,10 @@ class AuthStore {
   constructor() {
     makeAutoObservable(this);
 
-    onBecomeObserved(this, 'email', () => {
-      this.fetchCurrentUser().catch(console.error);
+    autorun(async (): Promise<void> => {
+      if (this.isAuth) {
+        await this.fetchCurrentUser().catch(console.error);
+      }
     });
   }
 
