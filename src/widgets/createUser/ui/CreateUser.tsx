@@ -2,7 +2,6 @@ import type { RegisterRequest } from '@/entities/user';
 import type { FormikHelpers } from 'formik';
 import type { ReactElement } from 'react';
 
-import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { userStore } from '@/entities/user/model/store/userStore';
 import { SignupSchema } from '@/features/auth';
 import LaunchIcon from '@mui/icons-material/Launch';
@@ -35,7 +34,7 @@ const CreateUser = (): ReactElement => {
     <div className={styles.userForm}>
       <div className={styles.userForm__head}>
         <p className={styles.userForm__title}>Создать пользователя</p>
-        <NavLink className={styles.userForm__link} to={ROUTE_CONSTANTS.ATTRIBUTES.path}>
+        <NavLink className={styles.userForm__link} to={'ROUTE_CONSTANTS.ROOT'}>
           <LaunchIcon />
         </NavLink>
       </div>
