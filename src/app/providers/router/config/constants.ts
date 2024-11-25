@@ -5,4 +5,5 @@ export const ROUTE_CONSTANTS = {
   ADMIN: { path: '/admin', ruTitle: 'Администратор' },
   ATTRIBUTES: { path: '/attributes', ruTitle: 'Аттрибуты' },
   DOCUMENT_TYPES: { path: '/document-types', ruTitle: 'Типы документов' },
+  CREATE_VOTING: { path: '/create-voting', ruTitle: 'Голосование' },
 } as const;

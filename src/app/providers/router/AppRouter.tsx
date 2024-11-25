@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 import { authStore } from '@/entities/auth';
 import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
+import { CreateVotingPage } from '@/pages/createVotingPage';
 import { DocumentTypesPage } from '@/pages/documentPage';
 import { ErrorPage } from '@/pages/errorPage';
 import { SignIn } from '@/pages/signin';
@@ -47,6 +48,10 @@ const AppRouter = observer((): ReactElement => {
           {
             path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
             element: <DocumentTypesPage />,
+          },
+          {
+            path: `${ROUTE_CONSTANTS.USER.path}/:documentID${ROUTE_CONSTANTS.CREATE_VOTING.path}`,
+            element: <CreateVotingPage />,
           },
         ],
       },
