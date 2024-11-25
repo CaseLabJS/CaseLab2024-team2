@@ -90,7 +90,7 @@ class DocumentTypesStore {
     try {
       documentTypeToUpdate.status = Status.LOADING;
 
-      const updatedDocumentType = (await updateDocType(id, documentType));
+      const updatedDocumentType = await updateDocType(id, documentType);
 
       runInAction(() => {
         Object.assign(documentTypeToUpdate, updatedDocumentType, {
