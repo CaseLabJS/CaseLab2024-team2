@@ -1,13 +1,9 @@
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import MailIcon from '@mui/icons-material/Mail';
 import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Collapse from '@mui/material/Collapse';
 import Grow from '@mui/material/Grow';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
@@ -15,6 +11,7 @@ import Stack from '@mui/material/Stack';
 import * as React from 'react';
 
 import styles from './notifications.module.css';
+import { ListItem } from '@mui/material';
 
 export default function NotificatoinsBadge(): React.ReactElement {
 
@@ -46,18 +43,6 @@ export default function NotificatoinsBadge(): React.ReactElement {
       isRead: false,
     },
   ];
-
-  /**Функционал выпадающего меню уведомлений */
-  // const [isOpenNotes, setOpenNotes] = React.useState(false);
-  // const handleOpenNotes = (): void => {
-  //   setOpenNotes(!isOpenNotes);
-  // }; // меню выпадает и исчезает по клику на иконку bell
-  // const closeNote = (): void => {
-  //   // меню исчезает если открывают другое меню
-  //   if (isOpenNotes === true) {
-  //     handleOpenNotes();
-  //   }
-  // };
 
   /**Функционал клика по уведомлениям */
   // положить данные в localStorage:
@@ -93,7 +78,7 @@ export default function NotificatoinsBadge(): React.ReactElement {
 
   //**Функционал MUI */
 
-  const [hasOpen, setOpenB] = React.useState(true);
+  const [hasOpen, setOpenB] = React.useState(false);
 
   const handleClick = (): void => {
     setOpenB(!hasOpen);
@@ -175,39 +160,29 @@ export default function NotificatoinsBadge(): React.ReactElement {
                       aria-labelledby="nested-list-subheader"
                     >
                       {localNotifications.map((item) => (
-                        <>
-                          <ListItemButton
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              handleClick();
-                              readEl(Number(event.currentTarget.getAttribute('data-id')));
-                            }}
-                            onKeyDown={handleListKeyDown}
-                            data-id={item.id}
-                            key={item.id}
-                          >
-                            {/* <ListItemIcon>
-                            <InboxIcon />
-                          </ListItemIcon> */}
-                            <ListItemText primary={item.note}
-                              className={(!item.isRead) && styles.notifications__note}
-                            // style={{ fontWeight: item.isRead === false ? 'bold' : 'normal' }}
-                            />
-                            {hasOpen ? <ExpandLess /> : <ExpandMore />}
-                          </ListItemButton>
-                          <Collapse in={hasOpen} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                              <ListItemButton sx={{ pl: 4 }}>
-                                {/* <ListItemIcon>
-                                <StarBorder />
-                              </ListItemIcon> */}
-                                <ListItemText primary={item.content} />
-                              </ListItemButton>
-                            </List>
-                          </Collapse>
-                        </>
-                      )
-                      )}
+                      <>
+                       <ListItem alignItems="flex-start"
+                          onClick={(event) => {
+                          event.stopPropagation();
+                          handleClick();
+                          readEl(Number(event.currentTarget.getAttribute('data-id')));
+                        }}
+                          onKeyDown={handleListKeyDown}
+                          data-id={item.id}
+                          key={item.id}
+                         >
+                         <ListItemText
+                           primary={item.note}
+                           className={(!item.isRead) ? styles.notifications__note : 'none'}
+                           secondary={
+                             <React.Fragment>
+                               {item.content}
+                             </React.Fragment>
+                           }
+                         />
+                       </ListItem>)
+                      </>
+                      ))}
                     </List>
                   </div>
                 </ClickAwayListener>

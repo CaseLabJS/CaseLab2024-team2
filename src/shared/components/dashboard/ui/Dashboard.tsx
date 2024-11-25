@@ -49,6 +49,8 @@ export default function Dashboard(): React.ReactElement {
     menuForUser = itemsAdmin;
   } else menuForUser = itemsUser;
 
+  /**Функционал MUI */
+
   const [isOpen, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
 
