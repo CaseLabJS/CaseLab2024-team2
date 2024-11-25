@@ -97,7 +97,7 @@ class AttributesStore {
     try {
       attributeToUpdate.status = Status.LOADING;
 
-      const updatedAttribute = await updateAttributeDoc(id, attribute) as StatefulAttribute;
+      const updatedAttribute = (await updateAttributeDoc(id, attribute)) as StatefulAttribute;
       updatedAttribute.status = Status.SUCCESS;
 
       runInAction(() => {

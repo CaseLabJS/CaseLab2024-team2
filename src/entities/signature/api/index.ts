@@ -1,1 +1,1 @@
-export { getSignatures, sendDocument, signDocument } from './req-signatures';
+export { getSignatures, sendDocument, signDocument, getDocumentSignatures } from './req-signatures';

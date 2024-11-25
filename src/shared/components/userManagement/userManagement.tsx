@@ -30,13 +30,14 @@ const UserManagement = observer(() => {
   const [canShowForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-
-  const filteredUsers = searchTerm ? userStore.users.filter((user:UserResponse) => {
-    return (
-      // user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.display_name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }) : userStore.users;
+  const filteredUsers = searchTerm
+    ? userStore.users.filter((user: UserResponse) => {
+        return (
+          // user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.display_name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      })
+    : userStore.users;
 
   const handleAddUser = async (): Promise<void> => {
     try {
@@ -50,15 +51,13 @@ const UserManagement = observer(() => {
     }
   };
 
-
   const handleRemoveUser = async (emailToRemove: string): Promise<void> => {
     try {
-        await userStore.deleteUser({email: emailToRemove});
+      await userStore.deleteUser({ email: emailToRemove });
     } catch (error) {
-        console.error('Error removing user:', error);
+      console.error('Error removing user:', error);
     }
   };
-
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchTerm(event.target.value);
@@ -68,19 +67,24 @@ const UserManagement = observer(() => {
       <div className={styles.data_grid_table}>
         <div className={styles.button_and_search}>
           <div className={styles.button_add}>
-            <Button variant="contained" onClick={() => setShowForm(!canShowForm)} sx={{ backgroundColor: 'white', color: '#4e82d0', height:'32px', boxShadow: 'none' }}>
-              <span className={styles.add_user_button_before}>Добавить</span>        
+            <Button
+              variant="contained"
+              onClick={() => setShowForm(!canShowForm)}
+              sx={{ backgroundColor: 'white', color: '#4e82d0', height: '32px', boxShadow: 'none' }}
+            >
+              <span className={styles.add_user_button_before}>Добавить</span>
             </Button>
           </div>
           <SearchContainer className={styles.search_container}>
-            <SearchIcon />            
-            <input className={styles.searchButton}
+            <SearchIcon />
+            <input
+              className={styles.searchButton}
               value={searchTerm}
               placeholder="Search..."
               onChange={handleSearchChange}
               // variant="outlined"
             />
-          </SearchContainer>       
+          </SearchContainer>
         </div>
 
         {canShowForm && (
@@ -117,36 +121,35 @@ const UserManagement = observer(() => {
         )}
 
         <TableContainer component="div" className={styles.user_table}>
-          <Table size="small" aria-label="users table" >
-          <colgroup>
-              <col style={{width:'7%'}}/>
-              <col style={{width:'31%'}}/>
-              <col style={{width:'31%'}}/>
-              <col style={{width:'31%'}}/>
-          </colgroup>
+          <Table size="small" aria-label="users table">
+            <colgroup>
+              <col style={{ width: '7%' }} />
+              <col style={{ width: '31%' }} />
+              <col style={{ width: '31%' }} />
+              <col style={{ width: '31%' }} />
+            </colgroup>
             <TableHead>
               <TableRow>
                 <TableCell align="left"></TableCell>
                 <TableCell>Имя</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Пароль</TableCell>              
+                <TableCell>Пароль</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredUsers.map((user:UserResponse, index) => (
+              {filteredUsers.map((user: UserResponse, index) => (
                 <TableRow key={index}>
                   <TableCell align="left">
-                    <DeleteIcon
-                      className={styles.delete_icon}
-                      onClick={() => handleRemoveUser(user.email)}
-                    />
+                    <DeleteIcon className={styles.delete_icon} onClick={() => handleRemoveUser(user.email)} />
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {user.display_name}
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
                   {/* <TableCell>{user.password}</TableCell> */}
-                  <TableCell><Visibility className={styles.visibility}/></TableCell>                
+                  <TableCell>
+                    <Visibility className={styles.visibility} />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
