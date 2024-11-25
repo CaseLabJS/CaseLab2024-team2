@@ -23,7 +23,7 @@
     "@fontsource/roboto": "^5.1.0",
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
-    "@mui/x-data-grid": "^7.22.2",
+    "@mui/x-data-grid": "^7.22.3",
     "axios": "^1.7.7",
     "formik": "^2.4.6",
     "mobx": "^6.13.5",

@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from 'react';
 
 import { authStore } from '@/entities/auth';
+import { AdminMainPage } from '@/pages/adminMainPage';
 import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
 import { DocumentCardPage } from '@/pages/documentCardPage';
@@ -67,6 +68,10 @@ const AppRouter = observer((): ReactElement => {
           </ProtectedAdminRoute>
         ),
         children: [
+          {
+            path: `${ROUTE_CONSTANTS.ADMIN.path}`,
+            element: <AdminMainPage />, //страница с виджетами (создать пользователя, создать атрибут и тд)
+          },
           {
             path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.ATTRIBUTES.path}`,
             element: <CreateAttributePage />,
