@@ -47,4 +47,3 @@ export const ToastProvider = ({ children }: { children: ReactNode }): ReactEleme
     </ToastContext.Provider>
   );
 };
-
