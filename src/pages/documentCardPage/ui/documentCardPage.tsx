@@ -77,7 +77,7 @@ const DocumentCardPage = observer((): ReactElement => {
           autosizeOptions={{ expand: true }}
           autosizeOnMount
         />
-        <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: 'lightgray', borderRadius: '10px' }}>
+        <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
           <Typography sx={{ fontSize: '18px' }}>
             {documentsStore.currentDocument?.signature
               ? `Подписан ${documentsStore.currentDocument?.signature.name}`
