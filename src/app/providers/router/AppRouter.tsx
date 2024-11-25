@@ -11,6 +11,7 @@ import { User } from '@/pages/user';
 import { observer } from 'mobx-react-lite';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
+import { ToastProvider } from '../ToastProvider';
 import { ROUTE_CONSTANTS } from './config/constants';
 
 const AppRouter = observer((): ReactElement => {
@@ -93,12 +94,14 @@ const AppRouter = observer((): ReactElement => {
   );
 
   return (
-    <RouterProvider
-      router={router}
-      future={{
-        v7_startTransition: true,
-      }}
-    />
+    <ToastProvider>
+      <RouterProvider
+        router={router}
+        future={{
+          v7_startTransition: true,
+        }}
+      />
+    </ToastProvider>
   );
 });
 
