@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
+import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { EditNote } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
@@ -10,12 +11,12 @@ import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-gri
 import { observer } from 'mobx-react-lite';
 
 const DocumentCardPage = observer((): ReactElement => {
-  if (documentsStore.currentDocument === null) {
-    return <Typography>Загрузка...</Typography>;
+  if (documentsStore.status === Status.ERROR) {
+    return <Typography>Документ не найден</Typography>;
   }
 
-  if (documentsStore.currentDocument === undefined) {
-    return <Typography>Документ не найден</Typography>;
+  if (documentsStore.currentDocument === null) {
+    return <Typography>Загрузка...</Typography>;
   }
 
   const rows = documentsStore.currentDocument.latest_version.attributes.map((attribute) => ({
@@ -110,7 +111,7 @@ const DocumentCardPage = observer((): ReactElement => {
         <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
           <Typography sx={{ fontSize: '18px' }}>
             Этот документ доступен для:{' '}
-            {documentsStore.currentDocument?.document.user_permissions.map((user) => user.email)}
+            {documentsStore.currentDocument?.document.user_permissions.map((user) => user.email).join(', ')}
           </Typography>
         </Box>
       </Box>
