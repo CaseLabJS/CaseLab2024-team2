@@ -15,7 +15,7 @@ const CreateAttribute = observer((): ReactElement => {
       setName('');
       setType('');
     } catch {
-      alert('Что-то пошло не так. Ошибка создания аттрибута');
+      alert('Что-то пошло не так. Ошибка создания атрибута');
     }
   }
 
@@ -23,7 +23,7 @@ const CreateAttribute = observer((): ReactElement => {
     <>
       <Stack direction="column" gap="13px" marginBottom="80px">
         <Typography variant="h6" className={style.titleAddAttribute}>
-          Создать аттрибут
+          Создать атрибут
         </Typography>
         <TextField
           id="input-add-attribute-name"
