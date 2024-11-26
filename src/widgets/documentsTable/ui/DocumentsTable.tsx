@@ -20,7 +20,6 @@ const DocumentsTable = observer((): ReactElement => {
   const [searchTerm, setSearchTerm] = useState('');
   useEffect(() => {
     void documentsStore.getDocumentsPage();
-    console.log(documentsStore.documents)
   }, []);
   const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
@@ -49,7 +48,7 @@ const DocumentsTable = observer((): ReactElement => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {displayedData.map(({document}, index) => (
+          {displayedData.map(({ document }, index) => (
             <TableRow key={index}>
               <TableCell>{document.document_type_id}</TableCell>
               <TableCell>{document.name}</TableCell>
