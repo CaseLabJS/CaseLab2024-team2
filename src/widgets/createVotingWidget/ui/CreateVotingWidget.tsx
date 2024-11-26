@@ -42,7 +42,10 @@ const CreateVoting = (): ReactElement => {
   //позже добавить возврат на страницу карточку документа
   return (
     <Box className={style.boxCreate}>
-      <Link to={ROUTE_CONSTANTS.USER.path} className={style.stylelinkIcon}>
+      <Link
+        to={`${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}/${documentId}`}
+        className={style.stylelinkIcon}
+      >
         <img src={iconLink} alt="Изображение икноки перехода на предыдущую страницу" />
       </Link>
       <Stack direction="column" gap="30px" marginBottom="40px">

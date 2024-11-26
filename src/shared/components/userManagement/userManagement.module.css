@@ -1,97 +1,97 @@
-.data_grid_table{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 5px;
-    margin-top: 0px;
+.data_grid_table {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 5px;
+  margin-top: 0px;
 }
-
 
 .user_management_container {
-    padding:3%;
-    background-color: #fff;
-    width: 80%;
-    margin: 0 auto;
-    height: fit-content;
+  padding: 3%;
+  background-color: #fff;
+  width: 80%;
+  margin: 0 auto;
+  height: fit-content;
 }
-.button_add{    
-    flex: none;
-    order: 0;
-    flex-grow: 1;
-    height: 32px;
+.button_add {
+  flex: none;
+  order: 0;
+  flex-grow: 1;
+  height: 32px;
 }
-.delete_icon, .visibility {
-    cursor: pointer;
-    margin-left: 5px;
+.delete_icon,
+.visibility {
+  cursor: pointer;
+  margin-left: 5px;
 }
 .search_container {
-    height: 32px;
-    position: relative; 
-    display: flex; 
-    width: fit-content;
-    float: right;
+  height: 32px;
+  position: relative;
+  display: flex;
+  width: fit-content;
+  float: right;
 }
 
 .search_icon {
-    position: absolute; 
-    left: 3px; 
-    top: 50%;
-    border:1px solid red;
-    transform: translateY(-50%); 
-    pointer-events: none; 
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  border: 1px solid red;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
-.button_and_search{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    flex-direction: row;
-    align-items: stretch;
-    align-items: flex-start;
-    padding: 4px 0px 20px 4px;
-    width: fill;
-    height: fit-content;
+.button_and_search {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: row;
+  align-items: stretch;
+  align-items: flex-start;
+  padding: 4px 0px 20px 4px;
+  width: fill;
+  height: fit-content;
 }
-.searchButton{
-    padding: 5%;
-    border:none;
-    border-bottom: 1px solid black;
+.searchButton {
+  padding: 5%;
+  border: none;
+  border-bottom: 1px solid black;
 }
 
 .add_user_button,
 .submit_button {
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    position: relative;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  position: relative;
 }
-.add_user_button_before{
-    padding-left: 8px;
+.add_user_button_before {
+  padding-left: 8px;
 }
-.add_user_button_before::before { 
-    content: "+"; 
-    position: absolute;
-    left: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.5em; 
-    color: #4e82d0; 
+.add_user_button_before::before {
+  content: '+';
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+  color: #4e82d0;
 }
 
 .user_form {
-    margin-top: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .user_table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .user_table th,
 .user_table td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd; 
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }

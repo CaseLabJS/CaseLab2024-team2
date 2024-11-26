@@ -1,4 +1,4 @@
-import type { CombinedAttribute} from '@/entities/attribute';
+import type { CombinedAttribute } from '@/entities/attribute';
 import type { DocumentTypeResponse } from '@/entities/documentsType';
 import type { DialogProps } from '@mui/material';
 
