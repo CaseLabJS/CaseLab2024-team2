@@ -2,9 +2,11 @@ import type { RegisterRequest } from '@/entities/user';
 import type { FormikHelpers } from 'formik';
 import type { ReactElement } from 'react';
 
+import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { userStore } from '@/entities/user/model/store/userStore';
 import { SignupSchema } from '@/features/auth';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { WidgetToPageButton } from '@/shared/components';
+import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { NavLink } from 'react-router-dom';
@@ -38,8 +40,12 @@ const CreateUser = (): ReactElement => {
           <LaunchIcon />
         </NavLink>
       </div>
+      <WidgetToPageButton path={`${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.USERS.path}`} />
       <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
         <Form className={styles.userForm__form}>
+          <Typography variant="h6" color="primary">
+            Создать пользователя
+          </Typography>
           <div className={styles.userForm__inputs}>
             <Field name="display_name" type="text" placeholder="Имя пользователя" />
             <div className={styles.userFrom__errorBox}>

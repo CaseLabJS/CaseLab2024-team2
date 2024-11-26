@@ -1,0 +1,4 @@
+.notifications__note span {
+  font-weight: bold;
+  cursor: pointer;
+}
