@@ -3,8 +3,6 @@ import { Button, TextField, Typography, Stack } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
 
-// import style from './createAttribute.module.css';
-
 const CreateAttribute = observer((): ReactElement => {
   const [name, setName] = useState<string>('');
   const [type, setType] = useState<string>('');
