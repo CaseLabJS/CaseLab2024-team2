@@ -5,6 +5,7 @@ import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
 import { DocumentTypesPage } from '@/pages/documentPage';
 import { ErrorPage } from '@/pages/errorPage';
+import { MainMenu } from '@/pages/mainMenu';
 import { SignIn } from '@/pages/signin';
 import { User } from '@/pages/user';
 import { observer } from 'mobx-react-lite';
@@ -33,7 +34,7 @@ const AppRouter = observer((): ReactElement => {
     [
       {
         path: ROUTE_CONSTANTS.ROOT.path,
-        element: <div>Здесь будет главная страница</div>,
+        element: <MainMenu />,
         errorElement: <ErrorPage />,
       },
       {
