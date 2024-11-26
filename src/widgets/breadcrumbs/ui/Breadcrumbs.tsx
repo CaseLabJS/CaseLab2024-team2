@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 
 import { getRussianRouteAndPath } from '../model/getRussianRoute';
 
-const Breadcrumbs = (): ReactElement => {
+const Breadcrumbs = ({ pageTitle }: { pageTitle?: string }): ReactElement => {
   const location = useLocation();
 
   const routes = location.pathname.split('/');
@@ -22,6 +22,7 @@ const Breadcrumbs = (): ReactElement => {
     return <></>;
   }
 
+  let path = '';
   const routesComponents = ruRoutes.map((route, index) => {
     if (route?.ruTitle === ROUTE_CONSTANTS.ROOT.ruTitle) {
       return (
@@ -30,13 +31,14 @@ const Breadcrumbs = (): ReactElement => {
         </MuiLink>
       );
     } else if (index !== ruRoutes.length - 1) {
+      path += route?.path;
       return (
-        <MuiLink key={index} color="inherit" href={route?.path}>
+        <MuiLink key={index} color="inherit" href={path}>
           {route?.ruTitle}
         </MuiLink>
       );
     } else {
-      return <Typography key={index}>{route?.ruTitle}</Typography>;
+      return <Typography key={index}>{route?.ruTitle ?? pageTitle}</Typography>;
     }
   });
 

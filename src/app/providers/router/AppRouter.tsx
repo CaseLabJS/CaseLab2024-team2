@@ -4,6 +4,8 @@ import { authStore } from '@/entities/auth';
 import { AdminMainPage } from '@/pages/adminMainPage';
 import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
+import { CreateVotingPage } from '@/pages/createVotingPage';
+import { DocumentCardPage } from '@/pages/documentCardPage';
 import { DocumentTypesPage } from '@/pages/documentPage';
 import { ErrorPage } from '@/pages/errorPage';
 import { SignIn } from '@/pages/signin';
@@ -11,6 +13,7 @@ import { User } from '@/pages/user';
 import { observer } from 'mobx-react-lite';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
+import { ToastProvider } from '../ToastProvider';
 import { ROUTE_CONSTANTS } from './config/constants';
 
 const AppRouter = observer((): ReactElement => {
@@ -50,6 +53,22 @@ const AppRouter = observer((): ReactElement => {
             element: <DocumentTypesPage />,
           },
         ],
+      },
+      {
+        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}`,
+        element: (
+          <ProtectedUserRoute>
+            <DocumentCardPage />
+          </ProtectedUserRoute>
+        ),
+      },
+      {
+        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}${ROUTE_CONSTANTS.CREATE_VOTING.path}`,
+        element: (
+          <ProtectedUserRoute>
+            <CreateVotingPage />
+          </ProtectedUserRoute>
+        ),
       },
       {
         path: ROUTE_CONSTANTS.ADMIN.path,
@@ -93,12 +112,14 @@ const AppRouter = observer((): ReactElement => {
   );
 
   return (
-    <RouterProvider
-      router={router}
-      future={{
-        v7_startTransition: true,
-      }}
-    />
+    <ToastProvider>
+      <RouterProvider
+        router={router}
+        future={{
+          v7_startTransition: true,
+        }}
+      />
+    </ToastProvider>
   );
 });
 
