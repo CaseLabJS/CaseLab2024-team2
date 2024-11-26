@@ -4,6 +4,7 @@ import { authStore } from '@/entities/auth';
 import { AdminMainPage } from '@/pages/adminMainPage';
 import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
+import { CreateVotingPage } from '@/pages/createVotingPage';
 import { DocumentCardPage } from '@/pages/documentCardPage';
 import { DocumentTypesPage } from '@/pages/documentPage';
 import { ErrorPage } from '@/pages/errorPage';
@@ -58,6 +59,14 @@ const AppRouter = observer((): ReactElement => {
         element: (
           <ProtectedUserRoute>
             <DocumentCardPage />
+          </ProtectedUserRoute>
+        ),
+      },
+      {
+        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}${ROUTE_CONSTANTS.CREATE_VOTING.path}`,
+        element: (
+          <ProtectedUserRoute>
+            <CreateVotingPage />
           </ProtectedUserRoute>
         ),
       },

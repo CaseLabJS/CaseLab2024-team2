@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 
+import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
@@ -9,8 +10,11 @@ import { EditNote } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const DocumentCardPage = observer((): ReactElement => {
+  const navigate = useNavigate();
+  const location = useLocation();
   if (documentsStore.status === Status.ERROR) {
     return <Typography>Документ не найден</Typography>;
   }
@@ -36,6 +40,11 @@ const DocumentCardPage = observer((): ReactElement => {
   const userMail = authStore.email;
   const permission = documentsStore.currentDocument.document.user_permissions.find((user) => user.email === userMail);
   const isCreator = permission?.document_permissions[0].name === 'CREATOR';
+  const statusDocument = documentsStore.currentDocument.document.status;
+
+  const handleCreateVoting = (): void => {
+    navigate(`${location.pathname}${ROUTE_CONSTANTS.CREATE_VOTING.path}`);
+  };
 
   return (
     <Layout>
@@ -90,9 +99,11 @@ const DocumentCardPage = observer((): ReactElement => {
             <Button variant="outlined" onClick={() => alert('В разработке')}>
               Отправить на подпись
             </Button>
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
-              Отправить на согласование
-            </Button>
+            {statusDocument === 'DRAFT' && (
+              <Button variant="outlined" onClick={handleCreateVoting}>
+                Создать согласование
+              </Button>
+            )}
             <Button variant="outlined" onClick={() => alert('В разработке')}>
               Дать доступ к документу
             </Button>
