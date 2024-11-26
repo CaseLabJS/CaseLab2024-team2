@@ -3,8 +3,6 @@ import { Button, TextField, Typography, Stack } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
 
-import style from './createAttribute.module.css';
-
 const CreateAttribute = observer((): ReactElement => {
   const [name, setName] = useState<string>('');
   const [type, setType] = useState<string>('');
@@ -21,15 +19,15 @@ const CreateAttribute = observer((): ReactElement => {
 
   return (
     <>
-      <Stack direction="column" gap="13px" marginBottom="80px">
-        <Typography variant="h6" className={style.titleAddAttribute}>
+      <Stack direction="column" gap="13px">
+        <Typography variant="h6" color="primary">
           Создать атрибут
         </Typography>
         <TextField
           id="input-add-attribute-name"
           placeholder="Название"
           variant="standard"
-          className={style.inputAttribute}
+          sx={{ mt: '30px' }}
           value={name}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setName(event.target.value);
@@ -39,15 +37,20 @@ const CreateAttribute = observer((): ReactElement => {
           id="input-add-attribute-type"
           placeholder="Тип"
           variant="standard"
-          className={style.inputAttribute}
           value={type}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setType(event.target.value);
           }}
         />
       </Stack>
-      <Button disabled={!name || !type} onClick={handleSubmit} variant="contained" className={style.btnCreate}>
-        Сохранить
+      <Button
+        disabled={!name || !type}
+        onClick={handleSubmit}
+        variant="contained"
+        size="small"
+        sx={{ marginTop: 'auto' }}
+      >
+        Создать
       </Button>
     </>
   );
