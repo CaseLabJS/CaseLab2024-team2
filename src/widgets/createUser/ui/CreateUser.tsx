@@ -2,6 +2,7 @@ import type { RegisterRequest } from '@/entities/user';
 import type { FormikHelpers } from 'formik';
 import type { ReactElement } from 'react';
 
+import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { userStore } from '@/entities/user/model/store/userStore';
 import { SignupSchema } from '@/features/auth';
 import Button from '@mui/material/Button';
@@ -32,7 +33,7 @@ const CreateUser = (): ReactElement => {
 
   return (
     <div className={styles.userForm}>
-      <WidgetToPageButton path={'#'} />
+      <WidgetToPageButton path={`${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.USERS.path}`} />
       <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
         <Form className={styles.userForm__form}>
           <Typography variant="h6" color="primary">
