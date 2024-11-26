@@ -49,6 +49,10 @@ const AppRouter = observer((): ReactElement => {
             path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
             element: <DocumentTypesPage />,
           },
+          {
+            path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENTS.path}`,
+            element: <DocumentsPage />,
+          },
         ],
       },
       {
@@ -64,10 +68,6 @@ const AppRouter = observer((): ReactElement => {
             element: <CreateAttributePage />,
           },
         ],
-      },
-      {
-        path: ROUTE_CONSTANTS.DOCUMENTS.path,
-        element: <DocumentsPage />,
       },
       {
         path: ROUTE_CONSTANTS.SIGN_IN.path,

@@ -1,3 +1,4 @@
+import { documentsStore } from '@/entities/documents';
 import {
   TableContainer,
   Paper,
@@ -8,16 +9,19 @@ import {
   TableBody,
   TablePagination,
 } from '@mui/material';
-import { useState, type ReactElement } from 'react';
-
-import type DocumentsTableProps from '../model/DocumentsTableProps';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState, type ReactElement } from 'react';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
 
-const DocumentsTable = ({ data }: DocumentsTableProps): ReactElement => {
+const DocumentsTable = observer((): ReactElement => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
+  useEffect(() => {
+    void documentsStore.getDocumentsPage();
+    console.log(documentsStore.documents)
+  }, []);
   const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
   };
@@ -31,7 +35,7 @@ const DocumentsTable = ({ data }: DocumentsTableProps): ReactElement => {
     setSearchTerm(event.target.value);
   };
 
-  const displayedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const displayedData = documentsStore.documents.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <TableContainer component={Paper} sx={{ padding: 4 }}>
@@ -39,17 +43,17 @@ const DocumentsTable = ({ data }: DocumentsTableProps): ReactElement => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Header</TableCell>
-            <TableCell>Header</TableCell>
-            <TableCell>Header</TableCell>
+            <TableCell>Тип</TableCell>
+            <TableCell>Название</TableCell>
+            <TableCell>Статус</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {displayedData.map((row, index) => (
+          {displayedData.map(({document}, index) => (
             <TableRow key={index}>
-              <TableCell>{row.column1}</TableCell>
-              <TableCell>{row.column2}</TableCell>
-              <TableCell>{row.column3}</TableCell>
+              <TableCell>{document.document_type_id}</TableCell>
+              <TableCell>{document.name}</TableCell>
+              <TableCell>{document.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -57,7 +61,7 @@ const DocumentsTable = ({ data }: DocumentsTableProps): ReactElement => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={data.length}
+        count={documentsStore.documents.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -66,6 +70,6 @@ const DocumentsTable = ({ data }: DocumentsTableProps): ReactElement => {
       />
     </TableContainer>
   );
-};
+});
 
 export default DocumentsTable;
