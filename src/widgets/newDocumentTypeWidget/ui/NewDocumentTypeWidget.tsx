@@ -6,11 +6,11 @@ import { attributesStore } from '@/entities/attribute';
 import { documentTypesStore } from '@/entities/documentsType/model/store/documentTypesStore';
 import AddAttributesDialog from '@/features/documentTypesManagement/ui/manageDocumentType/AddAttributesDialog';
 import AttributesTable from '@/features/documentTypesManagement/ui/manageDocumentType/AttributesTable';
+import { WidgetToPageButton } from '@/shared/components';
 import AddIcon from '@mui/icons-material/Add';
 import { Stack, Box, TextField, Button, Paper, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import { WidgetToPageButton } from '@/shared/components';
 
 export const NewDocumentTypeWidget = observer((): React.ReactElement => {
   const [name, setName] = useState<string>('');

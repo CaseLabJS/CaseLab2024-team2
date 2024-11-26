@@ -1,8 +1,10 @@
+import type { ReactElement } from 'react';
+
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-export const WidgetToPageButton = ({ path }: { path: string }) => {
+export const WidgetToPageButton = ({ path }: { path: string }): ReactElement => {
   return (
     <Box
       sx={() => ({

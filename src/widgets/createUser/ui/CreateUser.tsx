@@ -5,12 +5,12 @@ import type { ReactElement } from 'react';
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { userStore } from '@/entities/user/model/store/userStore';
 import { SignupSchema } from '@/features/auth';
+import { WidgetToPageButton } from '@/shared/components';
+import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 
 import styles from './userForm.module.css';
-import { WidgetToPageButton } from '@/shared/components';
-import { Typography } from '@mui/material';
 
 const CreateUser = (): ReactElement => {
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
