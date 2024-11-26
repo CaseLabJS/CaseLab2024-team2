@@ -9,7 +9,7 @@ const Admin = (): ReactElement => {
   return (
     <Layout>
       <Breadcrumbs />
-      <Typography variant="h4">Документы</Typography>
+      <Typography variant="h4">ADMIN MENU</Typography>
       <Outlet />
     </Layout>
   );

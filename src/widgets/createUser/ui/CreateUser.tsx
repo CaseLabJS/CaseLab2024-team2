@@ -4,12 +4,12 @@ import type { ReactElement } from 'react';
 
 import { userStore } from '@/entities/user/model/store/userStore';
 import { SignupSchema } from '@/features/auth';
-import LaunchIcon from '@mui/icons-material/Launch';
 import Button from '@mui/material/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { NavLink } from 'react-router-dom';
 
 import styles from './userForm.module.css';
+import { WidgetToPageButton } from '@/shared/components';
+import { Typography } from '@mui/material';
 
 const CreateUser = (): ReactElement => {
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
@@ -32,14 +32,12 @@ const CreateUser = (): ReactElement => {
 
   return (
     <div className={styles.userForm}>
-      <div className={styles.userForm__head}>
-        <p className={styles.userForm__title}>Создать пользователя</p>
-        <NavLink className={styles.userForm__link} to={'ROUTE_CONSTANTS.ROOT'}>
-          <LaunchIcon />
-        </NavLink>
-      </div>
+      <WidgetToPageButton path={'#'} />
       <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
         <Form className={styles.userForm__form}>
+          <Typography variant="h6" color="primary">
+            Создать пользователя
+          </Typography>
           <div className={styles.userForm__inputs}>
             <Field name="display_name" type="text" placeholder="Имя пользователя" />
             <div className={styles.userFrom__errorBox}>
