@@ -61,12 +61,6 @@
    npm run lint
    ```
 
-- **Полная сборка и генерация типов**:
-
-   ```bash
-   npm run build-gen:all
-   ```
-
 ---
 
 ## Работа с Docker
