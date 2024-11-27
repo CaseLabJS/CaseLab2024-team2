@@ -23,9 +23,7 @@ class DocumentsStore {
   currentDocument: DocumentFacadeResponse | null = null;
   status: Status = Status.UNSET;
   pageNumber: number = 0;
-  rowsPerPage: number = 3;
-  count = 0;
-  searchQuery: string = '';
+  searchQuery: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -42,27 +40,26 @@ class DocumentsStore {
     });
   }
 
-  async getVisibleDocuments(): Promise<void> {
-    if (this.searchQuery.length > 0) {
-      await this.searchDocuments();
-    } else {
-      await this.getDocumentsPage();
-    }
-  }
-
   async setQuery(query: string): Promise<void> {
     this.searchQuery = query;
-    await this.getVisibleDocuments();
+    await this.searchDocuments();
   }
 
-  async setPage(page: number): Promise<void> {
-    this.pageNumber = page;
-    await this.getVisibleDocuments();
+  initPage(): void {
+    this.pageNumber = 0;
   }
 
-  setRowsPerPage(rowsPage: number): void {
-    this.rowsPerPage = rowsPage;
-    this.setPage(0);
+  //на предыдущую страницу на пагинации
+  prevPage(): void {
+    if (this.pageNumber > 1) {
+      this.pageNumber--;
+    }
+  }
+  //на след страницу на пагинации (в идеале в ui добавить disabled кнопки при переключении с первой или последней страницы)
+  nextPage(): void {
+    if (this.pageNumber < 23) {
+      this.pageNumber++;
+    }
   }
 
   //поиск документов (эту функцию не вызываем, просто устанавливаем query через setQuery)
@@ -71,8 +68,8 @@ class DocumentsStore {
       this.status = Status.LOADING;
       if (!this.searchQuery) return;
       const documentPage = await searchDocumentsData({
-        pageNum: this.pageNumber + 1,
-        pageSize: this.rowsPerPage,
+        pageNum: this.pageNumber,
+        pageSize: 32,
         query: this.searchQuery,
       });
       runInAction(() => {
@@ -89,11 +86,10 @@ class DocumentsStore {
   async getDocumentsPage(): Promise<void> {
     try {
       this.status = Status.LOADING;
-      const documentPage = await getAllDocumentsData({ pageNum: this.pageNumber, pageSize: this.rowsPerPage });
+      const documentPage = await getAllDocumentsData({ pageNum: this.pageNumber, pageSize: 32 });
       runInAction(() => {
-        this.searchQuery = '';
-        this.documents = documentPage.content;
-        this.count = documentPage.totalElements;
+        this.searchQuery = null;
+        this.documents = documentPage;
         this.status = Status.SUCCESS;
       });
     } catch {

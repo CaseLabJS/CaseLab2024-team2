@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TitleIcon from '@mui/icons-material/Title';
@@ -17,6 +18,7 @@ interface NavTabsProps {
 export default function NavTabs({ created }: NavTabsProps): ReactElement {
   const docNames = [
     { name: 'СПИСОК ДОКУМЕНТОВ', path: '/user/documents', icon: <ContentPasteIcon /> },
+    { name: 'ГОЛОСОВАНИЕ', path: '#', icon: <CheckCircleOutlineIcon /> },
     { name: 'ПОДПИСЬ', path: '#', icon: <TitleIcon /> },
   ];
   const createdNames = [

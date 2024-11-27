@@ -1,4 +1,3 @@
-import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
 import {
   TableContainer,
@@ -11,28 +10,26 @@ import {
   TablePagination,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, type ReactElement } from 'react';
-import { useNavigate } from 'react-router';
+import { useEffect, useState, type ReactElement } from 'react';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
 
 const DocumentsTable = observer((): ReactElement => {
-  const navigate = useNavigate();
-
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   useEffect(() => {
     void documentsStore.getDocumentsPage();
   }, []);
   const handleChangePage = (event: unknown, newPage: number): void => {
-    documentsStore.setPage(newPage);
+    setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    documentsStore.setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
-  function handleClickDocument(id: number) {
-    navigate(`${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}/${id}`);
-  }
+  const displayedData = documentsStore.documents.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <TableContainer component={Paper} sx={{ padding: 4 }}>
@@ -46,8 +43,8 @@ const DocumentsTable = observer((): ReactElement => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {documentsStore.documents.map(({ document }, index) => (
-            <TableRow key={index} onClick={() => handleClickDocument(document.id)} sx={{ cursor: 'pointer' }}>
+          {displayedData.map(({ document }, index) => (
+            <TableRow key={index}>
               <TableCell>{document.document_type_id}</TableCell>
               <TableCell>{document.name}</TableCell>
               <TableCell>{document.status}</TableCell>
@@ -56,11 +53,11 @@ const DocumentsTable = observer((): ReactElement => {
         </TableBody>
       </Table>
       <TablePagination
-        rowsPerPageOptions={[2, 3, 4]}
+        rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={documentsStore.count}
-        rowsPerPage={documentsStore.rowsPerPage}
-        page={documentsStore.pageNumber}
+        count={documentsStore.documents.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
         labelRowsPerPage={'Строк на странице:'}
