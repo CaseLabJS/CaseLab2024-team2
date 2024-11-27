@@ -8,7 +8,7 @@ import {
   searchDocumentsData,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
-import { makeAutoObservable, onBecomeObserved, autorun, runInAction } from 'mobx';
+import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 import { useParams } from 'react-router-dom';
 
 import type {
@@ -36,14 +36,6 @@ class DocumentsStore {
       const id = useParams().documentId;
       if (id) {
         this.getDocumentById(Number(id)).catch(() => alert('Ошибка'));
-      }
-    });
-
-    autorun(async (): Promise<void> => {
-      if (this.searchQuery) {
-        await this.searchDocuments();
-      } else {
-        await this.getDocumentsPage();
       }
     });
   }

@@ -6,6 +6,7 @@ import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
+import { VoteModal } from '@/widgets/voteModal';
 import { EditNote } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
@@ -96,6 +97,7 @@ const DocumentCardPage = observer((): ReactElement => {
         </Box>
         {isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+            <VoteModal user={userMail} />
             <Button variant="outlined" onClick={() => alert('В разработке')}>
               Отправить на подпись
             </Button>
@@ -111,9 +113,7 @@ const DocumentCardPage = observer((): ReactElement => {
         )}
         {!isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
-              Проголосовать
-            </Button>
+            <VoteModal user={userMail} />
             <Button variant="outlined" onClick={() => alert('В разработке')}>
               Подписаться
             </Button>

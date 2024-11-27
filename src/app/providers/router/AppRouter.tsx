@@ -8,9 +8,11 @@ import { CreateVotingPage } from '@/pages/createVotingPage';
 import { DocumentCardPage } from '@/pages/documentCardPage';
 import { DocumentTypesPage } from '@/pages/documentPage';
 import { DocumentsPage } from '@/pages/documentsPage';
+import { DocumentsTypePage } from '@/pages/documentsTypePage';
 import { ErrorPage } from '@/pages/errorPage';
 import { SignIn } from '@/pages/signin';
 import { User } from '@/pages/user';
+import { UserManagmentPage } from '@/pages/userManagmentPage';
 import { observer } from 'mobx-react-lite';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
@@ -88,8 +90,16 @@ const AppRouter = observer((): ReactElement => {
             element: <AdminMainPage />, //страница с виджетами (создать пользователя, создать атрибут и тд)
           },
           {
+            path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
+            element: <DocumentsTypePage />,
+          },
+          {
             path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.ATTRIBUTES.path}`,
             element: <CreateAttributePage />,
+          },
+          {
+            path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.USERS.path}`,
+            element: <UserManagmentPage />,
           },
         ],
       },

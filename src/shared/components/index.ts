@@ -6,3 +6,4 @@ export { TransferList } from './transferList/ui/TransferList';
 export { default as Dashboard } from './dashboard/ui/Dashboard';
 export { default as NotificationsBadge } from './notificatoinsBadge/ui/NotificatoinsBadge';
 export { WidgetToPageButton } from './widgetToPageButton/ui/WidgetToPageButton';
+export { default as UserManagement } from './userManagement/userManagement';
