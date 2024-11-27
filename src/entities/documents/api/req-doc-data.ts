@@ -25,11 +25,13 @@ export const getDocumentData = async (id: number): Promise<DocumentFacadeRespons
 };
 
 // получение всех документов пользователя текущего
-export const getAllDocumentsData = async (paginationRequest: PaginationRequest): Promise<DocumentFacadeResponse[]> => {
+export const getAllDocumentsData = async (
+  paginationRequest: PaginationRequest,
+): Promise<{ totalElements: number; content: DocumentFacadeResponse[] }> => {
   const response = await api.get<DocumentPageResponse>('/documents-facade/', {
     params: buildSearchParams(paginationRequest),
   });
-  return response.data.content;
+  return { totalElements: response.data.totalElements, content: response.data.content };
 };
 
 // получение всех документов по поиску
