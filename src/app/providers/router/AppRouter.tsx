@@ -10,6 +10,7 @@ import { DocumentTypesPage } from '@/pages/documentPage';
 import { DocumentsPage } from '@/pages/documentsPage';
 import { DocumentsTypePage } from '@/pages/documentsTypePage';
 import { ErrorPage } from '@/pages/errorPage';
+import { MainMenu } from '@/pages/mainMenu';
 import { SignIn } from '@/pages/signin';
 import { User } from '@/pages/user';
 import { UserManagmentPage } from '@/pages/userManagmentPage';
@@ -40,7 +41,7 @@ const AppRouter = observer((): ReactElement => {
     [
       {
         path: ROUTE_CONSTANTS.ROOT.path,
-        element: <div>Здесь будет главная страница</div>,
+        element: <MainMenu />,
         errorElement: <ErrorPage />,
       },
       {
