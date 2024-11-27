@@ -43,10 +43,80 @@
   margin-bottom: 80px;
 }
 
+.mainBlock__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 8px;
+  color: #f5f5f5;
+  border-radius: 4px;
+  padding: 8px 0;
+  margin: 0 auto;
+  text-transform: uppercase;
+  background: linear-gradient(170deg, rgba(0, 86, 179, 1) 0%, rgba(178, 176, 176, 1) 100%);
+  background-size: 200% 200%;
+  max-width: 448px;
+  width: 100%;
+  margin-bottom: 60px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.mainBlock__button:hover {
+  animation: gradient-smooth 3s ease infinite;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(11, 21, 32, 0.6);
+}
+
+@keyframes gradient-smooth {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .footerBlock {
   display: flex;
   justify-content: center;
   align-items: center;
   background: #0056b3;
   width: 100%;
+}
+
+.linkToProject {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+  color: #062f5c;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.linkToProject:visited,
+.linkToProject:active {
+  color: #062f5c;
+}
+
+.linkToProject img {
+  filter: brightness(0) saturate(100%) invert(11%) sepia(44%) saturate(3433%) hue-rotate(199deg) brightness(95%)
+    contrast(95%);
+  transition: filter 0.3s ease;
+}
+
+/* При наведении меняем цвет текста и иконки */
+.linkToProject:hover {
+  color: #98c3f1;
+}
+
+.linkToProject:hover img {
+  filter: brightness(0) saturate(100%) invert(71%) sepia(45%) saturate(2882%) hue-rotate(186deg) brightness(95%)
+    contrast(101%);
 }

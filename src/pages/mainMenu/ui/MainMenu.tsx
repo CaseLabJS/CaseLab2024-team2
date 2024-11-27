@@ -1,8 +1,10 @@
-import type { ReactElement } from 'react';
-
-import { Button, Grid, Icon, Paper, Typography } from '@mui/material';
+import { PlayArrow } from '@mui/icons-material';
+import { Grid, Icon, Paper, Typography } from '@mui/material';
+import { useEffect, useState, type ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import ctrl from '../img/ctrl.svg';
+import git from '../img/git.svg';
 import int from '../img/int.svg';
 import logo from '../img/Logo.svg';
 import mainImage from '../img/mainimg.webp';
@@ -55,6 +57,36 @@ const GridExample = (): ReactElement => {
   );
 };
 
+const LoginButton = (): ReactElement => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      setIsLoggedIn(true);
+      navigate('/signin');
+    }
+  }, [navigate]);
+
+  const handleNavigate = (): void => {
+    if (!isLoggedIn) {
+      navigate('/signin');
+    }
+  };
+
+  return (
+    <div className={styles.mainBlock__button} onClick={handleNavigate} style={{ cursor: 'pointer' }}>
+      <Icon>
+        <PlayArrow />
+      </Icon>
+      <span>
+        {isLoggedIn ? 'Перейти в профиль' : 'Авторизоваться'} {/* Если не авторизован */}
+      </span>
+    </div>
+  );
+};
+
 const MainMenu = (): ReactElement => {
   return (
     <div className={styles.mainMenu}>
@@ -99,20 +131,7 @@ const MainMenu = (): ReactElement => {
             надежную защиту данных, интуитивно понятный интерфейс и быстрое подключение к существующим бизнес-процессам.
           </Typography>
         </div>
-        <Button
-          size="large"
-          startIcon={<Icon />}
-          variant="contained"
-          sx={{
-            margin: '0 auto',
-            background: 'linear-gradient(170deg, rgba(0,86,179,1) 0%, rgba(178,176,176,1) 150%)',
-            maxWidth: '448px',
-            width: '100%',
-            mb: '60px',
-          }}
-        >
-          авторизоваться
-        </Button>
+        <LoginButton />
       </main>
       <footer className={styles.footerBlock}>
         <Typography
@@ -121,8 +140,16 @@ const MainMenu = (): ReactElement => {
         >
           <b>ГДО</b> | <b style={{ fontWeight: 'lighter' }}>ГРИНАТОМ ДОКУМЕНТООБОРОТ</b>
         </Typography>
-        <Typography sx={{ margin: '6px 0 6px auto' }} variant="body1">
-          Наш проект
+        <Typography sx={{ margin: '6px 20px 6px auto' }} variant="body1">
+          <a
+            className={styles.linkToProject}
+            href="https://github.com/CaseLabJS/CaseLab2024-team2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={git} alt="gitIcon" style={{ width: '31px', height: 'auto' }} />
+            Наш проект
+          </a>
         </Typography>
       </footer>
     </div>
