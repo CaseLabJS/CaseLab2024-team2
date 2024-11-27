@@ -8,6 +8,7 @@ import { CreateVotingPage } from '@/pages/createVotingPage';
 import { DocumentCardPage } from '@/pages/documentCardPage';
 import { DocumentTypesPage } from '@/pages/documentPage';
 import { DocumentsTypePage } from '@/pages/documentsTypePage';
+import { DocumentsPage } from '@/pages/documentsPage';
 import { ErrorPage } from '@/pages/errorPage';
 import { SignIn } from '@/pages/signin';
 import { User } from '@/pages/user';
@@ -53,6 +54,10 @@ const AppRouter = observer((): ReactElement => {
           {
             path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
             element: <DocumentTypesPage />,
+          },
+          {
+            path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENTS.path}`,
+            element: <DocumentsPage />,
           },
         ],
       },
