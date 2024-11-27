@@ -11,8 +11,8 @@ import {
   TablePagination,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useNavigate } from 'react-router';
 import { useEffect, useState, type ReactElement } from 'react';
+import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
 
