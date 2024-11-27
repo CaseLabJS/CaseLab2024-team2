@@ -1,7 +1,7 @@
 import { PlayArrow } from '@mui/icons-material';
 import { Grid, Icon, Paper, Typography } from '@mui/material';
 import { useEffect, useState, type ReactElement } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import ctrl from '../img/ctrl.svg';
 import git from '../img/git.svg';
@@ -59,31 +59,30 @@ const GridExample = (): ReactElement => {
 
 const LoginButton = (): ReactElement => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       setIsLoggedIn(true);
-      navigate('/signin');
     }
-  }, [navigate]);
-
-  const handleNavigate = (): void => {
-    if (!isLoggedIn) {
-      navigate('/signin');
-    }
-  };
+  }, []);
 
   return (
-    <div className={styles.mainBlock__button} onClick={handleNavigate} style={{ cursor: 'pointer' }}>
+    <Link
+      to={isLoggedIn ? '/profile' : '/signin'}
+      className={styles.mainBlock__button}
+      style={{
+        textDecoration: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        color: 'white',
+      }}
+    >
       <Icon>
         <PlayArrow />
       </Icon>
-      <span>
-        {isLoggedIn ? 'Перейти в профиль' : 'Авторизоваться'} {/* Если не авторизован */}
-      </span>
-    </div>
+      <span>{isLoggedIn ? 'Перейти в профиль' : 'Авторизоваться'}</span>
+    </Link>
   );
 };
 
