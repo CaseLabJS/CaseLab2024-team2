@@ -17,7 +17,7 @@ interface NavTabsProps {
 
 export default function NavTabs({ created }: NavTabsProps): ReactElement {
   const docNames = [
-    { name: 'СПИСОК ДОКУМЕНТОВ', path: '#', icon: <ContentPasteIcon /> },
+    { name: 'СПИСОК ДОКУМЕНТОВ', path: 'user/documents', icon: <ContentPasteIcon /> },
     { name: 'ГОЛОСОВАНИЕ', path: '#', icon: <CheckCircleOutlineIcon /> },
     { name: 'ПОДПИСЬ', path: '#', icon: <TitleIcon /> },
   ];
