@@ -13,4 +13,3 @@ const useToast = (): ToastContextType => {
 };
 
 export default useToast;
-
