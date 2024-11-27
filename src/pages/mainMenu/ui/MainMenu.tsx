@@ -69,7 +69,7 @@ const LoginButton = (): ReactElement => {
 
   return (
     <Link
-      to={isLoggedIn ? '/profile' : '/signin'}
+      to={'/signin'}
       className={styles.mainBlock__button}
       style={{
         textDecoration: 'none',
