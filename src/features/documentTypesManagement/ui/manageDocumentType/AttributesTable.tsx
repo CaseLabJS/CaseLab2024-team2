@@ -20,7 +20,7 @@ function AttributesTable({
   };
   return (
     <>
-      <TableContainer>
+      <TableContainer sx={{ overflowX: 'auto', height: '63px' }}>
         <Table size="small">
           <TableHead>
             <TableRow>

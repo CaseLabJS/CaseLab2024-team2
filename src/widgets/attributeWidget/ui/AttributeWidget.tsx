@@ -1,19 +1,16 @@
 import type { ReactElement } from 'react';
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
-import iconLink from '@/assets/iconLink.svg';
 import { CreateAttribute } from '@/features/createAttribute';
+import { WidgetToPageButton } from '@/shared/components';
 import { Box } from '@mui/material';
-import { Link } from 'react-router-dom';
 
 import style from './attributeWidget.module.css';
 
 const AddAttribute = (): ReactElement => {
   return (
     <Box className={style.boxCreateAttribute}>
-      <Link to={`${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.ATTRIBUTES.path}`} className={style.stylelinkIcon}>
-        <img src={iconLink} alt="Изображение икноки перехода на следующую страницу" />
-      </Link>
+      <WidgetToPageButton path={`${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.ATTRIBUTES.path}`} />
       <CreateAttribute />
     </Box>
   );

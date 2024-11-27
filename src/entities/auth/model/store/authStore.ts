@@ -79,7 +79,7 @@ class AuthStore {
     }
   }
 
-  private async processAuthResponse(): Promise<void> {
+  async processAuthResponse(): Promise<void> {
     const token = localStorage.getItem('accessToken');
     if (token) {
       const userData = await this.fetchCurrentUser();

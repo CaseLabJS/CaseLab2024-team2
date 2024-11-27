@@ -4,6 +4,7 @@
   padding: 30px;
   border-radius: 10px;
   background: #fff;
+  position: relative;
 }
 
 .userForm__head {
