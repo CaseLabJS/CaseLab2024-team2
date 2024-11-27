@@ -17,7 +17,6 @@ import DocumentsTableToolbar from './DocumentsTableToolBar';
 const DocumentsTable = observer((): ReactElement => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [searchTerm, setSearchTerm] = useState('');
   useEffect(() => {
     void documentsStore.getDocumentsPage();
   }, []);
@@ -30,15 +29,11 @@ const DocumentsTable = observer((): ReactElement => {
     setPage(0);
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearchTerm(event.target.value);
-  };
-
   const displayedData = documentsStore.documents.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <TableContainer component={Paper} sx={{ padding: 4 }}>
-      <DocumentsTableToolbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
+      <DocumentsTableToolbar />
       <Table>
         <TableHead>
           <TableRow>

@@ -9,7 +9,6 @@ import { WidgetToPageButton } from '@/shared/components';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { NavLink } from 'react-router-dom';
 
 import styles from './userForm.module.css';
 
@@ -34,12 +33,6 @@ const CreateUser = (): ReactElement => {
 
   return (
     <div className={styles.userForm}>
-      <div className={styles.userForm__head}>
-        <p className={styles.userForm__title}>Создать пользователя</p>
-        <NavLink className={styles.userForm__link} to={'ROUTE_CONSTANTS.ROOT'}>
-          <LaunchIcon />
-        </NavLink>
-      </div>
       <WidgetToPageButton path={`${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.USERS.path}`} />
       <Formik initialValues={initialValues} validationSchema={SignupSchema} onSubmit={submitFormHandler}>
         <Form className={styles.userForm__form}>

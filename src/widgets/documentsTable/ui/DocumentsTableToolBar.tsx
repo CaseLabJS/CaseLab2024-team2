@@ -1,11 +1,10 @@
 import type { ReactElement } from 'react';
 
-import { Add, Delete, Search } from '@mui/icons-material';
-import { Toolbar, Button, TextField, InputAdornment } from '@mui/material';
+import { SearchForm } from '@/shared/components';
+import { Add, Delete } from '@mui/icons-material';
+import { Toolbar, Button } from '@mui/material';
 
-import type { DocumentsTableToolbarProps } from '../model/DocumentsTableToolbarProps';
-
-const DocumentsTableToolbar = ({ searchTerm, handleSearchChange }: DocumentsTableToolbarProps): ReactElement => {
+const DocumentsTableToolbar = (): ReactElement => {
   return (
     <Toolbar
       sx={{
@@ -19,23 +18,7 @@ const DocumentsTableToolbar = ({ searchTerm, handleSearchChange }: DocumentsTabl
       <Button variant="text" startIcon={<Delete sx={{ color: 'grey.500' }} />} sx={{ color: 'grey.500' }}>
         Удалить
       </Button>
-      <TextField
-        variant="standard"
-        size="small"
-        placeholder="Поиск..."
-        value={searchTerm}
-        onChange={handleSearchChange}
-        sx={{ marginLeft: 'auto', marginRight: 2 }}
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
+      <SearchForm sx={{ marginLeft: 'auto', marginRight: 2 }} />
     </Toolbar>
   );
 };
