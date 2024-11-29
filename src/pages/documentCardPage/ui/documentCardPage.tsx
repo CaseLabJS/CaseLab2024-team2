@@ -6,6 +6,7 @@ import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
+import { DocumentVersionSelect } from '@/widgets/documentVersion';
 import { VoteModal } from '@/widgets/voteModal';
 import { EditNote } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
@@ -16,6 +17,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
+
   if (documentsStore.status === Status.ERROR) {
     return <Typography>Документ не найден</Typography>;
   }
@@ -74,6 +76,7 @@ const DocumentCardPage = observer((): ReactElement => {
             <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
               Отправить в архив
             </Button>
+            <DocumentVersionSelect />
           </>
         )}
       </Box>
