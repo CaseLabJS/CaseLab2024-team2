@@ -19,3 +19,14 @@
   margin-left: 5px;
   cursor: ponter;
 }
+
+.editIcon {
+  padding: 3%;
+  background-color: #fff;
+  width: 80%;
+  margin: 0 auto;
+  height: fit-content;
+  cursor: pointer;
+  margin-left: 5px;
+  cursor: ponter;
+}

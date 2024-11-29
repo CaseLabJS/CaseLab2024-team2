@@ -4,13 +4,20 @@ import { authStore } from '@/entities/auth';
 import { AdminMainPage } from '@/pages/adminMainPage';
 import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
+import { CreateVotingPage } from '@/pages/createVotingPage';
+import { DocumentCardPage } from '@/pages/documentCardPage';
 import { DocumentTypesPage } from '@/pages/documentPage';
+import { DocumentsPage } from '@/pages/documentsPage';
+import { DocumentsTypePage } from '@/pages/documentsTypePage';
 import { ErrorPage } from '@/pages/errorPage';
+import { MainMenu } from '@/pages/mainMenu';
 import { SignIn } from '@/pages/signin';
 import { User } from '@/pages/user';
+import { UserManagmentPage } from '@/pages/userManagmentPage';
 import { observer } from 'mobx-react-lite';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
+import { ToastProvider } from '../ToastProvider';
 import { ROUTE_CONSTANTS } from './config/constants';
 
 const AppRouter = observer((): ReactElement => {
@@ -34,7 +41,7 @@ const AppRouter = observer((): ReactElement => {
     [
       {
         path: ROUTE_CONSTANTS.ROOT.path,
-        element: <div>Здесь будет главная страница</div>,
+        element: <MainMenu />,
         errorElement: <ErrorPage />,
       },
       {
@@ -49,7 +56,27 @@ const AppRouter = observer((): ReactElement => {
             path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
             element: <DocumentTypesPage />,
           },
+          {
+            path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENTS.path}`,
+            element: <DocumentsPage />,
+          },
         ],
+      },
+      {
+        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}`,
+        element: (
+          <ProtectedUserRoute>
+            <DocumentCardPage />
+          </ProtectedUserRoute>
+        ),
+      },
+      {
+        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}${ROUTE_CONSTANTS.CREATE_VOTING.path}`,
+        element: (
+          <ProtectedUserRoute>
+            <CreateVotingPage />
+          </ProtectedUserRoute>
+        ),
       },
       {
         path: ROUTE_CONSTANTS.ADMIN.path,
@@ -64,8 +91,16 @@ const AppRouter = observer((): ReactElement => {
             element: <AdminMainPage />, //страница с виджетами (создать пользователя, создать атрибут и тд)
           },
           {
+            path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
+            element: <DocumentsTypePage />,
+          },
+          {
             path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.ATTRIBUTES.path}`,
             element: <CreateAttributePage />,
+          },
+          {
+            path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.USERS.path}`,
+            element: <UserManagmentPage />,
           },
         ],
       },
@@ -93,12 +128,14 @@ const AppRouter = observer((): ReactElement => {
   );
 
   return (
-    <RouterProvider
-      router={router}
-      future={{
-        v7_startTransition: true,
-      }}
-    />
+    <ToastProvider>
+      <RouterProvider
+        router={router}
+        future={{
+          v7_startTransition: true,
+        }}
+      />
+    </ToastProvider>
   );
 });
 

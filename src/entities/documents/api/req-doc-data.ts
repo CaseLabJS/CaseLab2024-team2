@@ -20,13 +20,13 @@ export interface SearchDocumentRequest extends PaginationRequest {
 }
 // получение документа по id
 export const getDocumentData = async (id: number): Promise<DocumentFacadeResponse> => {
-  const response = await api.get<DocumentFacadeResponse>(`/documents-fasade/${id}`);
+  const response = await api.get<DocumentFacadeResponse>(`/documents-facade/${id}`);
   return response.data;
 };
 
 // получение всех документов пользователя текущего
 export const getAllDocumentsData = async (paginationRequest: PaginationRequest): Promise<DocumentFacadeResponse[]> => {
-  const response = await api.get<DocumentPageResponse>('/documents-fasade/', {
+  const response = await api.get<DocumentPageResponse>('/documents-facade/', {
     params: buildSearchParams(paginationRequest),
   });
   return response.data.content;
@@ -34,7 +34,7 @@ export const getAllDocumentsData = async (paginationRequest: PaginationRequest):
 
 // получение всех документов по поиску
 export const searchDocumentsData = async (searchRequest: SearchDocumentRequest): Promise<DocumentFacadeResponse[]> => {
-  const response = await api.get<DocumentPageResponse>('/documents-fasade/', {
+  const response = await api.get<DocumentPageResponse>('/documents-facade/', {
     params: buildSearchParams(searchRequest),
   });
   return response.data.content;
@@ -42,7 +42,7 @@ export const searchDocumentsData = async (searchRequest: SearchDocumentRequest):
 
 // создание документа
 export const createDocumentData = async (createDocument: CreateDocumentRequest): Promise<DocumentFacadeResponse> => {
-  const response = await api.post<DocumentFacadeResponse>('/documents-fasade/', createDocument);
+  const response = await api.post<DocumentFacadeResponse>('/documents-facade/', createDocument);
   return response.data;
 };
 
@@ -51,7 +51,7 @@ export const updateDocumentData = async (
   id: number,
   updateDocument: UpdateDocumentRequest,
 ): Promise<DocumentFacadeResponse> => {
-  const response = await api.put<DocumentFacadeResponse>(`/documents-fasade/${id}`, updateDocument);
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument);
   return response.data;
 };
 
@@ -60,12 +60,12 @@ export const patchDocumentData = async (
   id: number,
   updateDocument: PatchDocumentRequest,
 ): Promise<DocumentFacadeResponse> => {
-  const response = await api.put<DocumentFacadeResponse>(`/documents-fasade/${id}`, updateDocument);
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument);
   return response.data;
 };
 
 // отправка документа в архив
 export const deleteDocumentData = async (id: number): Promise<void> => {
-  await api.delete(`/documents-fasade/${id}`);
+  await api.delete(`/documents-facade/${id}`);
   return;
 };

@@ -14,7 +14,6 @@ import * as React from 'react';
 import styles from './notifications.module.css';
 
 export default function NotificatoinsBadge(): React.ReactElement {
-
   /**Пример уведомлений - должно приходить с backend (для разработки) */
   const notifications = [
     // уведомления
@@ -92,10 +91,7 @@ export default function NotificatoinsBadge(): React.ReactElement {
   };
 
   const handleClose = (event: Event | React.SyntheticEvent): void => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
     }
     setOpen(false);
@@ -147,8 +143,7 @@ export default function NotificatoinsBadge(): React.ReactElement {
             <Grow
               {...TransitionProps}
               style={{
-                transformOrigin:
-                  placement === 'bottom-start' ? 'left top' : 'left bottom',
+                transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
               <Paper>
@@ -160,28 +155,25 @@ export default function NotificatoinsBadge(): React.ReactElement {
                       aria-labelledby="nested-list-subheader"
                     >
                       {localNotifications.map((item) => (
-                      <>
-                       <ListItem alignItems="flex-start"
-                          onClick={(event) => {
-                          event.stopPropagation();
-                          handleClick();
-                          readEl(Number(event.currentTarget.getAttribute('data-id')));
-                        }}
-                          onKeyDown={handleListKeyDown}
-                          data-id={item.id}
-                          key={item.id}
-                         >
-                         <ListItemText
-                           primary={item.note}
-                           className={(!item.isRead) ? styles.notifications__note : 'none'}
-                           secondary={
-                             <React.Fragment>
-                               {item.content}
-                             </React.Fragment>
-                           }
-                         />
-                       </ListItem>
-                      </>
+                        <>
+                          <ListItem
+                            alignItems="flex-start"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleClick();
+                              readEl(Number(event.currentTarget.getAttribute('data-id')));
+                            }}
+                            onKeyDown={handleListKeyDown}
+                            data-id={item.id}
+                            key={item.id}
+                          >
+                            <ListItemText
+                              primary={item.note}
+                              className={!item.isRead ? styles.notifications__note : 'none'}
+                              secondary={<React.Fragment>{item.content}</React.Fragment>}
+                            />
+                          </ListItem>
+                        </>
                       ))}
                     </List>
                   </div>

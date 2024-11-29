@@ -33,6 +33,22 @@ class UserStore {
     }
   }
 
+  async getUser({ email }: { email: string }): Promise<UserResponse | null> {
+    try {
+      const response = await getUserData(email);
+      return response;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message) {
+          alert(error.message);
+        } else {
+          alert('Something went wrong');
+        }
+      }
+      return null;
+    }
+  }
+
   async createUser({ email, display_name, password }: RegisterRequest): Promise<void> {
     try {
       await registerUser({ email, display_name, password });

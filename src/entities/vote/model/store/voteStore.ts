@@ -1,8 +1,8 @@
+import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '@/entities/vote';
+
+import { addVote, createVotingProcess, getVotingProcess } from '@/entities/vote/api';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '../..';
-
-import { addVote, createVotingProcess, getVotingProcess } from '../../api';
 type ISimpleState = 'error' | 'success' | 'loading';
 
 class VotingStore {
@@ -12,19 +12,41 @@ class VotingStore {
     makeAutoObservable(this);
   }
 
+  async isAvailibleVote(documentId: number, email: string): Promise<boolean> {
+    try {
+      this.state = 'loading';
+      const data = await getVotingProcess(documentId);
+      if (!data) return false;
+      const findVote = data.votes.find(
+        (item) => data.status.includes('IN_PROGRESS') && item.applicationUser.email === email,
+      );
+      runInAction(() => {
+        this.state = 'success';
+      });
+      return !!findVote;
+    } catch {
+      runInAction(() => {
+        this.state = 'error';
+      });
+      return false;
+    }
+  }
+
   async getVotingDocument(documentId: number): Promise<VotingProcessResponse | null> {
     try {
       this.state = 'loading';
       const data = await getVotingProcess(documentId);
+
+      if (!data) {
+        return null;
+      }
       runInAction(() => {
         this.state = 'success';
       });
       return data;
-    } catch (error) {
+    } catch {
       runInAction(() => {
-        this.state = 'error';
-        console.log(error);
-        alert('Ошибка. Что-то пошло не так');
+        this.state = 'success';
       });
       return null;
     }
@@ -33,14 +55,18 @@ class VotingStore {
   async createVoting(newVoting: VotingProcessRequest): Promise<void> {
     try {
       this.state = 'loading';
-      await createVotingProcess(newVoting);
+      const data = await createVotingProcess(newVoting);
+      if (!data) {
+        alert('Ошибка создания');
+      } else {
+        alert('Отправлен на голосование');
+      }
       runInAction(() => {
         this.state = 'success';
       });
-    } catch (error) {
+    } catch {
       runInAction(() => {
         this.state = 'error';
-        console.log(error);
         alert('Ошибка при создании голосования. Что-то пошло не так');
       });
     }
@@ -56,11 +82,9 @@ class VotingStore {
       runInAction(() => {
         this.state = 'success';
       });
-    } catch (error) {
+    } catch {
       runInAction(() => {
         this.state = 'error';
-        console.log(error);
-
         alert('Ошибка при голосовании. Повторите попытку');
       });
     }

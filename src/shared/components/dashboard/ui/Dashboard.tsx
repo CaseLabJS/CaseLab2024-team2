@@ -17,7 +17,6 @@ import Stack from '@mui/material/Stack';
 import * as React from 'react';
 
 export default function Dashboard(): React.ReactElement {
-
   /**Массив пунктов выпадающего меню пользователя: */
   const itemsAdmin = [
     // пункты меню в случае администратора
@@ -59,10 +58,7 @@ export default function Dashboard(): React.ReactElement {
   };
 
   const handleClose = (event: Event | React.SyntheticEvent): void => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
     }
 
@@ -113,8 +109,7 @@ export default function Dashboard(): React.ReactElement {
             <Grow
               {...TransitionProps}
               style={{
-                transformOrigin:
-                  placement === 'bottom-start' ? 'left top' : 'left bottom',
+                transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
               <Paper>
@@ -137,12 +132,11 @@ export default function Dashboard(): React.ReactElement {
                     >
                       {menuForUser.map((item, i) => (
                         <MenuItem key={i}>
-                          <ListItemIcon>
-                            {item.icon}
-                          </ListItemIcon>
-                          <Link href={item.link} underline="none">{item.name}</Link>
+                          <ListItemIcon>{item.icon}</ListItemIcon>
+                          <Link href={item.link} underline="none">
+                            {item.name}
+                          </Link>
                         </MenuItem>
-
                       ))}
                       <MenuItem>
                         <ListItemIcon>
