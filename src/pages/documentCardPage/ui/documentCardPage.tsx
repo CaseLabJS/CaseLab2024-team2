@@ -52,9 +52,13 @@ const DocumentCardPage = observer((): ReactElement => {
   return (
     <Layout>
       <Breadcrumbs pageTitle={documentsStore.currentDocument?.document.name} />
-      <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px' }}>
-        Документ: {documentsStore.currentDocument?.document.name}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+        <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
+          Документ: {documentsStore.currentDocument?.document.name}
+        </Typography>
+        <DocumentVersionSelect />
+      </Box>
+
       <Box
         sx={{
           backgroundColor: 'white',
@@ -76,7 +80,6 @@ const DocumentCardPage = observer((): ReactElement => {
             <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
               Отправить в архив
             </Button>
-            <DocumentVersionSelect />
           </>
         )}
       </Box>
