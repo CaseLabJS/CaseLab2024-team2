@@ -2,7 +2,6 @@ import type { UserResponse } from '@/entities/user';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
-import Visibility from '@mui/icons-material/Visibility';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -126,14 +125,12 @@ const UserManagement = observer(() => {
               <col style={{ width: '7%' }} />
               <col style={{ width: '31%' }} />
               <col style={{ width: '31%' }} />
-              <col style={{ width: '31%' }} />
             </colgroup>
             <TableHead>
               <TableRow>
                 <TableCell align="left"></TableCell>
                 <TableCell>Имя</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Пароль</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -147,9 +144,6 @@ const UserManagement = observer(() => {
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
                   {/* <TableCell>{user.password}</TableCell> */}
-                  <TableCell>
-                    <Visibility className={styles.visibility} />
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
