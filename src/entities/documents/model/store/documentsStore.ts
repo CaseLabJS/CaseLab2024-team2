@@ -8,7 +8,8 @@ import {
   searchDocumentsData,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
-import { makeAutoObservable, onBecomeObserved, autorun, runInAction } from 'mobx';
+import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
+import { useParams } from 'react-router-dom';
 
 import type {
   CreateDocumentRequest,
@@ -31,11 +32,10 @@ class DocumentsStore {
       this.getDocumentsPage().catch(() => alert('Ошибка'));
     });
 
-    autorun(async (): Promise<void> => {
-      if (this.searchQuery) {
-        await this.searchDocuments();
-      } else {
-        await this.getDocumentsPage();
+    onBecomeObserved(this, 'currentDocument', () => {
+      const id = useParams().documentId;
+      if (id) {
+        this.getDocumentById(Number(id)).catch(() => alert('Ошибка'));
       }
     });
   }
@@ -153,12 +153,17 @@ class DocumentsStore {
 
   //частичное изменение документа
   async updateDocumentById(id: number, document: PatchDocumentRequest): Promise<void> {
+    
     const documentToUpdate = this.documents.find((item) => item.document.id === id);
-    if (documentToUpdate) {
+    const currentDocumentToUpdate=this.currentDocument;
+    if (documentToUpdate || currentDocumentToUpdate?.document.id==id) {
+      
       try {
         this.status = Status.LOADING;
+        console.log(this.status);
         const updatedDocument = await patchDocumentData(id, document);
         runInAction(() => {
+          
           this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
         });

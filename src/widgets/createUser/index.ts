@@ -1,1 +1,1 @@
-export { default as CreateUser}  from './ui/CreateUser';
+export { default as CreateUser } from './ui/CreateUser';
