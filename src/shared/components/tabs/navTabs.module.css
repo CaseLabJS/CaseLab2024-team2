@@ -1,0 +1,19 @@
+.link {
+  padding: 9px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.link:hover {
+  color: rgba(25, 118, 210, 1);
+}
+.active {
+  padding: 9px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(25, 118, 210, 1);
+  border-bottom: 2px solid rgba(25, 118, 210, 1);
+}

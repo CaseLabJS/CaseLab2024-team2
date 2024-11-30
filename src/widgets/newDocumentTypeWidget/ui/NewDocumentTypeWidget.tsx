@@ -6,12 +6,11 @@ import { attributesStore } from '@/entities/attribute';
 import { documentTypesStore } from '@/entities/documentsType/model/store/documentTypesStore';
 import AddAttributesDialog from '@/features/documentTypesManagement/ui/manageDocumentType/AddAttributesDialog';
 import AttributesTable from '@/features/documentTypesManagement/ui/manageDocumentType/AttributesTable';
+import { WidgetToPageButton } from '@/shared/components';
 import AddIcon from '@mui/icons-material/Add';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { Stack, Box, TextField, Button, Paper } from '@mui/material';
+import { Stack, Box, TextField, Button, Paper, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 export const NewDocumentTypeWidget = observer((): React.ReactElement => {
   const [name, setName] = useState<string>('');
@@ -49,21 +48,34 @@ export const NewDocumentTypeWidget = observer((): React.ReactElement => {
 
   return (
     <>
-      <Paper sx={{ p: '16px', minWidth: '350px', width: 'fit-content', position: 'relative' }}>
-        <Box
-          sx={() => ({
-            position: 'absolute',
-            right: '8px',
-            top: '8px',
-          })}
+      <Paper
+        variant="outlined"
+        sx={{
+          p: '30px',
+          minWidth: '350px',
+          width: 'fit-content',
+          position: 'relative',
+          borderRadius: '10px',
+          alignItems: 'center',
+          border: 'none',
+        }}
+      >
+        <WidgetToPageButton path={`${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`} />
+        <Stack
+          spacing={2}
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}
         >
-          <Link to={ROUTE_CONSTANTS.DOCUMENT_TYPES.path}>
-            <OpenInNewIcon />
-          </Link>
-        </Box>
-        <Stack spacing={2}>
           <Box sx={{ textAlign: 'center' }}>
-            <TextField size="small" label="Название типа" value={name} onChange={(e) => setName(e.target.value)} />
+            <Typography variant="h6" color="primary" mb="46px">
+              Создать тип документа
+            </Typography>
+            <TextField
+              size="small"
+              label="Название типа"
+              variant="standard"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </Box>
           <Stack>
             {attributes.length > 0 && (
@@ -73,7 +85,7 @@ export const NewDocumentTypeWidget = observer((): React.ReactElement => {
               Добавить атрибуты
             </Button>
           </Stack>
-          <Button variant="contained" color="primary" onClick={handleCreateButton}>
+          <Button variant="contained" size="small" color="primary" sx={{ mt: 'auto' }} onClick={handleCreateButton}>
             Создать
           </Button>
         </Stack>

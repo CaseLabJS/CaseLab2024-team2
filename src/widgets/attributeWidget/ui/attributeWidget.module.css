@@ -6,8 +6,6 @@
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
-}
-.stylelinkIcon {
-  margin: 9px 9px 10px auto;
-  cursor: pointer;
+  position: relative;
+  padding: 30px 30px 35px;
 }
