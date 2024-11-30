@@ -1,5 +1,5 @@
 import type { RegisterRequest } from '@/entities/user';
-import type { FormikHelpers } from 'formik';
+import type { FormikHelpers} from 'formik';
 import type { ReactElement } from 'react';
 
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
@@ -17,7 +17,8 @@ const CreateUser = (): ReactElement => {
 
   const submitFormHandler = async (
     values: RegisterRequest,
-    { setSubmitting }: FormikHelpers<RegisterRequest>,
+    { setSubmitting, resetForm }: FormikHelpers<RegisterRequest>,
+    
   ): Promise<void> => {
     try {
       const body: RegisterRequest = { ...values };
@@ -28,6 +29,7 @@ const CreateUser = (): ReactElement => {
       console.log(error);
     } finally {
       setSubmitting(false);
+      resetForm();
     }
   };
 
