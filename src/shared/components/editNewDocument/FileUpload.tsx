@@ -27,7 +27,7 @@ const FileUpload: React.FC<{ onChange: (file: File) => void }> = ({ onChange }) 
         type="file"
         onChange={handleInputChange}
         value={fileInputValue}
-        inputProps={{ accept: "image/*, application/pdf" }} // Разрешение типов файлов
+        inputProps={{ accept: "image/*, application/pdf" }} 
     />
   );
 };

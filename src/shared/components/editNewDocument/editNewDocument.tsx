@@ -28,10 +28,11 @@ interface DocumentFormModalProps {
 
 const DocumentFormModal: React.FC<DocumentFormModalProps> = ({ open, handleClose }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isFileUploaded, setFileUploaded]=useState<boolean>(false)
   const [canCreatePoll, setCreatePoll] = useState(false);
   const [formData, setFormData] = useState<{ [key: number]: string }>({}); // Состояние для данных формы
   const [documentName, setDocumentName]=useState("");
-  
+  console.log(selectedFile)
   const attributes = documentsStore.currentDocument?.latest_version.attributes.map((attribute) => ({
     id: attribute.id,
     attributeName: attribute.name,
@@ -40,6 +41,7 @@ const DocumentFormModal: React.FC<DocumentFormModalProps> = ({ open, handleClose
   }));
   const handleFileChange = (file: File):void => {
     setSelectedFile(file);
+    setFileUploaded(true);
   };
   const handleChange = (attributeId: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     setFormData({ ...formData, [attributeId]: event.target.value });
@@ -70,7 +72,7 @@ const DocumentFormModal: React.FC<DocumentFormModalProps> = ({ open, handleClose
       if (!id) {
         throw new Error("ID документа не найден.");
       }
-      await documentsStore.updateDocumentById(id, patch);
+      await documentsStore.updateDocumentById(id, patch, isFileUploaded);
     
       handleClose(); 
     } catch(e){

@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 
+import { api } from '@/shared/http';
 import DocumentFormModal from '@/shared/components/editNewDocument/editNewDocument';
 // import { saveAs } from 'file-saver';
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
@@ -54,22 +55,19 @@ const DocumentCardPage = observer((): ReactElement => {
   const handleDownloadDocument = async (): Promise<void> =>{
     try {
       const id = documentsStore.currentDocument?.latest_version.id;
-      const response = await fetch(`http://172.18.27.102:8080/api/v1/versions/content/${id}`, {
-        method: 'GET',
+      const response = await api.get(`http://172.18.27.102:8080/api/v1/versions/content/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
+        responseType: 'blob',
       });
       console.log("response ", response)
       console.log(JSON.stringify(documentsStore.currentDocument?.latest_version))
-      if (!response.ok) {
-        throw new Error(`Ошибка загрузки документа: ${response.statusText}`);
-      }
 
-      const blob = await response.blob();
-      console.log("blob ", blob)
-      const url = window.URL.createObjectURL(blob);
-
+      const myString = await response.data;
+      console.log("blob ", myString, myString instanceof Blob)
+      const url = window.URL.createObjectURL(myString);
+      console.log(url)
       const a = document.createElement('a');
       a.href = url;
       a.download = documentsStore.currentDocument?.latest_version.contentName || 'document';

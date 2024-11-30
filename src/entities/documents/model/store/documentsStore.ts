@@ -152,7 +152,7 @@ class DocumentsStore {
   }
 
   //частичное изменение документа
-  async updateDocumentById(id: number, document: PatchDocumentRequest): Promise<void> {
+  async updateDocumentById(id: number, document: PatchDocumentRequest, isFileUpload: boolean): Promise<void> {
     
     const documentToUpdate = this.documents.find((item) => item.document.id === id);
     const currentDocumentToUpdate=this.currentDocument;
@@ -161,7 +161,7 @@ class DocumentsStore {
       try {
         this.status = Status.LOADING;
         console.log(this.status);
-        const updatedDocument = await patchDocumentData(id, document);
+        const updatedDocument = await patchDocumentData(id, document, isFileUpload);
         runInAction(() => {
           
           this.currentDocument = updatedDocument;

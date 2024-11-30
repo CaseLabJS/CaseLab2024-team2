@@ -59,12 +59,18 @@ export const updateDocumentData = async (
 export const patchDocumentData = async (
   id: number,
   updateDocument: PatchDocumentRequest,
+  isFileUpload: boolean
 ): Promise<DocumentFacadeResponse> => {
-  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument);
+  const contentType = isFileUpload ? 'multipart/form-data' : 'application/json';
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument, {
+    headers: {
+      'Content-Type': `${contentType}`,
+      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+    }
+  });
   return response.data;
 };
-
-// отправка документа в архив
+// отправка документа в архив   http://172.18.27.102:8080/api/v1/documents-facade/1
 export const deleteDocumentData = async (id: number): Promise<void> => {
   await api.delete(`/documents-facade/${id}`);
   return;
