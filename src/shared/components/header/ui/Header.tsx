@@ -3,7 +3,6 @@ import type { ReactElement } from 'react';
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth/model/store/authStore';
 import Dashboard from '@/shared/components/dashboard/ui/Dashboard';
-import NotificatoinsBadge from '@/shared/components/notificatoinsBadge/ui/NotificatoinsBadge';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -24,7 +23,6 @@ export const Header = observer((): ReactElement => {
           <img className={styles.userHeader__logo} src={logo} alt="userHeaderLogo" />
         </NavLink>
         <nav className={styles.userHeader__icons}>
-          <NotificatoinsBadge />
           <Dashboard />
         </nav>
       </div>
