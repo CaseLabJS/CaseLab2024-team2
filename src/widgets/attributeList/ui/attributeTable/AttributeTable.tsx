@@ -48,7 +48,7 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
     attributesStore
       .load(true)
       .then(() => setRowsPerPage(5))
-      .catch(() => stableShowToast('error', 'Ошибка получения атрибутов'));
+      .catch(() => stableShowToast('error', 'Не удалось получить список атрибутов'));
   }, [stableShowToast]);
 
   const { filtered, count } = useMemo(() => {

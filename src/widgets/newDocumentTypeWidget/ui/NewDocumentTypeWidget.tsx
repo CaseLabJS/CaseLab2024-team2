@@ -28,18 +28,23 @@ export const NewDocumentTypeWidget = observer((): React.ReactElement => {
   const openAddAtributeDialog = (): void => setIsAddAtributeDialogOpen(true);
   const closeAddAtributeDialog = (): void => setIsAddAtributeDialogOpen(false);
 
-  const handleCreateButton = (): void => {
-    void documentTypesStore.create({
-      name: name,
-      attributes: attributes.map((a) => ({
-        attribute_id: a.attribute_id,
-        is_optional: a.is_optional,
-      })),
-    });
+  const handleCreateButton = async (): Promise<void> => {
+    try {
+      await documentTypesStore.create({
+        name: name,
+        attributes: attributes.map((a) => ({
+          attribute_id: a.attribute_id,
+          is_optional: a.is_optional,
+        })),
+      });
+      showToast('success', 'Тип документа успешно создан');
+    } catch {
+      showToast('error', 'Ошибка создания типа документа');
+    }
   };
 
   useEffect(() => {
-    attributesStore.load(true).catch(() => stableShowToast('error', 'Ошибка получения атрибутов'));
+    attributesStore.load(true).catch(() => stableShowToast('error', 'Не удалось получить список атрибутов'));
   }, [stableShowToast]);
 
   const handleAddAttribute = (newAttributes: DocumentTypeToAttributeRequest[]): void => {
