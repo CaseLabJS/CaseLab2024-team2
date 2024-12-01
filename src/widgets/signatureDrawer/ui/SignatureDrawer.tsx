@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 
+import { useToast } from '@/shared/hooks';
 import { Drawer, Typography, Button, Backdrop, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useState, useEffect } from 'react';
 
@@ -23,6 +24,8 @@ const SignatureDrawer = ({
 }: SignatureDrawerProps): ReactElement => {
   const [selectedUser, setSelectedUser] = useState<Option | null>(null);
 
+  const { showToast } = useToast();
+
   // Здесь должны использоваться данные из usersStore
   const userOptions = [
     { email: 'user@yandex.ru', name: 'Иванов Иван' },
@@ -31,7 +34,7 @@ const SignatureDrawer = ({
 
   const handleSubmit = (): void => {
     if (!selectedUser) {
-      alert('Пожалуйста, выберите пользователя.');
+      showToast('warning', 'Пожалуйста, выберите пользователя.');
       return;
     }
 

@@ -24,11 +24,11 @@ class VotingStore {
         this.state = 'success';
       });
       return !!findVote;
-    } catch {
+    } catch (error) {
       runInAction(() => {
         this.state = 'error';
       });
-      return false;
+      throw error;
     }
   }
 
@@ -44,48 +44,40 @@ class VotingStore {
         this.state = 'success';
       });
       return data;
-    } catch {
+    } catch (error) {
       runInAction(() => {
         this.state = 'success';
       });
-      return null;
+      throw error;
     }
   }
 
   async createVoting(newVoting: VotingProcessRequest): Promise<void> {
     try {
       this.state = 'loading';
-      const data = await createVotingProcess(newVoting);
-      if (!data) {
-        alert('Ошибка создания');
-      } else {
-        alert('Отправлен на голосование');
-      }
+      await createVotingProcess(newVoting);
       runInAction(() => {
         this.state = 'success';
       });
-    } catch {
+    } catch (error) {
       runInAction(() => {
         this.state = 'error';
-        alert('Ошибка при создании голосования. Что-то пошло не так');
       });
+      throw error;
     }
   }
 
   async addVoteDocument(newVoteUser: VoteRequest): Promise<void> {
     try {
       this.state = 'loading';
-      const addedVote = await addVote(newVoteUser);
-      if (addedVote) {
-        alert('Ваш голос записан');
-      }
+      await addVote(newVoteUser);
       runInAction(() => {
         this.state = 'success';
       });
-    } catch {
+    } catch (error) {
       runInAction(() => {
         this.state = 'error';
-        alert('Ошибка при голосовании. Повторите попытку');
+        throw error;
       });
     }
   }

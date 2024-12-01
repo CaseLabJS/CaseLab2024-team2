@@ -1,8 +1,9 @@
 import iconLink from '@/assets/iconLink.svg';
 import { votingStore } from '@/entities/vote';
+import { useToast } from '@/shared/hooks';
 import { Button, Box, Modal, Typography, FormControlLabel, Checkbox, Stack } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useState, type ReactElement, useEffect } from 'react';
+import { useState, type ReactElement, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router';
 
 import style from './voteModal.module.css';
@@ -17,6 +18,9 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
   const [isAvailible, setIsAvailible] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
+
   const handleOpen = (): void => {
     setIsOpen(true);
   };
@@ -30,6 +34,7 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
 
   async function sendVoteUser(): Promise<void> {
     await votingStore.addVoteDocument({ documentId: Number(documentId), status: isChecked ? 'IN_FAVUOR' : 'AGAINST' });
+    showToast('success', 'Спасибо! Ваш голос учтен');
   }
 
   useEffect(() => {
@@ -38,8 +43,11 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
       .then((res) => {
         setIsAvailible(res);
       })
-      .catch(() => setIsAvailible(false));
-  }, []);
+      .catch(() => {
+        setIsAvailible(false);
+        stableShowToast('error', 'Ошибка');
+      });
+  }, [stableShowToast]);
 
   if (!isAvailible) return <></>;
 

@@ -4,6 +4,7 @@ import type { SelectChangeEvent } from '@mui/material';
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import iconLink from '@/assets/iconLink.svg';
 import { votingStore } from '@/entities/vote';
+import { useToast } from '@/shared/hooks';
 import { Button, TextField, Typography, Box, Stack, Select, MenuItem } from '@mui/material';
 import { useState, type ReactElement } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -20,6 +21,8 @@ const CreateVoting = (): ReactElement => {
   const [day, setDay] = useState<number>(0);
   const [threshold, setThreshold] = useState<string>('');
 
+  const { showToast } = useToast();
+
   const handleChangeTeams = (event: SelectChangeEvent<string>): void => {
     setThreshold(event.target.value);
   };
@@ -35,8 +38,9 @@ const CreateVoting = (): ReactElement => {
         documentId: Number(documentId),
         emails: ['ivan@gmail.com'],
       });
+      showToast('success', 'Отправлен на голосование');
     } catch {
-      alert('Ошибка создания');
+      showToast('error', 'Ошибка создания голосования');
     }
   }
   //позже добавить возврат на страницу карточку документа
