@@ -1,22 +1,21 @@
-import type { ReactElement } from 'react';
-
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
-import { DocumentVersionSelect } from '@/widgets/documentVersion';
 import { VoteModal } from '@/widgets/voteModal';
 import { EditNote } from '@mui/icons-material';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Drawer, List, ListItem, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
+import { useState, type ReactElement } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
   if (documentsStore.status === Status.ERROR) {
     return <Typography>Документ не найден</Typography>;
@@ -25,6 +24,29 @@ const DocumentCardPage = observer((): ReactElement => {
   if (documentsStore.currentDocument === null) {
     return <Typography>Загрузка...</Typography>;
   }
+
+  const versionsList = [
+    {
+      id: documentsStore.currentDocument.latest_version.id,
+      name: documentsStore.currentDocument.latest_version.name,
+      date: documentsStore.currentDocument.latest_version.createdAt,
+    },
+    // ...documentsStore.currentDocument.versions.map((version) => ({
+    //   id: version.id,
+    //   name: version.name,
+    //   date: version.created_at,
+    // })),
+    {
+      id: 100,
+      name: 'Настройки',
+      date: '2022-12-12',
+    },
+    {
+      id: 101,
+      name: 'Удалить документ',
+      date: '2022-12-12',
+    },
+  ];
 
   const rows = documentsStore.currentDocument.latest_version.attributes.map((attribute) => ({
     id: attribute.id,
@@ -52,11 +74,13 @@ const DocumentCardPage = observer((): ReactElement => {
   return (
     <Layout>
       <Breadcrumbs pageTitle={documentsStore.currentDocument?.document.name} />
-      <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
           Документ: {documentsStore.currentDocument?.document.name}
         </Typography>
-        <DocumentVersionSelect />
+        <Button sx={{ marginLeft: 'auto' }} variant="outlined" onClick={() => setIsOpenDrawer(true)}>
+          Версии документа
+        </Button>
       </Box>
 
       <Box
@@ -130,6 +154,17 @@ const DocumentCardPage = observer((): ReactElement => {
           </Typography>
         </Box>
       </Box>
+      <Drawer open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} anchor="right">
+        <List>
+          {versionsList.map((version) => (
+            <ListItem sx={{ cursor: 'pointer' }} key={version.id} onClick={() => alert('В разработке')}>
+              {version.name}
+              {version.date}
+              {version.id}
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </Layout>
   );
 });
