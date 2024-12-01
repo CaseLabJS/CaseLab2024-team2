@@ -6,7 +6,6 @@ import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
 import { CreateVotingPage } from '@/pages/createVotingPage';
 import { DocumentCardPage } from '@/pages/documentCardPage';
-import { DocumentTypesPage } from '@/pages/documentPage';
 import { DocumentsPage } from '@/pages/documentsPage';
 import { DocumentsTypePage } from '@/pages/documentsTypePage';
 import { ErrorPage } from '@/pages/errorPage';
@@ -52,10 +51,6 @@ const AppRouter = observer((): ReactElement => {
           </ProtectedUserRoute>
         ),
         children: [
-          {
-            path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
-            element: <DocumentTypesPage />,
-          },
           {
             path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENTS.path}`,
             element: <DocumentsPage />,
