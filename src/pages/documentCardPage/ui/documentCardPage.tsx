@@ -12,11 +12,15 @@ import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useToast } from '@/shared/hooks';
 
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { showToast } = useToast();
+
   if (documentsStore.status === Status.ERROR) {
+    showToast('error', 'Что-то пошло не так');
     return <Typography>Документ не найден</Typography>;
   }
 

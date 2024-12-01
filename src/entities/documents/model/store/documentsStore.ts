@@ -29,13 +29,13 @@ class DocumentsStore {
     makeAutoObservable(this);
 
     onBecomeObserved(this, 'documents', () => {
-      this.getDocumentsPage().catch(() => alert('Ошибка'));
+      this.getDocumentsPage();
     });
 
     onBecomeObserved(this, 'currentDocument', () => {
       const id = useParams().documentId;
       if (id) {
-        this.getDocumentById(Number(id)).catch(() => alert('Ошибка'));
+        this.getDocumentById(Number(id));
       }
     });
   }
@@ -76,9 +76,9 @@ class DocumentsStore {
         this.documents = documentPage;
         this.status = Status.SUCCESS;
       });
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось найти документы');
+      throw error;
     }
   }
 
@@ -92,9 +92,9 @@ class DocumentsStore {
         this.documents = documentPage;
         this.status = Status.SUCCESS;
       });
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось получить список документов');
+      throw error;
     }
   }
 
@@ -107,9 +107,9 @@ class DocumentsStore {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
       });
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось получить документ');
+      throw error;
     }
   }
 
@@ -119,7 +119,9 @@ class DocumentsStore {
       this.status = Status.LOADING;
       const createdDocument = await createDocumentData(newDocument);
       if (!createdDocument) {
-        alert('Не удалось создать документ');
+        // Вызывать уведомление нужно из компонента создающего документ
+        // После создания компонента - удалить эту часть
+        console.log('Не удалось создать документ');
         return;
       } else {
         runInAction(() => {
@@ -127,9 +129,9 @@ class DocumentsStore {
           this.currentDocument = createdDocument;
         });
       }
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось создать документ');
+      throw error;
     }
   }
 
@@ -144,9 +146,9 @@ class DocumentsStore {
           this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
         });
-      } catch {
+      } catch (error) {
         this.status = Status.ERROR;
-        alert('Не удалось обновить документ');
+        throw error;
       }
     }
   }
@@ -162,9 +164,9 @@ class DocumentsStore {
           this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
         });
-      } catch {
+      } catch (error) {
         this.status = Status.ERROR;
-        alert('Не удалось обновить документ');
+        throw error;
       }
     }
   }
@@ -179,9 +181,9 @@ class DocumentsStore {
         this.status = Status.SUCCESS;
         this.currentDocument = null;
       });
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось удалить документ');
+      throw error;
     }
   }
 }

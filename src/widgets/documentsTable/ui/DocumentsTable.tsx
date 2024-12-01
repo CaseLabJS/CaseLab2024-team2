@@ -11,18 +11,23 @@ import {
   TablePagination,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState, type ReactElement } from 'react';
+import { useCallback, useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
+import { useToast } from '@/shared/hooks';
 
 const DocumentsTable = observer((): ReactElement => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
   useEffect(() => {
-    void documentsStore.getDocumentsPage();
-  }, []);
+    void documentsStore
+      .getDocumentsPage()
+      .catch(() => stableShowToast('error', 'Не удалось получить список документов'));
+  }, [stableShowToast]);
   const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
   };
