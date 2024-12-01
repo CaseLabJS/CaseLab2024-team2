@@ -49,7 +49,7 @@ const UserManagement = observer(() => {
       setPassword('');
       setShowForm(false);
       showToast('success', 'Пользователь успешно зарегистрирован!');
-    } catch (error) {
+    } catch {
       showToast('error', 'Ошибка регистрации пользователя. Попробуйте снова.');
     }
   };
@@ -58,7 +58,7 @@ const UserManagement = observer(() => {
     try {
       await userStore.deleteUser({ email: emailToRemove });
       showToast('success', 'Пользователь успешно удален!');
-    } catch (error) {
+    } catch {
       showToast('error', 'Ошибка удаления пользователя. Попробуйте снова.');
     }
   };

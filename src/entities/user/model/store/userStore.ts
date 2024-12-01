@@ -23,6 +23,9 @@ class UserStore {
         this.users = response;
       });
     } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message || 'Something went wrong');
+      }
       throw error;
     }
   }
@@ -32,6 +35,9 @@ class UserStore {
       const response = await getUserData(email);
       return response;
     } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message || 'Something went wrong');
+      }
       throw error;
     }
   }
@@ -44,6 +50,9 @@ class UserStore {
         this.users.push(user);
       });
     } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message || 'Something went wrong');
+      }
       throw error;
     }
   }
@@ -58,6 +67,9 @@ class UserStore {
         }
       });
     } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message || 'Something went wrong');
+      }
       throw error;
     }
   }
@@ -69,6 +81,9 @@ class UserStore {
         if (response === 204) this.users = this.users.filter((user) => user.email !== email);
       });
     } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message || 'Something went wrong');
+      }
       throw error;
     }
   }

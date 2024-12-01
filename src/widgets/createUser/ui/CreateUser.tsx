@@ -25,7 +25,7 @@ const CreateUser = (): ReactElement => {
       const body: RegisterRequest = { ...values };
       await userStore.createUser(body);
       showToast('success', 'Пользователь успешно зарегистрирован!');
-    } catch (error) {
+    } catch {
       showToast('error', 'Ошибка регистрации пользователя. Попробуйте снова.');
     } finally {
       setSubmitting(false);

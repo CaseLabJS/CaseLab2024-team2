@@ -103,6 +103,7 @@ class AuthStore {
           this.logout();
         }
       } catch (error) {
+        console.error(error);
         throw error;
       }
     }

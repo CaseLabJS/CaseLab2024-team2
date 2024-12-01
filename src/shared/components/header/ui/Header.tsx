@@ -4,6 +4,7 @@ import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth/model/store/authStore';
 import Dashboard from '@/shared/components/dashboard/ui/Dashboard';
 import NotificatoinsBadge from '@/shared/components/notificatoinsBadge/ui/NotificatoinsBadge';
+import { useToast } from '@/shared/hooks';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -11,7 +12,6 @@ import { NavLink } from 'react-router-dom';
 import logo from './images/logo.svg';
 
 import styles from './header.module.css';
-import { useToast } from '@/shared/hooks';
 
 export const Header = observer((): ReactElement => {
   const { showToast } = useToast();
