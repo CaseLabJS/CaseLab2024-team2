@@ -5,16 +5,19 @@ import { authStore } from '@/entities/auth/model/store/authStore';
 import Dashboard from '@/shared/components/dashboard/ui/Dashboard';
 import NotificatoinsBadge from '@/shared/components/notificatoinsBadge/ui/NotificatoinsBadge';
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import logo from './images/logo.svg';
 
 import styles from './header.module.css';
+import { useToast } from '@/shared/hooks';
 
 export const Header = observer((): ReactElement => {
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
   useEffect(() => {
-    authStore.processAuthResponse().catch(() => alert('Ошибка'));
+    authStore.processAuthResponse().catch(() => stableShowToast('error', 'Ошибка'));
   });
 
   return (

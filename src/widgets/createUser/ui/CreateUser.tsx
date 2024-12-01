@@ -27,7 +27,6 @@ const CreateUser = (): ReactElement => {
       showToast('success', 'Пользователь успешно зарегистрирован!');
     } catch (error) {
       showToast('error', 'Ошибка регистрации пользователя. Попробуйте снова.');
-      console.error('Error creating user:', error);
     } finally {
       setSubmitting(false);
     }

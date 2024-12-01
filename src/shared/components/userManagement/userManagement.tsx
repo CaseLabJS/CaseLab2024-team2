@@ -51,7 +51,6 @@ const UserManagement = observer(() => {
       showToast('success', 'Пользователь успешно зарегистрирован!');
     } catch (error) {
       showToast('error', 'Ошибка регистрации пользователя. Попробуйте снова.');
-      console.error('Error creating user:', error);
     }
   };
 
@@ -61,7 +60,6 @@ const UserManagement = observer(() => {
       showToast('success', 'Пользователь успешно удален!');
     } catch (error) {
       showToast('error', 'Ошибка удаления пользователя. Попробуйте снова.');
-      console.error('Error removing user:', error);
     }
   };
 

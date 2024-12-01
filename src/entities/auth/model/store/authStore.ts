@@ -75,31 +75,35 @@ class AuthStore {
       return data;
     } catch (error) {
       console.error('Error fetching current user:', error);
-      return null;
+      throw error;
     }
   }
 
   async processAuthResponse(): Promise<void> {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      const userData = await this.fetchCurrentUser();
-      if (userData) {
-        runInAction(() => {
-          this.state = 'success';
-          this.isAuth = true;
-          this.displayName = userData.display_name;
-          this.email = userData.email;
-          if (userData.roles.includes('ADMIN')) {
-            localStorage.setItem('isAdmin', JSON.stringify(userData.roles.includes('ADMIN')));
-            this.isAdmin = true;
-          }
-          if (userData.roles.includes('USER')) {
-            localStorage.setItem('isUser', JSON.stringify(userData.roles.includes('USER')));
-            this.isUser = true;
-          }
-        });
-      } else {
-        this.logout();
+      try {
+        const userData = await this.fetchCurrentUser();
+        if (userData) {
+          runInAction(() => {
+            this.state = 'success';
+            this.isAuth = true;
+            this.displayName = userData.display_name;
+            this.email = userData.email;
+            if (userData.roles.includes('ADMIN')) {
+              localStorage.setItem('isAdmin', JSON.stringify(userData.roles.includes('ADMIN')));
+              this.isAdmin = true;
+            }
+            if (userData.roles.includes('USER')) {
+              localStorage.setItem('isUser', JSON.stringify(userData.roles.includes('USER')));
+              this.isUser = true;
+            }
+          });
+        } else {
+          this.logout();
+        }
+      } catch (error) {
+        throw error;
       }
     }
   }
