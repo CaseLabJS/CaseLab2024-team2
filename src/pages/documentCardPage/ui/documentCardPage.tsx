@@ -34,10 +34,10 @@ const DocumentCardPage = observer((): ReactElement => {
   }));
 
   const columns = [
-    { field: 'id', headerName: 'ID', maxWidth: 60 },
-    { field: 'attributeName', headerName: 'Атрибут' },
-    { field: 'attributeType', headerName: 'Тип атрибута' },
-    { field: 'attributeValue', headerName: 'Значение' },
+    { field: 'id', headerName: 'ID', width: 60 },
+    { field: 'attributeName', headerName: 'Атрибут', flex: 1 },
+    { field: 'attributeType', headerName: 'Тип атрибута', flex: 1 },
+    { field: 'attributeValue', headerName: 'Значение', flex: 1 },
   ];
 
   const userMail = authStore.email;
@@ -91,8 +91,6 @@ const DocumentCardPage = observer((): ReactElement => {
           disableColumnResize={true}
           disableColumnFilter
           disableColumnMenu
-          autosizeOptions={{ expand: true }}
-          autosizeOnMount
         />
         <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
           <Typography sx={{ fontSize: '18px' }}>
