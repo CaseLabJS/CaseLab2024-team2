@@ -23,9 +23,7 @@ import { useFormik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState, type ReactElement } from 'react';
 
-import type { FormValues } from '../lib';
-
-import { getFormConfiguration, getInputComponent, getFormData } from '../lib';
+import { getFormConfiguration, getInputComponent } from '../lib';
 
 interface CreateDocumentDialogProps {
   open: boolean;
