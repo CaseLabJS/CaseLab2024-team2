@@ -1,6 +1,7 @@
 import type { AttributeResponse, StatefulAttribute } from '@/entities/attribute';
 
 import { attributesStore } from '@/entities/attribute';
+import { useToast } from '@/shared/hooks';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -14,9 +15,9 @@ import {
   Typography,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useState, type ReactElement, useMemo, useEffect } from 'react';
+import { useState, type ReactElement, useMemo, useEffect, useCallback } from 'react';
 
-import EditAttributeDialog from './editAttributeDialog';
+import EditAttributeDialog from './EditAttributeDialog';
 
 import style from './attributeTable.module.css';
 
@@ -29,6 +30,9 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
   const [isEditAttbuteDialogOpen, setIsEditAttbuteDialogOpen] = useState(false);
   const openEditAttributeDialog = (): void => setIsEditAttbuteDialogOpen(true);
   const closeEditAttributeDialog = (): void => setIsEditAttbuteDialogOpen(false);
+
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
 
   const handleChangePage = (_event: unknown, newPage: number): void => {
     console.log(newPage);
@@ -44,8 +48,8 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
     attributesStore
       .load(true)
       .then(() => setRowsPerPage(5))
-      .catch(() => alert('Ошибка'));
-  }, []);
+      .catch(() => stableShowToast('error', 'Ошибка получения атрибутов'));
+  }, [stableShowToast]);
 
   const { filtered, count } = useMemo(() => {
     const init = debounceValue
@@ -67,7 +71,7 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
     try {
       await attributesStore.deleteById(id);
     } catch {
-      alert('Ошибка удаления');
+      showToast('error', 'Ошибка удаления атрибута');
     }
   };
 

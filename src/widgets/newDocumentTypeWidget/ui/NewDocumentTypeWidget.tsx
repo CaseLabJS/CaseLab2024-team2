@@ -7,10 +7,11 @@ import { documentTypesStore } from '@/entities/documentsType/model/store/documen
 import AddAttributesDialog from '@/features/documentTypesManagement/ui/manageDocumentType/AddAttributesDialog';
 import AttributesTable from '@/features/documentTypesManagement/ui/manageDocumentType/AttributesTable';
 import { WidgetToPageButton } from '@/shared/components';
+import { useToast } from '@/shared/hooks';
 import AddIcon from '@mui/icons-material/Add';
 import { Stack, Box, TextField, Button, Paper, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const NewDocumentTypeWidget = observer((): React.ReactElement => {
   const [name, setName] = useState<string>('');
@@ -20,6 +21,9 @@ export const NewDocumentTypeWidget = observer((): React.ReactElement => {
   const combinedAttributes = attributes.map((a) => {
     return { ...a, ...attributesStore.getById(a.attribute_id) } as CombinedAttribute;
   });
+
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
 
   const openAddAtributeDialog = (): void => setIsAddAtributeDialogOpen(true);
   const closeAddAtributeDialog = (): void => setIsAddAtributeDialogOpen(false);
@@ -35,8 +39,8 @@ export const NewDocumentTypeWidget = observer((): React.ReactElement => {
   };
 
   useEffect(() => {
-    void attributesStore.load();
-  }, []);
+    attributesStore.load(true).catch(() => stableShowToast('error', 'Ошибка получения атрибутов'));
+  }, [stableShowToast]);
 
   const handleAddAttribute = (newAttributes: DocumentTypeToAttributeRequest[]): void => {
     const newAttributesToCombined = newAttributes.map((a) => ({
