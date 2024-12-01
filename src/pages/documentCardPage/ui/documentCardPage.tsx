@@ -4,6 +4,7 @@ import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
+import { useToast } from '@/shared/hooks';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { VoteModal } from '@/widgets/voteModal';
@@ -12,7 +13,6 @@ import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useToast } from '@/shared/hooks';
 
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();

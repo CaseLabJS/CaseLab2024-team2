@@ -29,13 +29,13 @@ class DocumentsStore {
     makeAutoObservable(this);
 
     onBecomeObserved(this, 'documents', () => {
-      this.getDocumentsPage();
+      this.getDocumentsPage().catch(console.error);
     });
 
     onBecomeObserved(this, 'currentDocument', () => {
       const id = useParams().documentId;
       if (id) {
-        this.getDocumentById(Number(id));
+        this.getDocumentById(Number(id)).catch(console.error);
       }
     });
   }

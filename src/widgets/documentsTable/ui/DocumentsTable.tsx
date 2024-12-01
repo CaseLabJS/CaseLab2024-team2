@@ -1,5 +1,6 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
+import { useToast } from '@/shared/hooks';
 import {
   TableContainer,
   Paper,
@@ -15,7 +16,6 @@ import { useCallback, useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
-import { useToast } from '@/shared/hooks';
 
 const DocumentsTable = observer((): ReactElement => {
   const navigate = useNavigate();
