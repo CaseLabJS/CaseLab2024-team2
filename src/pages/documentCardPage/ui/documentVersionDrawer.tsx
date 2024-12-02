@@ -1,3 +1,4 @@
+import type { DocumentVersionResponse } from '@/entities/documents';
 import type { ReactElement } from 'react';
 
 import { documentsStore } from '@/entities/documents';
@@ -11,11 +12,7 @@ const DocumentVersionDrawer = ({
 }: {
   isOpenDrawer: boolean;
   setIsOpenDrawer: (isOpenDrawer: boolean) => void;
-  versionsList: {
-    id: number;
-    name: string;
-    date: string;
-  }[];
+  versionsList: DocumentVersionResponse[];
   currentVersionId: number;
 }): ReactElement => {
   return (
@@ -25,7 +22,7 @@ const DocumentVersionDrawer = ({
       </Typography>
       <List sx={{ width: '400px' }}>
         {versionsList.map((version) =>
-          version.id === currentVersionId ? ( // Если это выбранная версия, то у неё другой фон
+          version.id === currentVersionId ? ( // Если это выбранная версия, то у неё другой фон. Сейчас подходят все версии, так как у нас нет функционала переключения и версия всегда последняя
             <Box key={version.id}>
               <Divider />
               <ListItem
@@ -35,11 +32,11 @@ const DocumentVersionDrawer = ({
                   backgroundColor: '#d9ebfa',
                   ':hover': { backgroundColor: '#bbdefb' },
                 }}
-                onClick={() => alert(`Версия ${new Date(version.date).toLocaleString()}`)} // TODO добавить функционал переключения версии при клике, то есть меняем в сторе currentVersion
+                onClick={() => alert(`Версия ${new Date(version.createdAt).toLocaleString()}`)} // TODO добавить функционал переключения версии при клике, то есть меняем в сторе currentVersion
               >
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <Typography>{version.name}</Typography>
-                  <Typography>{new Date(version.date).toLocaleString()}</Typography>
+                  <Typography>{new Date(version.createdAt).toLocaleString()}</Typography>
                 </Box>
               </ListItem>
             </Box>
@@ -52,11 +49,11 @@ const DocumentVersionDrawer = ({
                   cursor: 'pointer',
                   ':hover': { backgroundColor: '#bbdefb' },
                 }}
-                onClick={() => alert(`Версия ${new Date(version.date).toLocaleString()}`)} // TODO добавить функционал переключения версии при клике
+                onClick={() => alert(`Версия ${new Date(version.createdAt).toLocaleString()}`)} // TODO добавить функционал переключения версии при клике
               >
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <Typography>{version.name}</Typography>
-                  <Typography>{new Date(version.date).toLocaleString()}</Typography>
+                  <Typography>{new Date(version.createdAt).toLocaleString()}</Typography>
                 </Box>
               </ListItem>
             </Box>

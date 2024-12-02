@@ -1,3 +1,5 @@
+import type { DocumentVersionResponse } from '@/entities/documents';
+
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
@@ -33,22 +35,37 @@ const DocumentCardPage = observer((): ReactElement => {
   const isCreator = permission?.document_permissions[0].name === 'CREATOR';
   const statusDocument = documentsStore.currentDocument.document.status;
 
-  // TODO Нужно делать запрос версий в сторе. Пока что вводим вручную
-  const versionsList = [
+  // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
+  const versionsList: DocumentVersionResponse[] = [
     {
+      attributes: documentsStore.currentDocument.latest_version.attributes,
+      documentId: documentsStore.currentDocument.document.id,
       id: documentsStore.currentDocument.latest_version.id,
       name: documentsStore.currentDocument.latest_version.name,
-      date: documentsStore.currentDocument.latest_version.createdAt,
+      createdAt: documentsStore.currentDocument.latest_version.createdAt,
+      signatureIds: documentsStore.currentDocument.latest_version.signatureIds,
+      votingProcessesId: documentsStore.currentDocument.latest_version.votingProcessesId,
+      contentName: documentsStore.currentDocument.latest_version.contentName,
     },
     {
-      id: 101,
-      name: 'Настройки',
-      date: '2022-12-12',
+      attributes: documentsStore.currentDocument.latest_version.attributes,
+      documentId: documentsStore.currentDocument.document.id,
+      id: documentsStore.currentDocument.latest_version.id,
+      name: documentsStore.currentDocument.latest_version.name,
+      createdAt: documentsStore.currentDocument.latest_version.createdAt,
+      signatureIds: documentsStore.currentDocument.latest_version.signatureIds,
+      votingProcessesId: documentsStore.currentDocument.latest_version.votingProcessesId,
+      contentName: documentsStore.currentDocument.latest_version.contentName,
     },
     {
-      id: 102,
-      name: 'Удалить документ',
-      date: '2022-12-12',
+      attributes: documentsStore.currentDocument.latest_version.attributes,
+      documentId: documentsStore.currentDocument.document.id,
+      id: documentsStore.currentDocument.latest_version.id,
+      name: documentsStore.currentDocument.latest_version.name,
+      createdAt: documentsStore.currentDocument.latest_version.createdAt,
+      signatureIds: documentsStore.currentDocument.latest_version.signatureIds,
+      votingProcessesId: documentsStore.currentDocument.latest_version.votingProcessesId,
+      contentName: documentsStore.currentDocument.latest_version.contentName,
     },
   ];
 
