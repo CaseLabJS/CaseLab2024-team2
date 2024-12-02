@@ -51,7 +51,7 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
           <CloseIcon color="primary" className={style.stylelinkIcon} onClick={handleClose} />
           <Stack direction="column" gap="46px" marginBottom="56px">
             <Typography variant="h6" className={style.titleAddAttribute}>
-              Проголосовать
+              {votingStore.currentVoting?.name}
             </Typography>
             <Stack direction="row" justifyContent="center" gap="20px">
               <Button variant="contained" color="success" onClick={() => sendVoteUser('IN_FAVOUR')}>

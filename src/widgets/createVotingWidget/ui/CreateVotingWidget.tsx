@@ -89,6 +89,41 @@ const CreateVoting = observer((): ReactElement => {
                 setName(event.target.value);
               }}
             />
+            <Stack>
+              <Typography color="textDisabled">Выбор пользователей</Typography>
+              {users.length > 0 && (
+                <Select
+                  multiple
+                  value={selectedUsers}
+                  onChange={handleChangeUser}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  )}
+                >
+                  <Box sx={{ height: '150px', overflowY: 'scroll' }}>
+                    {users.map((item: string) => (
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Box>
+                </Select>
+              )}
+            </Stack>
+            <Stack>
+              <Typography color="textDisabled">Порог</Typography>
+              <Select id="select-threshold" value={String(threshold)} onChange={handleChangeTeams}>
+                {threshold_values.map((item: number) => (
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Stack>
             <Stack direction="row" gap="5px">
               <TextField
                 label="дней"
@@ -106,39 +141,6 @@ const CreateVoting = observer((): ReactElement => {
                   setTime(parseInt(e.target.value, 10) || 0)
                 }
               />
-            </Stack>
-            <Stack>
-              <Typography color="textDisabled">Порог</Typography>
-              <Select id="select-threshold" value={String(threshold)} onChange={handleChangeTeams}>
-                {threshold_values.map((item: number) => (
-                  <MenuItem key={item} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Stack>
-            <Stack>
-              <Typography color="textDisabled">Выбор пользователей</Typography>
-              {users.length > 0 && (
-                <Select
-                  multiple
-                  value={selectedUsers}
-                  onChange={handleChangeUser}
-                  renderValue={(selected) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {selected.map((value) => (
-                        <Chip key={value} label={value} />
-                      ))}
-                    </Box>
-                  )}
-                >
-                  {users.map((item: string) => (
-                    <MenuItem key={item} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
             </Stack>
           </Stack>
           <Button disabled={!name || !threshold} onClick={handleSubmit} variant="contained" className={style.btnCreate}>

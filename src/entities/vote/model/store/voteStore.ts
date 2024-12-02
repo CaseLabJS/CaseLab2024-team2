@@ -7,6 +7,7 @@ type ISimpleState = 'error' | 'success' | 'loading';
 
 class VotingStore {
   state: ISimpleState = 'success';
+  currentVoting: VotingProcessResponse | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -22,6 +23,9 @@ class VotingStore {
       );
       runInAction(() => {
         this.state = 'success';
+        if (findVote) {
+          this.currentVoting = data;
+        }
       });
       return !!findVote;
     } catch {
