@@ -35,7 +35,7 @@ const DocumentsTable = observer((): ReactElement => {
   const displayedData = documentsStore.documents.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleClickDocument = (id: number): void => {
-    navigate(`${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}/${id}`);
+    navigate(`${ROUTE_CONSTANTS.USER_DOCUMENTS.path}/${id}`);
   };
 
   return (
