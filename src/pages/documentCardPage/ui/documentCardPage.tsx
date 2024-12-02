@@ -100,7 +100,7 @@ const DocumentCardPage = observer((): ReactElement => {
         {isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
             <VoteModal user={userMail} />
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
+            <Button variant="outlined" onClick={() => setSignatureDrawerOpen(true)}>
               Отправить на подпись
             </Button>
             {statusDocument === 'DRAFT' && (
@@ -116,7 +116,7 @@ const DocumentCardPage = observer((): ReactElement => {
         {!isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
             <VoteModal user={userMail} />
-            <Button variant="outlined" onClick={() => setSignatureDrawerOpen(true)}>
+            <Button variant="outlined" onClick={() => alert('В разработке')}>
               Подписаться
             </Button>
           </Box>
@@ -128,7 +128,12 @@ const DocumentCardPage = observer((): ReactElement => {
           </Typography>
         </Box>
       </Box>
-      <SignatureDrawer isOpen={isSignatureDrawerOpen} onClose={() => setSignatureDrawerOpen(false)} />
+      <SignatureDrawer
+        isOpen={isSignatureDrawerOpen}
+        onClose={() => setSignatureDrawerOpen(false)}
+        documentName={documentsStore.currentDocument?.document.name}
+        documentId={documentsStore.currentDocument?.document.id}
+      />
     </Layout>
   );
 });
