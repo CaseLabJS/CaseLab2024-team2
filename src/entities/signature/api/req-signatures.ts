@@ -10,7 +10,7 @@ export const getSignatures = async (): Promise<SignatureResponse[]> => {
 
 // получение всех подписей документа
 export const getDocumentSignatures = async (documentId: number): Promise<SignatureResponse[]> => {
-  const response = await api.get<SignatureResponse[]>(`/signatures/all${documentId}`);
+  const response = await api.get<SignatureResponse[]>(`/signatures/all/${documentId}`);
   return response.data;
 };
 
