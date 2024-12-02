@@ -8,6 +8,7 @@ export default function Logout(): ReactElement {
   return (
     <Button
       startIcon={<ExitToAppIcon htmlColor="rgba(0 0 0 / 54%)" />}
+      sx={{ display: 'flex', justifyContent: 'space-between', paddingLeft: '4px', width: '96px' }}
       onClick={() => {
         authStore.logout();
       }}
