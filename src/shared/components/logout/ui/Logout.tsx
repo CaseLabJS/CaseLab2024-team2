@@ -7,12 +7,12 @@ import { Button } from '@mui/material';
 export default function Logout(): ReactElement {
   return (
     <Button
-      startIcon={<ExitToAppIcon />}
+      startIcon={<ExitToAppIcon htmlColor="rgba(0 0 0 / 54%)" />}
       onClick={() => {
         authStore.logout();
       }}
     >
-      Log out
+      Выход
     </Button>
   );
 }
