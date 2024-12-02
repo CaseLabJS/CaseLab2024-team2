@@ -1,3 +1,4 @@
+import type { SignatureResponse } from '@/entities/signature';
 import type { UserResponse } from '@/entities/user';
 import type { ReactElement } from 'react';
 
@@ -12,13 +13,17 @@ interface SignatureDrawerProps {
   documentId: number;
   documentName: string;
   onClose: () => void;
+  signatures: SignatureResponse[];
 }
 
 const SignatureDrawer = observer(
-  ({ isOpen, documentId, documentName, onClose }: SignatureDrawerProps): ReactElement => {
+  ({ isOpen, documentId, documentName, onClose, signatures }: SignatureDrawerProps): ReactElement => {
     const [selectedUser, setSelectedUser] = useState<UserResponse | null>(null);
 
     const userOptions = userStore.users;
+    const notSignedUsers = userOptions.filter(
+      (user) => !signatures.some((signature) => signature.email === user.email),
+    );
 
     const handleSubmit = (): void => {
       // TODO сделать валидацию
@@ -87,7 +92,7 @@ const SignatureDrawer = observer(
               value={selectedUser ? selectedUser.email : ''}
               onChange={(e) => {
                 const userEmail = e.target.value;
-                const user = userOptions.find((option) => option.email === userEmail);
+                const user = notSignedUsers.find((option) => option.email === userEmail);
                 setSelectedUser(user || null);
               }}
               label="Выберите пользователя"
@@ -97,7 +102,7 @@ const SignatureDrawer = observer(
                 },
               }}
             >
-              {userOptions.map((option) => (
+              {notSignedUsers.map((option) => (
                 <MenuItem key={option.email} value={option.email}>
                   <Typography sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
                     {option.display_name} <Box sx={{ color: 'text.secondary', display: 'inline' }}>{option.email}</Box>

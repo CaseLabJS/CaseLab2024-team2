@@ -1,6 +1,7 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
+import { signaturesStore } from '@/entities/signature';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
@@ -17,6 +18,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
+  const signatures = signaturesStore.selectedDocumentSignatures;
 
   if (documentsStore.status === Status.ERROR) {
     return <Typography>Документ не найден</Typography>;
@@ -133,6 +135,7 @@ const DocumentCardPage = observer((): ReactElement => {
         onClose={() => setSignatureDrawerOpen(false)}
         documentName={documentsStore.currentDocument?.document.name}
         documentId={documentsStore.currentDocument?.document.id}
+        signatures={signatures}
       />
     </Layout>
   );
