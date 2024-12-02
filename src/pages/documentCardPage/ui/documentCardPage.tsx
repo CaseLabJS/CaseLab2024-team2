@@ -162,7 +162,7 @@ const DocumentCardPage = observer((): ReactElement => {
         isOpenDrawer={isOpenDrawer}
         setIsOpenDrawer={setIsOpenDrawer}
         versionsList={versionsList}
-        currentVersionId={documentsStore.currentDocument?.latest_version.id}
+        currentVersionId={documentsStore.currentDocument?.latest_version.id} // По умолчанию выбираем последнюю версию, нужно брать из стора версий
       />
     </Layout>
   );
