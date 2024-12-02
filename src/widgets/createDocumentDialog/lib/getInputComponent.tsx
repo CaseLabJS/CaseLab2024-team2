@@ -16,7 +16,7 @@ export default function getInputComponent(
           key={attribute.id}
           name={attribute.id.toString()}
           label={attribute.name}
-          value={formik.values[attribute.id.toString()] as string}
+          value={(formik.values[attribute.id.toString()] as string) || ''}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={Boolean(formik.touched[attribute.id.toString()]) && Boolean(formik.errors[attribute.id.toString()])}
