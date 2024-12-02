@@ -5,8 +5,8 @@ import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { VoteModal } from '@/widgets/voteModal';
-import { EditNote } from '@mui/icons-material';
-import { Box, Button, Drawer, List, ListItem, Typography } from '@mui/material';
+import { EditNote, ManageHistory } from '@mui/icons-material';
+import { Box, Button, Divider, Drawer, List, ListItem, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
@@ -25,6 +25,7 @@ const DocumentCardPage = observer((): ReactElement => {
     return <Typography>Загрузка...</Typography>;
   }
 
+  // TODO делать запрос версий в сторе
   const versionsList = [
     {
       id: documentsStore.currentDocument.latest_version.id,
@@ -37,7 +38,7 @@ const DocumentCardPage = observer((): ReactElement => {
     //   date: version.created_at,
     // })),
     {
-      id: 100,
+      id: documentsStore.currentDocument.document.document_versions_ids,
       name: 'Настройки',
       date: '2022-12-12',
     },
@@ -78,7 +79,12 @@ const DocumentCardPage = observer((): ReactElement => {
         <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
           Документ: {documentsStore.currentDocument?.document.name}
         </Typography>
-        <Button sx={{ marginLeft: 'auto' }} variant="outlined" onClick={() => setIsOpenDrawer(true)}>
+        <Button
+          sx={{ marginLeft: 'auto' }}
+          startIcon={<ManageHistory />}
+          variant="outlined"
+          onClick={() => setIsOpenDrawer(true)}
+        >
           Версии документа
         </Button>
       </Box>
@@ -154,14 +160,29 @@ const DocumentCardPage = observer((): ReactElement => {
           </Typography>
         </Box>
       </Box>
-      <Drawer open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} anchor="right">
-        <List>
+      <Drawer sx={{ width: '400px' }} open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} anchor="right">
+        <Typography sx={{ padding: '20px' }} variant="h6">
+          Версии документа: {documentsStore.currentDocument?.document.name}
+        </Typography>
+        <List sx={{ width: '400px' }}>
           {versionsList.map((version) => (
-            <ListItem sx={{ cursor: 'pointer' }} key={version.id} onClick={() => alert('В разработке')}>
-              {version.name}
-              {version.date}
-              {version.id}
-            </ListItem>
+            <>
+              <Divider />
+              <ListItem
+                key={version.name}
+                sx={{
+                  cursor: 'pointer',
+                  ':hover': { backgroundColor: '#bbdefb' },
+                  ':first-of-type': { backgroundColor: '#d9ebfa' },
+                }}
+                onClick={() => alert('В разработке')}
+              >
+                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <Typography>{version.name}</Typography>
+                  <Typography>{new Date(version.date).toLocaleString()}</Typography>
+                </Box>
+              </ListItem>
+            </>
           ))}
         </List>
       </Drawer>
