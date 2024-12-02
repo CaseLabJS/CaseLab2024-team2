@@ -50,7 +50,6 @@ const DocumentCardPage = observer((): ReactElement => {
   const handleDownload = async (): Promise<void> => {
     try {
       const blob = await documentsStore.fetchDocumentBlob();
-      console.log(blob);
       if (!blob) return;
 
       const url = window.URL.createObjectURL(blob);
