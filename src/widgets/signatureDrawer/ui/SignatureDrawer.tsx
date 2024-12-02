@@ -38,7 +38,13 @@ const SignatureDrawer = observer(
         name: documentName,
       };
 
-      signaturesStore.sendDocumentToSign(requestData).catch(console.error);
+      signaturesStore
+        .sendDocumentToSign(requestData)
+        .then(() => {
+          onClose();
+          notSignedUsers.push(selectedUser); // TODO если успеем, то сделать хранение списка юзеров в сторе
+        })
+        .catch(console.error);
       setSelectedUser(null);
     };
 
@@ -105,7 +111,10 @@ const SignatureDrawer = observer(
               {notSignedUsers.map((option) => (
                 <MenuItem key={option.email} value={option.email}>
                   <Typography sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                    {option.display_name} <Box sx={{ color: 'text.secondary', display: 'inline' }}>{option.email}</Box>
+                    {option.display_name}{' '}
+                    <Box component="span" sx={{ color: 'text.secondary', display: 'inline' }}>
+                      {option.email}
+                    </Box>
                   </Typography>
                 </MenuItem>
               ))}
