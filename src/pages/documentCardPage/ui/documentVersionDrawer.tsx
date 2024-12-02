@@ -21,12 +21,12 @@ const DocumentVersionDrawer = ({
         Версии документа: {documentsStore.currentDocument?.document.name}
       </Typography>
       <List sx={{ width: '400px' }}>
-        {versionsList.map((version) =>
+        {versionsList.map((version, index) =>
           version.id === currentVersionId ? ( // Если это выбранная версия, то у неё другой фон. Сейчас подходят все версии, так как у нас нет функционала переключения и версия всегда последняя
-            <Box key={version.id}>
+            <Box key={index}>
               <Divider />
               <ListItem
-                key={version.id}
+                key={index}
                 sx={{
                   cursor: 'pointer',
                   backgroundColor: '#d9ebfa',
@@ -41,10 +41,10 @@ const DocumentVersionDrawer = ({
               </ListItem>
             </Box>
           ) : (
-            <Box key={version.id}>
+            <Box key={index}>
               <Divider />
               <ListItem
-                key={version.id}
+                key={index}
                 sx={{
                   cursor: 'pointer',
                   ':hover': { backgroundColor: '#bbdefb' },
