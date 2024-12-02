@@ -6,44 +6,47 @@ import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { VoteModal } from '@/widgets/voteModal';
 import { EditNote, ManageHistory } from '@mui/icons-material';
-import { Box, Button, Divider, Drawer, List, ListItem, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+
+import { DocumentVersionDrawer } from './documentVersionDrawer';
 
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
+  // Проверяем статус документа
+  if (documentsStore.status === Status.LOADING || documentsStore.currentDocument === null) {
+    return <Typography>Загрузка...</Typography>;
+  }
   if (documentsStore.status === Status.ERROR) {
     return <Typography>Документ не найден</Typography>;
   }
 
-  if (documentsStore.currentDocument === null) {
-    return <Typography>Загрузка...</Typography>;
-  }
+  // Проверяем, что юзер является создателем документа
+  const userMail = authStore.email;
+  const permission = documentsStore.currentDocument.document.user_permissions.find((user) => user.email === userMail);
+  const isCreator = permission?.document_permissions[0].name === 'CREATOR';
+  const statusDocument = documentsStore.currentDocument.document.status;
 
-  // TODO делать запрос версий в сторе
+  // TODO Нужно делать запрос версий в сторе. Пока что вводим вручную
   const versionsList = [
     {
       id: documentsStore.currentDocument.latest_version.id,
       name: documentsStore.currentDocument.latest_version.name,
       date: documentsStore.currentDocument.latest_version.createdAt,
     },
-    // ...documentsStore.currentDocument.versions.map((version) => ({
-    //   id: version.id,
-    //   name: version.name,
-    //   date: version.created_at,
-    // })),
     {
-      id: documentsStore.currentDocument.document.document_versions_ids,
+      id: 101,
       name: 'Настройки',
       date: '2022-12-12',
     },
     {
-      id: 101,
+      id: 102,
       name: 'Удалить документ',
       date: '2022-12-12',
     },
@@ -62,11 +65,6 @@ const DocumentCardPage = observer((): ReactElement => {
     { field: 'attributeType', headerName: 'Тип атрибута', flex: 1 },
     { field: 'attributeValue', headerName: 'Значение', flex: 1 },
   ];
-
-  const userMail = authStore.email;
-  const permission = documentsStore.currentDocument.document.user_permissions.find((user) => user.email === userMail);
-  const isCreator = permission?.document_permissions[0].name === 'CREATOR';
-  const statusDocument = documentsStore.currentDocument.document.status;
 
   const handleCreateVoting = (): void => {
     navigate(`${location.pathname}${ROUTE_CONSTANTS.CREATE_VOTING.path}`);
@@ -160,32 +158,12 @@ const DocumentCardPage = observer((): ReactElement => {
           </Typography>
         </Box>
       </Box>
-      <Drawer sx={{ width: '400px' }} open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} anchor="right">
-        <Typography sx={{ padding: '20px' }} variant="h6">
-          Версии документа: {documentsStore.currentDocument?.document.name}
-        </Typography>
-        <List sx={{ width: '400px' }}>
-          {versionsList.map((version) => (
-            <>
-              <Divider />
-              <ListItem
-                key={version.name}
-                sx={{
-                  cursor: 'pointer',
-                  ':hover': { backgroundColor: '#bbdefb' },
-                  ':first-of-type': { backgroundColor: '#d9ebfa' },
-                }}
-                onClick={() => alert('В разработке')}
-              >
-                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <Typography>{version.name}</Typography>
-                  <Typography>{new Date(version.date).toLocaleString()}</Typography>
-                </Box>
-              </ListItem>
-            </>
-          ))}
-        </List>
-      </Drawer>
+      <DocumentVersionDrawer
+        isOpenDrawer={isOpenDrawer}
+        setIsOpenDrawer={setIsOpenDrawer}
+        versionsList={versionsList}
+        currentVersionId={documentsStore.currentDocument?.latest_version.id}
+      />
     </Layout>
   );
 });
