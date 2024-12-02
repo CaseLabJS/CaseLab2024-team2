@@ -4,11 +4,14 @@ import type { SignatureResponse } from '@/entities/signature';
 import { getSignatures, getDocumentSignatures, sendDocument, signDocument } from '@/entities/signature/api';
 import { makeAutoObservable, runInAction } from 'mobx';
 
+import type { SignDocumentRequest } from '../../api/req-signatures';
+
 type ISimpleState = 'idle' | 'loading' | 'success' | 'error';
 
 class SignaturesStore {
   signatures: SignatureResponse[] = [];
   selectedDocumentSignatures: SignatureResponse[] = [];
+  selectedSignature: SignatureResponse | null = null;
   status: ISimpleState = 'idle';
 
   constructor() {
@@ -44,6 +47,23 @@ class SignaturesStore {
     });
   });
 
+  async checkSignByEmail(email: string, documentId: number): Promise<boolean> {
+    try {
+      this.status = 'loading';
+      const data = await getDocumentSignatures(documentId);
+      const currentSignature =
+        data.find((signature) => signature.email === email && signature.status === 'NOT_SIGNED') || null;
+      runInAction(() => {
+        this.selectedSignature = currentSignature;
+      });
+      return !!currentSignature;
+    } catch {
+      this.status = 'error';
+      this.selectedSignature = null;
+      return false;
+    }
+  }
+
   sendDocumentToSign = this.tryCatch(async (signatureData: SignatureCreateRequest): Promise<void> => {
     this.status = 'loading';
     const newSignature = await sendDocument(signatureData);
@@ -53,15 +73,11 @@ class SignaturesStore {
     });
   });
 
-  signDocumentById = this.tryCatch(async (id: number, status: boolean): Promise<void> => {
+  signDocumentById = this.tryCatch(async (sign: SignDocumentRequest): Promise<void> => {
     this.status = 'loading';
-    const updatedSignature = await signDocument(id, status);
+    const updatedSignature = await signDocument(sign);
     runInAction(() => {
-      const index = this.signatures.findIndex((signature) => signature.id === id);
-      if (index !== -1) {
-        this.signatures[index] = updatedSignature;
-      }
-      this.status = 'success';
+      this.selectedSignature = updatedSignature;
     });
   });
 }

@@ -2,6 +2,11 @@ import type { SignatureCreateRequest, SignatureResponse } from '@/entities/signa
 
 import { api } from '@/shared/http';
 
+export interface SignDocumentRequest {
+  documentId: number;
+  status: boolean;
+}
+
 // получение всех подписей
 export const getSignatures = async (): Promise<SignatureResponse[]> => {
   const response = await api.get<SignatureResponse[]>('/signatures/all');
@@ -10,7 +15,7 @@ export const getSignatures = async (): Promise<SignatureResponse[]> => {
 
 // получение всех подписей документа
 export const getDocumentSignatures = async (documentId: number): Promise<SignatureResponse[]> => {
-  const response = await api.get<SignatureResponse[]>(`/signatures/all${documentId}`);
+  const response = await api.get<SignatureResponse[]>(`/signatures/all/${documentId}`);
   return response.data;
 };
 
@@ -21,7 +26,10 @@ export const sendDocument = async (signatureData: SignatureCreateRequest): Promi
 };
 
 // подписать документ
-export const signDocument = async (id: number, status: boolean): Promise<SignatureResponse> => {
-  const response = await api.post<SignatureResponse>(`/signatures/sign/${id}`, status);
+export const signDocument = async (sign: SignDocumentRequest): Promise<SignatureResponse> => {
+  const response = await api.post<SignatureResponse>(
+    `/signatures/sign?documentId=${sign.documentId}&status=${sign.status}`,
+    sign,
+  );
   return response.data;
 };

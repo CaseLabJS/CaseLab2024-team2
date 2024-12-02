@@ -6,6 +6,7 @@ import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
+import { SignDocument } from '@/widgets/signDocument';
 import { VoteModal } from '@/widgets/voteModal';
 import { EditNote } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
@@ -114,9 +115,7 @@ const DocumentCardPage = observer((): ReactElement => {
         {!isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
             <VoteModal user={userMail} />
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
-              Подписаться
-            </Button>
+            {statusDocument === 'SIGNATURE_IN_PROGRESS' && <SignDocument email={userMail} />}
           </Box>
         )}
         <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
