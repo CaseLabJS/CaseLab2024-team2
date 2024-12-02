@@ -7,25 +7,16 @@ import * as api from '../../api';
 
 class DocumentVersionsStore {
   versions: DocumentVersionResponse[] = [];
+  currentVersion: DocumentVersionResponse | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async getDocumentVersionById(id: number): Promise<void> {
-    try {
-      const version = await api.getDocumentVersionById(id);
-      runInAction(() => {
-        this.versions = [version];
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message) {
-          alert(error.message);
-        } else {
-          alert('Что-то пошло не так');
-        }
-      }
+  setCurrentDocumentVersionById(id: number): void {
+    const version = this.versions.find((v) => v.id == id);
+    if (version) {
+      this.currentVersion = version;
     }
   }
 

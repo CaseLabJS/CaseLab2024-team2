@@ -47,7 +47,6 @@ export const getDocumentVersionsByDocumentId = async (
   id: number,
   paginationRequest: PaginationRequest,
 ): Promise<DocumentVersionResponse[]> => {
-  console.log('buildSearchParams(paginationRequest)', paginationRequest);
   const response = await api.get<PaginatedResponse<DocumentVersionResponse>>(`/versions/document/${id}`, {
     params: buildSearchParams(paginationRequest),
   });
