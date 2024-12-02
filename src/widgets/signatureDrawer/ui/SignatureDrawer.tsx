@@ -1,8 +1,9 @@
 import type { UserResponse } from '@/entities/user';
 import type { ReactElement } from 'react';
 
+import { signaturesStore } from '@/entities/signature';
 import { userStore } from '@/entities/user';
-import { Drawer, Typography, Button, Backdrop, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Drawer, Typography, Button, Backdrop, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
 
@@ -29,10 +30,10 @@ const SignatureDrawer = observer(
       const requestData = {
         documentId,
         email: selectedUser.email,
-        documentName: documentName.trim(),
+        name: documentName,
       };
-      // Здесь отправляем запрос на подпись документа
-      console.log('Данные для запроса:', requestData);
+
+      signaturesStore.sendDocumentToSign(requestData).catch(console.error);
       setSelectedUser(null);
     };
 
@@ -98,7 +99,9 @@ const SignatureDrawer = observer(
             >
               {userOptions.map((option) => (
                 <MenuItem key={option.email} value={option.email}>
-                  <Typography>{option.display_name}</Typography>
+                  <Typography sx={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                    {option.display_name} <Box sx={{ color: 'text.secondary', display: 'inline' }}>{option.email}</Box>
+                  </Typography>
                 </MenuItem>
               ))}
             </Select>
