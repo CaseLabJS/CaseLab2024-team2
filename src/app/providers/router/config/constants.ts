@@ -7,7 +7,6 @@ export const ROUTE_CONSTANTS = {
   ATTRIBUTES: { path: '/attributes', ruTitle: 'Атрибуты' },
   USERS: { path: '/users', ruTitle: 'Пользователи' },
   DOCUMENT_TYPES: { path: '/document-types', ruTitle: 'Типы документов' },
-  CREATE_VOTING: { path: '/create-voting', ruTitle: 'Создание голосования' },
   USER_DOCUMENTS: { path: '/documents', ruTitle: 'Документы пользователя' },
   DOCUMENT_CARD: { path: '/:documentId', ruTitle: 'Документ' },
 } as const;

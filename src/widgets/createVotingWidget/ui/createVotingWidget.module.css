@@ -1,14 +1,20 @@
 .boxCreate {
-  width: 320px;
+  width: 300px + 10vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
-  padding: 20px 0;
+  padding: 15px;
+  margin-bottom: 80px;
 }
 .stylelinkIcon {
-  margin: 9px 30px 10px auto;
+  margin: 0px 10px 10px auto;
+  cursor: pointer;
 }
 .titleCreate {
   margin-top: 30px;
@@ -17,9 +23,7 @@
   font-weight: 500;
   line-height: 32px;
   letter-spacing: 0.15000000596046448px;
-}
-.inputVoting {
-  margin-bottom: 30px;
+  text-align: center;
 }
 .btnCreate {
   background-color: #0056b3;
