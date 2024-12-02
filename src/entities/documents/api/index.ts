@@ -6,6 +6,7 @@ export {
   deleteDocumentData,
   searchDocumentsData,
   patchDocumentData,
+  downloadDocumentData,
 } from './req-doc-data';
 export {
   getAllDocTypes,
