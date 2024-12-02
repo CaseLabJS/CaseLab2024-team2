@@ -47,6 +47,25 @@ const DocumentCardPage = observer((): ReactElement => {
     navigate(`${location.pathname}${ROUTE_CONSTANTS.CREATE_VOTING.path}`);
   };
 
+  const handleDownload = async (): Promise<void> => {
+    try {
+      const blob = await documentsStore.fetchDocumentBlob();
+      console.log(blob);
+      if (!blob) return;
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = documentsStore.currentDocument?.latest_version.contentName || 'document';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return (
     <Layout>
       <Breadcrumbs pageTitle={documentsStore.currentDocument?.document.name} />
@@ -63,7 +82,7 @@ const DocumentCardPage = observer((): ReactElement => {
           gap: '20px',
         }}
       >
-        <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={() => alert('В разработке')}>
+        <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
           Скачать документ
         </Button>
         {isCreator && (
