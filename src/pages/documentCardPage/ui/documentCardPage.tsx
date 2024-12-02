@@ -1,21 +1,23 @@
-import type { ReactElement } from 'react';
-
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
+import { SignatureDrawer } from '@/widgets/signatureDrawer';
 import { VoteModal } from '@/widgets/voteModal';
 import { EditNote } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
+import { useState, type ReactElement } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
+
   if (documentsStore.status === Status.ERROR) {
     return <Typography>Документ не найден</Typography>;
   }
@@ -114,7 +116,7 @@ const DocumentCardPage = observer((): ReactElement => {
         {!isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
             <VoteModal user={userMail} />
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
+            <Button variant="outlined" onClick={() => setSignatureDrawerOpen(true)}>
               Подписаться
             </Button>
           </Box>
@@ -126,6 +128,7 @@ const DocumentCardPage = observer((): ReactElement => {
           </Typography>
         </Box>
       </Box>
+      <SignatureDrawer isOpen={isSignatureDrawerOpen} onClose={() => setSignatureDrawerOpen(false)} />
     </Layout>
   );
 });
