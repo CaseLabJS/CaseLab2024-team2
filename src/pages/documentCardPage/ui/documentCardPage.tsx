@@ -20,7 +20,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
   // Проверяем статус документа
-  if (documentsStore.status === Status.LOADING || documentsStore.currentDocument === null) {
+  if (documentsStore.currentDocument === null) {
     return <Typography>Загрузка...</Typography>;
   }
   if (documentsStore.status === Status.ERROR) {
