@@ -23,7 +23,7 @@ import { useFormik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState, type ReactElement } from 'react';
 
-import { getFormConfiguration, getInputComponent } from '../lib';
+import { getFormConfiguration, getInputComponent, getNewDocumentParameters } from '../lib';
 
 interface CreateDocumentDialogProps {
   open: boolean;
@@ -35,8 +35,14 @@ const CreateDocumentDialog = observer(({ open, onClose }: CreateDocumentDialogPr
   const [attributes, setAttributes] = useState<CombinedAttribute[]>([]);
   const formik = useFormik(
     getFormConfiguration(attributes, () => {
-      // const formData = getFormData(documentTypeId as number, formik.values as FormValues);
-      // использованиче formData
+      documentsStore
+        .createDocument(getNewDocumentParameters(documentTypeId as number, formik.values))
+        .then(() => {
+          alert('Документ создан');
+          formik.resetForm();
+          onClose();
+        })
+        .catch(console.error);
     }),
   );
 
@@ -58,13 +64,10 @@ const CreateDocumentDialog = observer(({ open, onClose }: CreateDocumentDialogPr
   function handleFileInput(event: ChangeEvent<HTMLInputElement>): void {
     if (!event.target.files || !event.target.files.length) return;
 
-    formik
-      .setFieldValue('file', event.target.files[0])
-      .then(console.log)
-      .catch((error) => {
-        console.error(error);
-        alert('Не удалось выбрать файл');
-      });
+    formik.setFieldValue('file', event.target.files[0]).catch((error) => {
+      console.error(error);
+      alert('Не удалось выбрать файл');
+    });
   }
 
   return (
@@ -80,11 +83,7 @@ const CreateDocumentDialog = observer(({ open, onClose }: CreateDocumentDialogPr
           <Autocomplete
             sx={{ mt: 1 }}
             disablePortal
-            onChange={(_, value) => {
-              if (value === null) return;
-
-              setDocumentTypeId(value.id);
-            }}
+            onChange={(_, value) => setDocumentTypeId(value?.id || null)}
             options={
               documentTypesStore.status === Status.LOADING
                 ? [{ id: -1, label: 'Загрузка...' }]
@@ -97,29 +96,33 @@ const CreateDocumentDialog = observer(({ open, onClose }: CreateDocumentDialogPr
             }
             renderInput={(params) => <TextField {...params} label="Тип документа" />}
           />
-          <TextField
-            sx={{ mt: 2 }}
-            name="name"
-            label="Название документа"
-            value={formik.values.name as string}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={Boolean(formik.touched.name) && Boolean(formik.errors.name)}
-            required
-            fullWidth
-          />
-          {attributes.map((attribute) => getInputComponent(attribute, formik))}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-            <input id="filePicker" name="file" style={{ display: 'none' }} type="file" onChange={handleFileInput} />
-            <label htmlFor="filePicker">
-              <Button component="span" size="medium" startIcon={<FileOpen />}>
-                {(formik?.values.file as { name?: string })?.name || 'Выбрать файл *'}
-              </Button>
-            </label>
-            <IconButton onClick={() => formik.setFieldValue('file', null)}>
-              <Delete />
-            </IconButton>
-          </Box>
+          {documentTypeId && (
+            <>
+              <TextField
+                sx={{ mt: 2 }}
+                name="name"
+                label="Название документа"
+                value={(formik.values.name as string) || ''}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={Boolean(formik.touched.name) && Boolean(formik.errors.name)}
+                required
+                fullWidth
+              />
+              {attributes.map((attribute) => getInputComponent(attribute, formik))}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+                <input id="filePicker" name="file" style={{ display: 'none' }} type="file" onChange={handleFileInput} />
+                <label htmlFor="filePicker">
+                  <Button component="span" size="medium" startIcon={<FileOpen />}>
+                    {(formik?.values.file as { name?: string })?.name || 'Выбрать файл *'}
+                  </Button>
+                </label>
+                <IconButton onClick={() => formik.setFieldValue('file', null)}>
+                  <Delete />
+                </IconButton>
+              </Box>
+            </>
+          )}
         </DialogContent>
         <DialogActions sx={{ alignContent: 'end', pr: 3, pb: 2 }}>
           <LoadingButton
