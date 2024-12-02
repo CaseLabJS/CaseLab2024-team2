@@ -24,11 +24,11 @@ class VotingStore {
         this.state = 'success';
       });
       return !!findVote;
-    } catch (error) {
+    } catch {
       runInAction(() => {
         this.state = 'error';
       });
-      throw error;
+      return false;
     }
   }
 
