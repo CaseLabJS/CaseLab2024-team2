@@ -36,7 +36,7 @@ export default function Dashboard(): React.ReactElement {
     // пункты меню в случае простого пользователя
     {
       name: 'Профиль',
-      link: `user/profile`,
+      link: `/profile`,
       icon: <AccountCircleIcon fontSize="small" />,
     },
   ];
