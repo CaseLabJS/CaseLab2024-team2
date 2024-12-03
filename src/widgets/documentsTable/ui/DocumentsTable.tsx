@@ -30,7 +30,7 @@ const DocumentsTable = observer((): ReactElement => {
       .getDocumentsPage()
       .catch(() => stableShowToast('error', 'Не удалось получить список документов'));
   }, [stableShowToast]);
-  const handleChangePage = (event: unknown, newPage: number): void => {
+  const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 
@@ -80,7 +80,7 @@ const DocumentsTable = observer((): ReactElement => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={documentsStore.documents.length}
+        count={filteredDocuments.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
