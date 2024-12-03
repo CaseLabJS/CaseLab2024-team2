@@ -19,7 +19,8 @@ class VotingStore {
       const data = await getVotingProcess(documentId);
       if (!data) return false;
       const findVote = data.votes.find(
-        (item) => data.status.includes('IN_PROGRESS') && item.applicationUser.email === email,
+        (item) =>
+          data.status.includes('IN_PROGRESS') && item.applicationUser.email === email && item.status === 'NOT_VOTED',
       );
       runInAction(() => {
         this.state = 'success';

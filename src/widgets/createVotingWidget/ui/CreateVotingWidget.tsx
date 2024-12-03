@@ -33,7 +33,6 @@ const CreateVoting = observer((): ReactElement => {
     setName('');
     setDay(0);
     setTime(0);
-    setIsOpen(false);
     setThreshold('');
     setIsOpen(false);
   };
@@ -56,12 +55,7 @@ const CreateVoting = observer((): ReactElement => {
         documentId: Number(documentId),
         emails: selectedUsers,
       });
-      setSelectedUsers([]);
-      setName('');
-      setDay(0);
-      setTime(0);
-      setIsOpen(false);
-      setThreshold('');
+      handleClose();
     } catch {
       alert('Ошибка создания');
     }
@@ -93,6 +87,7 @@ const CreateVoting = observer((): ReactElement => {
               <Typography color="textDisabled">Выбор пользователей</Typography>
               {users.length > 0 && (
                 <Select
+                  sx={{ overflowY: 'scroll' }}
                   multiple
                   value={selectedUsers}
                   onChange={handleChangeUser}
@@ -104,13 +99,11 @@ const CreateVoting = observer((): ReactElement => {
                     </Box>
                   )}
                 >
-                  <Box sx={{ height: '150px', overflowY: 'scroll' }}>
-                    {users.map((item: string) => (
-                      <MenuItem key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Box>
+                  {users.map((item: string) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
                 </Select>
               )}
             </Stack>
@@ -124,7 +117,7 @@ const CreateVoting = observer((): ReactElement => {
                 ))}
               </Select>
             </Stack>
-            <Stack direction="row" gap="5px">
+            <Stack direction="row" gap="5px" justifyContent="space-between">
               <TextField
                 label="дней"
                 value={day}
