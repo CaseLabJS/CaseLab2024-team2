@@ -3,9 +3,11 @@ import type { DocumentVersionResponse } from '@/entities/documents';
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
+import { signaturesStore } from '@/entities/signature';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
+import { SignatureDrawer } from '@/widgets/signatureDrawer';
 import { VoteModal } from '@/widgets/voteModal';
 import { EditNote, ManageHistory } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
@@ -19,12 +21,15 @@ import { DocumentVersionDrawer } from './documentVersionDrawer';
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
+  const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
+  const signatures = signaturesStore.selectedDocumentSignatures;
 
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
     return <Typography>Загрузка...</Typography>;
   }
+
   if (documentsStore.status === Status.ERROR) {
     return <Typography>Документ не найден</Typography>;
   }
@@ -116,7 +121,7 @@ const DocumentCardPage = observer((): ReactElement => {
           sx={{ marginLeft: 'auto' }}
           startIcon={<ManageHistory />}
           variant="outlined"
-          onClick={() => setIsOpenDrawer(true)}
+          onClick={() => setVersionDrawerOpen(true)}
         >
           Версии документа
         </Button>
@@ -165,7 +170,7 @@ const DocumentCardPage = observer((): ReactElement => {
         {isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
             <VoteModal user={userMail} />
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
+            <Button variant="outlined" onClick={() => setSignatureDrawerOpen(true)}>
               Отправить на подпись
             </Button>
             {statusDocument === 'DRAFT' && (
@@ -194,10 +199,17 @@ const DocumentCardPage = observer((): ReactElement => {
         </Box>
       </Box>
       <DocumentVersionDrawer
-        isOpenDrawer={isOpenDrawer}
-        setIsOpenDrawer={setIsOpenDrawer}
+        isOpenDrawer={isVersionDrawerOpen}
+        setIsOpenDrawer={setVersionDrawerOpen}
         versionsList={versionsList}
         currentVersionId={documentsStore.currentDocument?.latest_version.id} // По умолчанию выбираем последнюю версию, нужно брать из стора версий
+      />
+      <SignatureDrawer
+        isOpen={isSignatureDrawerOpen}
+        onClose={() => setSignatureDrawerOpen(false)}
+        documentName={documentsStore.currentDocument?.document.name}
+        documentId={documentsStore.currentDocument?.document.id}
+        signatures={signatures}
       />
     </Layout>
   );
