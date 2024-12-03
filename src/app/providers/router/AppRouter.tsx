@@ -6,13 +6,11 @@ import { Admin } from '@/pages/adminPage';
 import { CreateAttributePage } from '@/pages/createAttributePage';
 import { CreateVotingPage } from '@/pages/createVotingPage';
 import { DocumentCardPage } from '@/pages/documentCardPage';
-import { DocumentTypesPage } from '@/pages/documentPage';
 import { DocumentsPage } from '@/pages/documentsPage';
 import { DocumentsTypePage } from '@/pages/documentsTypePage';
 import { ErrorPage } from '@/pages/errorPage';
 import { MainMenu } from '@/pages/mainMenu';
 import { SignIn } from '@/pages/signin';
-import { User } from '@/pages/user';
 import { UserManagmentPage } from '@/pages/userManagmentPage';
 import { observer } from 'mobx-react-lite';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
@@ -45,25 +43,15 @@ const AppRouter = observer((): ReactElement => {
         errorElement: <ErrorPage />,
       },
       {
-        path: ROUTE_CONSTANTS.USER.path,
+        path: ROUTE_CONSTANTS.USER_DOCUMENTS.path,
         element: (
           <ProtectedUserRoute>
-            <User />
+            <DocumentsPage />
           </ProtectedUserRoute>
         ),
-        children: [
-          {
-            path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
-            element: <DocumentTypesPage />,
-          },
-          {
-            path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.DOCUMENTS.path}`,
-            element: <DocumentsPage />,
-          },
-        ],
       },
       {
-        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}`,
+        path: `${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}`,
         element: (
           <ProtectedUserRoute>
             <DocumentCardPage />
@@ -71,7 +59,7 @@ const AppRouter = observer((): ReactElement => {
         ),
       },
       {
-        path: `${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}${ROUTE_CONSTANTS.CREATE_VOTING.path}`,
+        path: `${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}${ROUTE_CONSTANTS.CREATE_VOTING.path}`,
         element: (
           <ProtectedUserRoute>
             <CreateVotingPage />
@@ -88,7 +76,7 @@ const AppRouter = observer((): ReactElement => {
         children: [
           {
             path: `${ROUTE_CONSTANTS.ADMIN.path}`,
-            element: <AdminMainPage />, //страница с виджетами (создать пользователя, создать атрибут и тд)
+            element: <AdminMainPage />,
           },
           {
             path: `${ROUTE_CONSTANTS.ADMIN.path}${ROUTE_CONSTANTS.DOCUMENT_TYPES.path}`,
@@ -109,7 +97,7 @@ const AppRouter = observer((): ReactElement => {
         element: authStore.isAuth ? (
           <>
             {authStore.isAdmin && <Navigate to={ROUTE_CONSTANTS.ADMIN.path} />}
-            {authStore.isUser && <Navigate to={ROUTE_CONSTANTS.USER.path} />}
+            {authStore.isUser && <Navigate to={ROUTE_CONSTANTS.USER_DOCUMENTS.path} />}
           </>
         ) : (
           <SignIn />
