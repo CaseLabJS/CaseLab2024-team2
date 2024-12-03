@@ -1,4 +1,4 @@
-import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
+// import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import Logout from '@/shared/components/logout/ui/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
