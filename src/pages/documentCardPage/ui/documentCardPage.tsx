@@ -1,6 +1,5 @@
 import type { DocumentVersionResponse } from '@/entities/documents';
 
-import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { signaturesStore } from '@/entities/signature';
@@ -8,23 +7,30 @@ import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
+import { CreateVoting } from '@/widgets/createVotingWidget';
 import { SignatureDrawer } from '@/widgets/signatureDrawer';
+import { SignDocument } from '@/widgets/signDocument';
 import { VoteModal } from '@/widgets/voteModal';
 import { EditNote, ManageHistory } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
-import { useState, type ReactElement } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, type ReactElement, useEffect } from 'react';
+import { useParams } from 'react-router';
 
 import { DocumentVersionDrawer } from './documentVersionDrawer';
 
 const DocumentCardPage = observer((): ReactElement => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const id = useParams().documentId;
   const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
+
+  useEffect(() => {
+    if (id) {
+      void documentsStore.getDocumentById(Number(id));
+    }
+  }, []);
 
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
@@ -94,10 +100,6 @@ const DocumentCardPage = observer((): ReactElement => {
     { field: 'attributeType', headerName: 'Тип атрибута' },
     { field: 'attributeValue', headerName: 'Значение' },
   ];
-
-  const handleCreateVoting = (): void => {
-    navigate(`${location.pathname}${ROUTE_CONSTANTS.CREATE_VOTING.path}`);
-  };
 
   const handleDownload = async (): Promise<void> => {
     try {
@@ -178,22 +180,18 @@ const DocumentCardPage = observer((): ReactElement => {
                 Отправить на подпись
               </Button>
             )}
-            {statusDocument === DocumentStatus.DRAFT && (
-              <Button variant="outlined" onClick={handleCreateVoting}>
-                Создать согласование
-              </Button>
-            )}
+            {statusDocument === DocumentStatus.DRAFT && <CreateVoting />}
+            {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
             <Button variant="outlined" onClick={() => alert('В разработке')}>
               Дать доступ к документу
             </Button>
+            {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
           </Box>
         )}
         {!isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-            <VoteModal user={userMail} />
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
-              Подписаться
-            </Button>
+            {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
+            {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
           </Box>
         )}
         <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
