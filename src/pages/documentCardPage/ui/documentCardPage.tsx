@@ -99,6 +99,7 @@ const DocumentCardPage = observer((): ReactElement => {
             <Button variant="outlined" onClick={() => alert('В разработке')}>
               Дать доступ к документу
             </Button>
+            {statusDocument === 'SIGNATURE_IN_PROGRESS' && <SignDocument email={userMail} />}
           </Box>
         )}
         {!isCreator && (
