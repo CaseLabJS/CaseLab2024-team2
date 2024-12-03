@@ -5,6 +5,7 @@ import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
+import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { VoteModal } from '@/widgets/voteModal';
 import { EditNote } from '@mui/icons-material';
@@ -39,9 +40,15 @@ const DocumentCardPage = observer((): ReactElement => {
   ];
 
   const userMail = authStore.email;
-  const permission = documentsStore.currentDocument.document.user_permissions.find((user) => user.email === userMail);
+  const { status: statusDocument, name, user_permissions } = documentsStore.currentDocument.document;
+  const permission = user_permissions.find((user) => user.email === userMail);
   const isCreator = permission?.document_permissions[0].name === 'CREATOR';
-  const statusDocument = documentsStore.currentDocument.document.status;
+  const documentStatuses = [
+    DocumentStatus.DRAFT,
+    DocumentStatus.SIGNATURE_IN_PROGRESS,
+    DocumentStatus.SIGNATURE_ACCEPTED,
+  ];
+  const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
 
   const handleCreateVoting = (): void => {
     navigate(`${location.pathname}${ROUTE_CONSTANTS.CREATE_VOTING.path}`);
@@ -67,9 +74,9 @@ const DocumentCardPage = observer((): ReactElement => {
 
   return (
     <Layout>
-      <Breadcrumbs pageTitle={documentsStore.currentDocument?.document.name} />
+      <Breadcrumbs pageTitle={name} />
       <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px' }}>
-        Документ: {documentsStore.currentDocument?.document.name}
+        Документ: {name}
       </Typography>
       <Box
         sx={{
@@ -107,19 +114,17 @@ const DocumentCardPage = observer((): ReactElement => {
           autosizeOnMount
         />
         <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
-          <Typography sx={{ fontSize: '18px' }}>
-            {documentsStore.currentDocument?.signature
-              ? `Подписан ${documentsStore.currentDocument?.signature.name}`
-              : 'Документ еще не подписан'}
-          </Typography>
+          <Typography sx={{ fontSize: '18px' }}>Статус документа: {getStatusTranslation(statusDocument)}</Typography>
         </Box>
         {isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
             <VoteModal user={userMail} />
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
-              Отправить на подпись
-            </Button>
-            {statusDocument === 'DRAFT' && (
+            {isSignBtnShown && (
+              <Button variant="outlined" onClick={() => alert('В разработке')}>
+                Отправить на подпись
+              </Button>
+            )}
+            {statusDocument === DocumentStatus.DRAFT && (
               <Button variant="outlined" onClick={handleCreateVoting}>
                 Создать согласование
               </Button>
@@ -139,8 +144,7 @@ const DocumentCardPage = observer((): ReactElement => {
         )}
         <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
           <Typography sx={{ fontSize: '18px' }}>
-            Этот документ доступен для:{' '}
-            {documentsStore.currentDocument?.document.user_permissions.map((user) => user.email).join(', ')}
+            Этот документ доступен для: {user_permissions.map((user) => user.email).join(', ')}
           </Typography>
         </Box>
       </Box>

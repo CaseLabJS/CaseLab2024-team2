@@ -1,5 +1,6 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
+import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import {
   TableContainer,
   Paper,
@@ -36,10 +37,10 @@ const DocumentsTable = observer((): ReactElement => {
 
   const filteredDocuments = useMemo(() => {
     if (isShowSignedOnly) {
-      return documentsStore.documents.filter((document) => document.signature?.status === 'SIGNED');
+      return documentsStore.documents.filter(({ document }) => document.status === DocumentStatus.SIGNATURE_ACCEPTED);
     }
     return documentsStore.documents;
-  }, [isShowSignedOnly]);
+  }, [isShowSignedOnly, documentsStore.documents]);
 
   const displayedData = filteredDocuments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -67,7 +68,7 @@ const DocumentsTable = observer((): ReactElement => {
             <TableRow key={index} onClick={() => handleClickDocument(document.id)} sx={{ cursor: 'pointer' }}>
               <TableCell>{document.document_type_id}</TableCell>
               <TableCell>{document.name}</TableCell>
-              <TableCell>{document.status}</TableCell>
+              <TableCell>{getStatusTranslation(document.status)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
