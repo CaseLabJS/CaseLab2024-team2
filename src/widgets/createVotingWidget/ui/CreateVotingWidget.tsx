@@ -23,6 +23,7 @@ const CreateVoting = observer((): ReactElement => {
   const [day, setDay] = useState<number>(0);
   const [threshold, setThreshold] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isAvailable, setIsAvailable] = useState(true);
 
   const handleOpen = (): void => {
     setIsOpen(true);
@@ -56,10 +57,12 @@ const CreateVoting = observer((): ReactElement => {
         emails: selectedUsers,
       });
       handleClose();
+      setIsAvailable(false);
     } catch {
       alert('Ошибка создания');
     }
   }
+  if (!isAvailable) return <></>;
 
   return (
     <Box>

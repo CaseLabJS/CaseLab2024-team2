@@ -15,14 +15,22 @@ import { EditNote, ManageHistory } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
-import { useState, type ReactElement } from 'react';
+import { useState, type ReactElement, useEffect } from 'react';
+import { useParams } from 'react-router';
 
 import { DocumentVersionDrawer } from './documentVersionDrawer';
 
 const DocumentCardPage = observer((): ReactElement => {
+  const id = useParams().documentId;
   const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
+
+  useEffect(() => {
+    if (id) {
+      void documentsStore.getDocumentById(Number(id));
+    }
+  }, []);
 
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
@@ -173,6 +181,7 @@ const DocumentCardPage = observer((): ReactElement => {
               </Button>
             )}
             {statusDocument === DocumentStatus.DRAFT && <CreateVoting />}
+            {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
             <Button variant="outlined" onClick={() => alert('В разработке')}>
               Дать доступ к документу
             </Button>

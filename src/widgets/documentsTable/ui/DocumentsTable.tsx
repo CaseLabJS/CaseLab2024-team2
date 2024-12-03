@@ -12,7 +12,7 @@ import {
   TablePagination,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useMemo, useState, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
@@ -35,12 +35,9 @@ const DocumentsTable = observer((): ReactElement => {
     setPage(0);
   };
 
-  const filteredDocuments = useMemo(() => {
-    if (isShowSignedOnly) {
-      return documentsStore.documents.filter(({ document }) => document.status === DocumentStatus.SIGNATURE_ACCEPTED);
-    }
-    return documentsStore.documents;
-  }, [isShowSignedOnly, documentsStore.documents]);
+  const filteredDocuments = isShowSignedOnly
+    ? documentsStore.documents.filter(({ document }) => document.status === DocumentStatus.SIGNATURE_ACCEPTED)
+    : documentsStore.documents;
 
   const displayedData = filteredDocuments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 

@@ -1,9 +1,11 @@
+import { documentsStore } from '@/entities/documents';
 import { votingStore } from '@/entities/vote';
+import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Box, Modal, Typography, Stack } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 import style from './voteModal.module.css';
 
@@ -13,6 +15,7 @@ interface VoteModalProps {
 
 const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
   const { documentId } = useParams();
+
   const [isAvailable, setIsAvailable] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -31,12 +34,14 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
   }
 
   useEffect(() => {
-    votingStore
-      .isAvailibleVote(Number(documentId), user)
-      .then((res) => {
-        setIsAvailable(res);
-      })
-      .catch(() => setIsAvailable(false));
+    if (documentsStore.currentDocument?.document.status === DocumentStatus.VOTING_IN_PROGRESS) {
+      votingStore
+        .isAvailibleVote(Number(documentId), user)
+        .then((res) => {
+          setIsAvailable(res);
+        })
+        .catch(() => setIsAvailable(false));
+    }
   }, [user, documentId]);
 
   if (!isAvailable) return <></>;
