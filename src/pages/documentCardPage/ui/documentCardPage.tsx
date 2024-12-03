@@ -64,7 +64,7 @@ const DocumentCardPage = observer((): ReactElement => {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-    } catch (error) {
+    } catch {
       showToast('error', 'Ошибка при загрузке документа:');
     }
   };
