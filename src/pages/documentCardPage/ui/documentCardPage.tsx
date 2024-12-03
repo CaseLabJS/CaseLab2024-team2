@@ -21,14 +21,14 @@ import { DocumentVersionDrawer } from './documentVersionDrawer';
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
+  const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
+  const signatures = signaturesStore.selectedDocumentSignatures;
 
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
     return <Typography>Загрузка...</Typography>;
   }
-  const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
-  const signatures = signaturesStore.selectedDocumentSignatures;
 
   if (documentsStore.status === Status.ERROR) {
     return <Typography>Документ не найден</Typography>;
@@ -121,7 +121,7 @@ const DocumentCardPage = observer((): ReactElement => {
           sx={{ marginLeft: 'auto' }}
           startIcon={<ManageHistory />}
           variant="outlined"
-          onClick={() => setIsOpenDrawer(true)}
+          onClick={() => setVersionDrawerOpen(true)}
         >
           Версии документа
         </Button>
@@ -199,8 +199,8 @@ const DocumentCardPage = observer((): ReactElement => {
         </Box>
       </Box>
       <DocumentVersionDrawer
-        isOpenDrawer={isOpenDrawer}
-        setIsOpenDrawer={setIsOpenDrawer}
+        isOpenDrawer={isVersionDrawerOpen}
+        setIsOpenDrawer={setVersionDrawerOpen}
         versionsList={versionsList}
         currentVersionId={documentsStore.currentDocument?.latest_version.id} // По умолчанию выбираем последнюю версию, нужно брать из стора версий
       />
