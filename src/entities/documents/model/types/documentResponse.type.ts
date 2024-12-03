@@ -1,4 +1,5 @@
 import type { UserToDocumentResponse } from '@/entities/user/@x/documents';
+import type { DocumentStatus } from '@/shared/utils/statusTranslation';
 
 export interface DocumentResponse {
   id: number;
@@ -6,5 +7,5 @@ export interface DocumentResponse {
   name: string;
   document_versions_ids: number[];
   user_permissions: UserToDocumentResponse[];
-  status: string;
+  status: DocumentStatus;
 }

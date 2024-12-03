@@ -1,5 +1,6 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
+import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import {
   TableContainer,
   Paper,
@@ -11,7 +12,7 @@ import {
   TablePagination,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState, type ReactElement } from 'react';
+import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
@@ -20,6 +21,8 @@ const DocumentsTable = observer((): ReactElement => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isShowSignedOnly, setIsShowSignedOnly] = useState<boolean>(false);
+
   useEffect(() => {
     void documentsStore.getDocumentsPage();
   }, []);
@@ -32,7 +35,14 @@ const DocumentsTable = observer((): ReactElement => {
     setPage(0);
   };
 
-  const displayedData = documentsStore.documents.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const filteredDocuments = useMemo(() => {
+    if (isShowSignedOnly) {
+      return documentsStore.documents.filter(({ document }) => document.status === DocumentStatus.SIGNATURE_ACCEPTED);
+    }
+    return documentsStore.documents;
+  }, [isShowSignedOnly, documentsStore.documents]);
+
+  const displayedData = filteredDocuments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleClickDocument = (id: number): void => {
     navigate(`${ROUTE_CONSTANTS.USER_DOCUMENTS.path}/${id}`);
@@ -40,7 +50,11 @@ const DocumentsTable = observer((): ReactElement => {
 
   return (
     <TableContainer component={Paper} sx={{ padding: 4 }}>
-      <DocumentsTableToolbar />
+      <DocumentsTableToolbar
+        isShowSignedOnly={isShowSignedOnly}
+        setIsShowSignedOnly={setIsShowSignedOnly}
+        setPage={setPage}
+      />
       <Table>
         <TableHead>
           <TableRow>
@@ -54,7 +68,7 @@ const DocumentsTable = observer((): ReactElement => {
             <TableRow key={index} onClick={() => handleClickDocument(document.id)} sx={{ cursor: 'pointer' }}>
               <TableCell>{document.document_type_id}</TableCell>
               <TableCell>{document.name}</TableCell>
-              <TableCell>{document.status}</TableCell>
+              <TableCell>{getStatusTranslation(document.status)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

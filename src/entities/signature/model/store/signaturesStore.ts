@@ -2,7 +2,8 @@ import type { SignatureCreateRequest } from '@/entities/signature';
 import type { SignatureResponse } from '@/entities/signature';
 
 import { getSignatures, getDocumentSignatures, sendDocument, signDocument } from '@/entities/signature/api';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
+import { useParams } from 'react-router-dom';
 
 import type { SignDocumentRequest } from '../../api/req-signatures';
 
@@ -16,6 +17,10 @@ class SignaturesStore {
 
   constructor() {
     makeAutoObservable(this);
+
+    onBecomeObserved(this, 'selectedDocumentSignatures', () => {
+      this.fetchDocumentSignatures(Number(useParams().documentId)).catch(console.error);
+    });
   }
 
   private readonly tryCatch =
