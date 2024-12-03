@@ -1,4 +1,3 @@
-import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import Logout from '@/shared/components/logout/ui/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -20,7 +19,7 @@ export default function Dashboard(): React.ReactElement {
     // пункты меню в случае простого пользователя
     {
       name: 'Профиль',
-      link: ROUTE_CONSTANTS.USER.path,
+      link: `/profile`,
       icon: <AccountCircleIcon fontSize="small" />,
     },
   ];
