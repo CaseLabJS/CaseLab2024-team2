@@ -69,3 +69,11 @@ export const deleteDocumentData = async (id: number): Promise<void> => {
   await api.delete(`/documents-facade/${id}`);
   return;
 };
+
+// скачивание документа
+export const downloadDocumentData = async (id: number): Promise<Blob> => {
+  const response = await api.get<Blob>(`/versions/content/${id}`, {
+    responseType: 'blob',
+  });
+  return response.data;
+};

@@ -2,7 +2,7 @@ import type { AuthenticationRequest } from '@/entities/auth';
 import type { UserResponse } from '@/entities/user';
 
 import { authUser, getCurrentUser } from '@/entities/auth/api';
-import { autorun, makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 type ISimpleState = 'error' | 'success' | 'loading';
 
@@ -16,12 +16,7 @@ class AuthStore {
 
   constructor() {
     makeAutoObservable(this);
-
-    autorun(async (): Promise<void> => {
-      if (this.isAuth) {
-        await this.fetchCurrentUser().catch(console.error);
-      }
-    });
+    this.init();
   }
 
   async login(values: AuthenticationRequest): Promise<void> {
@@ -102,6 +97,10 @@ class AuthStore {
         this.logout();
       }
     }
+  }
+
+  init(): void {
+    this.processAuthResponse().catch(console.error);
   }
 }
 

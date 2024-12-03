@@ -11,7 +11,7 @@ import {
   TablePagination,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState, type ReactElement } from 'react';
+import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
@@ -20,6 +20,8 @@ const DocumentsTable = observer((): ReactElement => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isShowSignedOnly, setIsShowSignedOnly] = useState<boolean>(false);
+
   useEffect(() => {
     void documentsStore.getDocumentsPage();
   }, []);
@@ -32,15 +34,26 @@ const DocumentsTable = observer((): ReactElement => {
     setPage(0);
   };
 
-  const displayedData = documentsStore.documents.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const filteredDocuments = useMemo(() => {
+    if (isShowSignedOnly) {
+      return documentsStore.documents.filter((document) => document.signature?.status === 'SIGNED');
+    }
+    return documentsStore.documents;
+  }, [isShowSignedOnly]);
+
+  const displayedData = filteredDocuments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleClickDocument = (id: number): void => {
-    navigate(`${ROUTE_CONSTANTS.USER.path}${ROUTE_CONSTANTS.USER_DOCUMENTS.path}/${id}`);
+    navigate(`${ROUTE_CONSTANTS.USER_DOCUMENTS.path}/${id}`);
   };
 
   return (
     <TableContainer component={Paper} sx={{ padding: 4 }}>
-      <DocumentsTableToolbar />
+      <DocumentsTableToolbar
+        isShowSignedOnly={isShowSignedOnly}
+        setIsShowSignedOnly={setIsShowSignedOnly}
+        setPage={setPage}
+      />
       <Table>
         <TableHead>
           <TableRow>
