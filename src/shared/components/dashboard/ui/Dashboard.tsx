@@ -20,7 +20,7 @@ export default function Dashboard(): React.ReactElement {
     // пункты меню в случае простого пользователя
     {
       name: 'Профиль',
-      link: ROUTE_CONSTANTS.USER.path,
+      link: `/profile`,
       icon: <AccountCircleIcon fontSize="small" />,
     },
   ];
