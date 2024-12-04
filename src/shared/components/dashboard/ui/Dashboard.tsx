@@ -94,7 +94,13 @@ export default function Dashboard(): React.ReactElement {
                 <Paper>
                   <ClickAwayListener onClickAway={handleClose}>
                     <div>
-                      <MenuItem>
+                      <MenuList
+                        autoFocusItem={isOpen}
+                        id="composition-menu"
+                        aria-labelledby="composition-button"
+                        onKeyDown={handleListKeyDown}
+                      >
+                        <MenuItem>
                         <ListItemIcon>
                           <WorkIcon fontSize="small" />
                         </ListItemIcon>
@@ -102,13 +108,7 @@ export default function Dashboard(): React.ReactElement {
                           <ListItemText>{authStore.displayName}</ListItemText>
                           <ListItemText>{authStore.email}</ListItemText>
                         </ListItemText>
-                      </MenuItem>
-                      <MenuList
-                        autoFocusItem={isOpen}
-                        id="composition-menu"
-                        aria-labelledby="composition-button"
-                        onKeyDown={handleListKeyDown}
-                      >
+                       </MenuItem>
                         {itemsUser.map((item, i) => (
                           <MenuItem key={i}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
