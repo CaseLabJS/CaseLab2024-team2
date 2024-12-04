@@ -6,10 +6,10 @@ import {
   getAllDocumentsData,
   patchDocumentData,
   searchDocumentsData,
+  downloadDocumentData,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
-import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
-import { useParams } from 'react-router-dom';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 import type {
   CreateDocumentRequest,
@@ -27,17 +27,6 @@ class DocumentsStore {
 
   constructor() {
     makeAutoObservable(this);
-
-    onBecomeObserved(this, 'documents', () => {
-      this.getDocumentsPage().catch(() => alert('Ошибка'));
-    });
-
-    onBecomeObserved(this, 'currentDocument', () => {
-      const id = useParams().documentId;
-      if (id) {
-        this.getDocumentById(Number(id)).catch(() => alert('Ошибка'));
-      }
-    });
   }
 
   async setQuery(query: string): Promise<void> {
@@ -182,6 +171,19 @@ class DocumentsStore {
     } catch {
       this.status = Status.ERROR;
       alert('Не удалось удалить документ');
+    }
+  }
+
+  async fetchDocumentBlob(): Promise<Blob> {
+    try {
+      if (!this.currentDocument?.latest_version.contentName) {
+        throw new Error('Отсутствует файл для загрузки');
+      }
+      const id = this.currentDocument.latest_version.id;
+      return await downloadDocumentData(id);
+    } catch (error) {
+      console.error('Ошибка при загрузке документа:', error);
+      throw error;
     }
   }
 }
