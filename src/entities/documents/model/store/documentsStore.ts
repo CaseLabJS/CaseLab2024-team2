@@ -9,8 +9,7 @@ import {
   downloadDocumentData,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
-import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
-import { useParams } from 'react-router-dom';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 import type {
   CreateDocumentRequest,
@@ -28,17 +27,6 @@ class DocumentsStore {
 
   constructor() {
     makeAutoObservable(this);
-
-    onBecomeObserved(this, 'documents', () => {
-      this.getDocumentsPage().catch(() => alert('Ошибка'));
-    });
-
-    onBecomeObserved(this, 'currentDocument', () => {
-      const id = useParams().documentId;
-      if (id) {
-        this.getDocumentById(Number(id)).catch(() => alert('Ошибка'));
-      }
-    });
   }
 
   async setQuery(query: string): Promise<void> {

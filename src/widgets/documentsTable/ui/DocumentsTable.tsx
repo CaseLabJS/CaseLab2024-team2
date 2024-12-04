@@ -1,5 +1,6 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
+import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import {
   TableContainer,
   Paper,
@@ -11,7 +12,7 @@ import {
   TablePagination,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useMemo, useState, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
@@ -34,12 +35,9 @@ const DocumentsTable = observer((): ReactElement => {
     setPage(0);
   };
 
-  const filteredDocuments = useMemo(() => {
-    if (isShowSignedOnly) {
-      return documentsStore.documents.filter((document) => document.signature?.status === 'SIGNED');
-    }
-    return documentsStore.documents;
-  }, [isShowSignedOnly]);
+  const filteredDocuments = isShowSignedOnly
+    ? documentsStore.documents.filter(({ document }) => document.status === DocumentStatus.SIGNATURE_ACCEPTED)
+    : documentsStore.documents;
 
   const displayedData = filteredDocuments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -67,7 +65,7 @@ const DocumentsTable = observer((): ReactElement => {
             <TableRow key={index} onClick={() => handleClickDocument(document.id)} sx={{ cursor: 'pointer' }}>
               <TableCell>{document.document_type_id}</TableCell>
               <TableCell>{document.name}</TableCell>
-              <TableCell>{document.status}</TableCell>
+              <TableCell>{getStatusTranslation(document.status)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
