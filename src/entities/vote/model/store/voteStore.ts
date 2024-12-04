@@ -7,6 +7,7 @@ type ISimpleState = 'error' | 'success' | 'loading';
 
 class VotingStore {
   state: ISimpleState = 'success';
+  currentVoting: VotingProcessResponse | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -18,10 +19,14 @@ class VotingStore {
       const data = await getVotingProcess(documentId);
       if (!data) return false;
       const findVote = data.votes.find(
-        (item) => data.status.includes('IN_PROGRESS') && item.applicationUser.email === email,
+        (item) =>
+          data.status.includes('IN_PROGRESS') && item.applicationUser.email === email && item.status === 'NOT_VOTED',
       );
       runInAction(() => {
         this.state = 'success';
+        if (findVote) {
+          this.currentVoting = data;
+        }
       });
       return !!findVote;
     } catch {
