@@ -3,7 +3,7 @@ import Logout from '@/shared/components/logout/ui/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import WorkIcon from '@mui/icons-material/Work';
-import { Link, ListItemIcon, ListItemText } from '@mui/material';
+import { ListItemIcon, ListItemText } from '@mui/material';
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -13,6 +13,7 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Stack from '@mui/material/Stack';
 import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function Dashboard(): React.ReactElement {
   const itemsUser = [
@@ -112,9 +113,7 @@ export default function Dashboard(): React.ReactElement {
                         {itemsUser.map((item, i) => (
                           <MenuItem key={i}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
-                            <Link href={item.link} underline="none">
-                              {item.name}
-                            </Link>
+                            <NavLink to={item.link}>{item.name}</NavLink>
                           </MenuItem>
                         ))}
                         <MenuItem>

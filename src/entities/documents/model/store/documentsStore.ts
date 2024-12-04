@@ -25,6 +25,7 @@ class DocumentsStore {
   status: Status = Status.UNSET;
   pageNumber: number = 0;
   searchQuery: string | null = null;
+  currentFileUrl: string = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -104,9 +105,13 @@ class DocumentsStore {
     try {
       this.status = Status.LOADING;
       const data = await getDocumentData(id);
+      const blob = await downloadDocumentData(data.latest_version.id);
+      const url = URL.createObjectURL(blob);
+
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
+        this.currentFileUrl = url;
       });
     } catch {
       this.status = Status.ERROR;
@@ -186,13 +191,15 @@ class DocumentsStore {
     }
   }
 
-  async fetchDocumentBlob(): Promise<Blob> {
+  async fetchDocumentBlob(): Promise<string> {
     try {
       if (!this.currentDocument?.latest_version.contentName) {
         throw new Error('Отсутствует файл для загрузки');
       }
       const id = this.currentDocument.latest_version.id;
-      return await downloadDocumentData(id);
+      const blob = await downloadDocumentData(id);
+      const url = URL.createObjectURL(blob);
+      return url;
     } catch (error) {
       console.error('Ошибка при загрузке документа:', error);
       throw error;

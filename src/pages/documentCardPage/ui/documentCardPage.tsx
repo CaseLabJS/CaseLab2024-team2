@@ -13,11 +13,14 @@ import { VoteModal } from '@/widgets/voteModal';
 import { EditNote, ManageHistory } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
+import { Viewer } from '@react-pdf-viewer/core';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import { DocumentVersionDrawer } from './documentVersionDrawer';
+
+import '@react-pdf-viewer/core/lib/styles/index.css';
 
 const DocumentCardPage = observer((): ReactElement => {
   const navigate = useNavigate();
@@ -46,6 +49,7 @@ const DocumentCardPage = observer((): ReactElement => {
     DocumentStatus.SIGNATURE_ACCEPTED,
   ];
   const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
+  const file = documentsStore.currentFileUrl;
 
   // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
   const versionsList: DocumentVersionResponse[] = [
@@ -101,10 +105,7 @@ const DocumentCardPage = observer((): ReactElement => {
 
   const handleDownload = async (): Promise<void> => {
     try {
-      const blob = await documentsStore.fetchDocumentBlob();
-      if (!blob) return;
-
-      const url = window.URL.createObjectURL(blob);
+      const url = await documentsStore.fetchDocumentBlob();
       const link = document.createElement('a');
       link.href = url;
       link.download = documentsStore.currentDocument?.latest_version.contentName || 'document';
@@ -138,7 +139,6 @@ const DocumentCardPage = observer((): ReactElement => {
         sx={{
           backgroundColor: 'white',
           padding: '20px',
-          marginTop: '20px',
           borderRadius: '10px',
           display: 'flex',
           gap: '20px',
@@ -157,6 +157,12 @@ const DocumentCardPage = observer((): ReactElement => {
             </Button>
           </>
         )}
+      </Box>
+      <Box padding="20px" display="flex" justifyContent="center" flexDirection="column" alignItems="center">
+        <>
+          <img alt="preview" src={file} />
+          {file !== '' && <Viewer fileUrl={file}></Viewer>}
+        </>
       </Box>
       <Box sx={{ backgroundColor: 'white', padding: '20px', marginTop: '20px', borderRadius: '10px' }}>
         <DataGrid
