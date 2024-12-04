@@ -109,8 +109,8 @@ const DocumentTypesTable = observer((): ReactElement => {
 
   return (
     <React.Fragment>
-      <Paper>
-        <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '70%', margin: '0 auto', borderRadius: '10px' }}>
+        <Box>
           <DataGrid
             disableRowSelectionOnClick
             disableColumnFilter

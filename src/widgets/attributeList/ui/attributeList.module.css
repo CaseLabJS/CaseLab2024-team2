@@ -1,7 +1,7 @@
 .container {
   background-color: #fff;
-  padding: 30px;
   border-radius: 10px;
+  padding: 20px 33px;
 }
 .boxCreateAttribute {
   position: absolute;

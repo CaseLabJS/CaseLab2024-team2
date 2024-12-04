@@ -7,7 +7,7 @@ const Layout = ({ children }: { children: ReactNode }): ReactElement => {
   return (
     <>
       <Header />
-      <Box component="main" maxWidth={'lg'} sx={{ m: '0 auto', flexGrow: 1, width: '1200px', p: '32px 20px' }}>
+      <Box component="main" sx={{ m: '0 auto', flexGrow: 1, width: '100%', p: '32px 20px' }}>
         {children}
       </Box>
       <Footer />
