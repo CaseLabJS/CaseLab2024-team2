@@ -2,6 +2,7 @@ import type { AttributeResponse, StatefulAttribute } from '@/entities/attribute'
 
 import { attributesStore } from '@/entities/attribute';
 import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -14,6 +15,7 @@ import {
   TablePagination,
   Typography,
 } from '@mui/material';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useMemo, useEffect, useCallback } from 'react';
 
@@ -45,10 +47,20 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
   };
 
   useEffect(() => {
-    attributesStore
-      .load(true)
-      .then(() => setRowsPerPage(5))
-      .catch(() => stableShowToast('error', 'Не удалось получить список атрибутов'));
+    void attributesStore.load(true).then(() => setRowsPerPage(5));
+  }, []);
+
+  useEffect(() => {
+    const disposer = reaction(
+      () => attributesStore.status,
+      (status) => {
+        if (status === Status.ERROR) {
+          void stableShowToast('error', 'Ошибка загрузки атрибутов');
+        }
+      },
+    );
+
+    return (): void => disposer();
   }, [stableShowToast]);
 
   const { filtered, count } = useMemo(() => {

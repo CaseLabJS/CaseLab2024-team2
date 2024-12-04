@@ -5,12 +5,14 @@ import type { ReactElement } from 'react';
 import { attributesStore } from '@/entities/attribute/model/store/attributeStore';
 import { documentTypesStore } from '@/entities/documentsType/model/store/documentTypesStore';
 import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { Button, IconButton, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import { DataGrid, GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -52,11 +54,24 @@ const DocumentTypesTable = observer((): ReactElement => {
   };
 
   useEffect(() => {
-    documentTypesStore.load().catch(() => stableShowToast('error', 'Не удалось получить список типов документов'));
-  }, [stableShowToast]);
+    void documentTypesStore.load();
+  }, []);
 
   useEffect(() => {
-    attributesStore.load(true).catch(() => stableShowToast('error', 'Не удалось получить список атрибутов'));
+    void attributesStore.load();
+  }, []);
+
+  useEffect(() => {
+    const disposer = reaction(
+      () => documentTypesStore.status,
+      (status) => {
+        if (status === Status.ERROR) {
+          void stableShowToast('error', 'Ошибка загрузки пользователей');
+        }
+      },
+    );
+
+    return (): void => disposer();
   }, [stableShowToast]);
 
   const columns: GridColDef<DocumentTypeResponse>[] = [

@@ -1,7 +1,8 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
-import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
+import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import {
   TableContainer,
   Paper,
@@ -12,6 +13,7 @@ import {
   TableBody,
   TablePagination,
 } from '@mui/material';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
@@ -27,14 +29,24 @@ const DocumentsTable = observer((): ReactElement => {
   const { showToast } = useToast();
   const stableShowToast = useCallback(showToast, [showToast]);
   useEffect(() => {
-    void documentsStore
-      .getDocumentsPage()
-      .catch(() => stableShowToast('error', 'Не удалось получить список документов'));
-  }, [stableShowToast]);
+    void documentsStore.getDocumentsPage();
+  }, []);
   const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 
+  useEffect(() => {
+    const disposer = reaction(
+      () => documentsStore.status,
+      (status) => {
+        if (status === Status.ERROR) {
+          void stableShowToast('error', 'Ошибка загрузки документов');
+        }
+      },
+    );
+
+    return (): void => disposer();
+  }, [stableShowToast]);
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);

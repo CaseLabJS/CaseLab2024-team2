@@ -3,8 +3,8 @@ import type { SelectChangeEvent } from '@mui/material';
 
 import { userStore } from '@/entities/user';
 import { votingStore } from '@/entities/vote';
-import CloseIcon from '@mui/icons-material/Close';
 import { useToast } from '@/shared/hooks';
+import CloseIcon from '@mui/icons-material/Close';
 import { Button, TextField, Typography, Box, Stack, Select, MenuItem, Chip, Modal } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
