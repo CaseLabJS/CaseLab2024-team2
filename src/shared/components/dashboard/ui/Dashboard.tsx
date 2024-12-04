@@ -1,9 +1,7 @@
-import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
+import Logout from '@/shared/components/logout/ui/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import WorkIcon from '@mui/icons-material/Work';
 import { Link, ListItemIcon, ListItemText } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -17,36 +15,14 @@ import Stack from '@mui/material/Stack';
 import * as React from 'react';
 
 export default function Dashboard(): React.ReactElement {
-  /**Массив пунктов выпадающего меню пользователя: */
-  const itemsAdmin = [
-    // пункты меню в случае администратора
-    {
-      name: 'Профиль',
-      link: ROUTE_CONSTANTS.ADMIN.path,
-      icon: <AccountCircleIcon fontSize="small" />,
-    },
-    {
-      name: 'Admin menu',
-      link: ROUTE_CONSTANTS.ADMIN.path,
-      icon: <ErrorOutlineIcon fontSize="small" />,
-    },
-  ];
-
   const itemsUser = [
     // пункты меню в случае простого пользователя
     {
       name: 'Профиль',
-      link: ROUTE_CONSTANTS.USER.path,
+      link: `/profile`,
       icon: <AccountCircleIcon fontSize="small" />,
     },
   ];
-
-  /** Проверка пользователя на права администратора, для рендеринга сообветствующего меню пользователя*/
-  let menuForUser;
-
-  if (authStore.isAdmin) {
-    menuForUser = itemsAdmin;
-  } else menuForUser = itemsUser;
 
   /**Функционал MUI */
 
@@ -84,83 +60,74 @@ export default function Dashboard(): React.ReactElement {
     prevOpen.current = isOpen;
   }, [isOpen]);
 
-  return (
-    <Stack direction="row" spacing={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-      <div>
-        <Button
-          ref={anchorRef}
-          id="composition-button"
-          aria-controls={isOpen ? 'composition-menu' : undefined}
-          aria-expanded={isOpen ? 'true' : undefined}
-          aria-haspopup="true"
-          onClick={handleToggle}
-        >
-          <AccountCircleOutlinedIcon />
-        </Button>
-        <Popper
-          open={isOpen}
-          anchorEl={anchorRef.current}
-          role={undefined}
-          placement="bottom-start"
-          transition
-          disablePortal
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
-              }}
-            >
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <div>
-                    <MenuItem>
-                      <ListItemIcon>
-                        <WorkIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText>
-                        <ListItemText>{authStore.displayName}</ListItemText>
-                        <ListItemText>{authStore.email}</ListItemText>
-                      </ListItemText>
-                    </MenuItem>
-                    <MenuList
-                      autoFocusItem={isOpen}
-                      id="composition-menu"
-                      aria-labelledby="composition-button"
-                      onKeyDown={handleListKeyDown}
-                    >
-                      {menuForUser.map((item, i) => (
-                        <MenuItem key={i}>
-                          <ListItemIcon>{item.icon}</ListItemIcon>
-                          <Link href={item.link} underline="none">
-                            {item.name}
-                          </Link>
-                        </MenuItem>
-                      ))}
+  if (authStore.isAdmin) {
+    return <Logout />;
+  } else
+    return (
+      <Stack direction="row" spacing={2} sx={{ display: 'flex', justifyContent: 'center', zIndex: '100' }}>
+        <div>
+          <Button
+            ref={anchorRef}
+            id="composition-button"
+            aria-controls={isOpen ? 'composition-menu' : undefined}
+            aria-expanded={isOpen ? 'true' : undefined}
+            aria-haspopup="true"
+            onClick={handleToggle}
+          >
+            <AccountCircleOutlinedIcon />
+          </Button>
+          <Popper
+            open={isOpen}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            placement="bottom-start"
+            transition
+            disablePortal
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <div>
                       <MenuItem>
                         <ListItemIcon>
-                          <ExitToAppIcon />
+                          <WorkIcon fontSize="small" />
                         </ListItemIcon>
-                        <Link
-                          component="button"
-                          variant="body2"
-                          underline="none"
-                          onClick={() => {
-                            authStore.logout();
-                          }}
-                        >
-                          Sign out
-                        </Link>
+                        <ListItemText>
+                          <ListItemText>{authStore.displayName}</ListItemText>
+                          <ListItemText>{authStore.email}</ListItemText>
+                        </ListItemText>
                       </MenuItem>
-                    </MenuList>
-                  </div>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </div>
-    </Stack>
-  );
+                      <MenuList
+                        autoFocusItem={isOpen}
+                        id="composition-menu"
+                        aria-labelledby="composition-button"
+                        onKeyDown={handleListKeyDown}
+                      >
+                        {itemsUser.map((item, i) => (
+                          <MenuItem key={i}>
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <Link href={item.link} underline="none">
+                              {item.name}
+                            </Link>
+                          </MenuItem>
+                        ))}
+                        <MenuItem>
+                          <Logout />
+                        </MenuItem>
+                      </MenuList>
+                    </div>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </div>
+      </Stack>
+    );
 }
