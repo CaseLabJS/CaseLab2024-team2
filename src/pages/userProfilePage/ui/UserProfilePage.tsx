@@ -27,7 +27,6 @@ const UserProfilePage = observer((): ReactElement => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSnackbarMessage, setSnackbarMessage] = useState<string | null>(null);
 
-  // Валидация с использованием Yup
   const validationSchema = Yup.object().shape({
     display_name: Yup.string()
       .min(3, 'Имя должно содержать не менее 3 символов')
