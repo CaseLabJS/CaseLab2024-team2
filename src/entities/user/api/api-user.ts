@@ -1,6 +1,6 @@
 import { api } from '@/shared/http';
 
-import type { UserResponse, UserUpdateRequest } from '..';
+import type { UserResponse, RegisterRequest } from '..';
 
 // получить информацию о пользователе по email
 export const getUserData = async (email: string): Promise<UserResponse> => {
@@ -15,7 +15,7 @@ export const getAllUserData = async (): Promise<UserResponse[]> => {
 };
 
 // редактирование данных пользователя
-export const editUserData = async (user: UserUpdateRequest): Promise<UserResponse> => {
+export const editUserData = async (user: Omit<RegisterRequest, 'email'>): Promise<UserResponse> => {
   const response = await api.put<UserResponse>('/users', user);
   return response.data;
 };
