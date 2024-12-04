@@ -101,14 +101,14 @@ export default function Dashboard(): React.ReactElement {
                         onKeyDown={handleListKeyDown}
                       >
                         <MenuItem>
-                        <ListItemIcon>
-                          <WorkIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>
-                          <ListItemText>{authStore.displayName}</ListItemText>
-                          <ListItemText>{authStore.email}</ListItemText>
-                        </ListItemText>
-                       </MenuItem>
+                          <ListItemIcon>
+                            <WorkIcon fontSize="small" />
+                          </ListItemIcon>
+                          <ListItemText>
+                            <ListItemText>{authStore.displayName}</ListItemText>
+                            <ListItemText>{authStore.email}</ListItemText>
+                          </ListItemText>
+                        </MenuItem>
                         {itemsUser.map((item, i) => (
                           <MenuItem key={i}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
