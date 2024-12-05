@@ -99,9 +99,9 @@ const DocumentCardPage = observer((): ReactElement => {
 
   const columns = [
     { field: 'id', headerName: 'ID', maxWidth: 60 },
-    { field: 'attributeName', headerName: 'Атрибут' },
-    { field: 'attributeType', headerName: 'Тип атрибута' },
-    { field: 'attributeValue', headerName: 'Значение' },
+    { field: 'attributeName', headerName: 'Атрибут', flex: 1 },
+    { field: 'attributeType', headerName: 'Тип атрибута', flex: 1 },
+    { field: 'attributeValue', headerName: 'Значение', flex: 1 },
   ];
 
   const handleDownload = async (): Promise<void> => {
