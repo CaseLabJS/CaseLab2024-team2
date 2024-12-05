@@ -90,6 +90,7 @@ class DocumentsStore {
 
   //получить документ по id
   async getDocumentById(id: number): Promise<void> {
+    this.currentFileUrl = '';
     try {
       this.status = Status.LOADING;
       const data = await getDocumentData(id);

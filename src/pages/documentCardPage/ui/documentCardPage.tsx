@@ -3,6 +3,7 @@ import type { DocumentVersionResponse } from '@/entities/documents';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { signaturesStore } from '@/entities/signature';
+import { PreviewDoc } from '@/shared/components';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
@@ -14,14 +15,11 @@ import { VoteModal } from '@/widgets/voteModal';
 import { EditNote, ManageHistory } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
-import { Viewer } from '@react-pdf-viewer/core';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { DocumentVersionDrawer } from './documentVersionDrawer';
-
-import '@react-pdf-viewer/core/lib/styles/index.css';
 
 const DocumentCardPage = observer((): ReactElement => {
   const id = useParams().documentId;
@@ -55,7 +53,6 @@ const DocumentCardPage = observer((): ReactElement => {
     DocumentStatus.SIGNATURE_ACCEPTED,
   ];
   const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
-  const file = documentsStore.currentFileUrl;
 
   // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
   const versionsList: DocumentVersionResponse[] = [
@@ -160,13 +157,8 @@ const DocumentCardPage = observer((): ReactElement => {
           </>
         )}
       </Box>
-      <Box padding="20px" display="flex" justifyContent="center" flexDirection="column" alignItems="center">
-        <>
-          <img alt="preview" src={file} />
-          {file !== '' && <Viewer fileUrl={file}></Viewer>}
-        </>
-      </Box>
-      <Box sx={{ backgroundColor: 'white', padding: '20px', marginTop: '20px', borderRadius: '10px' }}>
+      <PreviewDoc />
+      <Box sx={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
         <DataGrid
           columns={columns}
           rows={rows}
