@@ -1,6 +1,7 @@
 import type { AttributeResponse, StatefulAttribute } from '@/entities/attribute';
 
 import { attributesStore } from '@/entities/attribute';
+import { ConfirmationDialog } from '@/widgets/confirmationDialog/';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -27,6 +28,7 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
   const [currentAttribute, setCurrentAttribute] = useState<StatefulAttribute | null>(null);
 
   const [isEditAttributeDialogOpen, setIsEditAttributeDialogOpen] = useState(false);
+  const [attributeIdToDelete, setAttributeIdToDelete] = useState(0);
   const openEditAttributeDialog = (): void => setIsEditAttributeDialogOpen(true);
   const closeEditAttributeDialog = (): void => setIsEditAttributeDialogOpen(false);
 
@@ -74,6 +76,12 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
 
   return (
     <>
+      <ConfirmationDialog
+        open={attributeIdToDelete !== 0}
+        onClose={() => setAttributeIdToDelete(0)}
+        onSubmit={() => handleRemoveAttribute(attributeIdToDelete)}
+        children={<Typography>Вы действительно собираетесь удалить атрибут?</Typography>}
+      />
       <TableContainer component="div" className={style.table}>
         <Table size="small" aria-label="users table">
           <colgroup>
@@ -99,7 +107,7 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
                       openEditAttributeDialog();
                     }}
                   />
-                  <DeleteIcon className={style.deleteIcon} onClick={() => handleRemoveAttribute(item.id)} />
+                  <DeleteIcon className={style.deleteIcon} onClick={() => setAttributeIdToDelete(item.id)} />
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {item.name}
