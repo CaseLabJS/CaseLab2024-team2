@@ -42,6 +42,23 @@ const DocumentCardPage = observer((): ReactElement => {
       .catch((_) => {});
   }, [id]);
 
+  useEffect(() => {
+    documentsStore
+      .getDocumentById(Number(id))
+      .then(() => {
+        const userPermissions = documentsStore.currentDocument?.document.user_permissions.find(
+          (p) => p.email == authStore.email,
+        );
+        if (userPermissions) {
+          const creatorPermission = userPermissions.document_permissions.find((p) => p.name == 'CREATOR');
+          if (creatorPermission) {
+            void documentVersionsStore.getDocumentVersionsByDocumentId(Number(id), { pageNum: 0, pageSize: 100 });
+          }
+        }
+      })
+      .catch((_) => {});
+  }, [id]);
+
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
     return <Typography>Загрузка...</Typography>;
