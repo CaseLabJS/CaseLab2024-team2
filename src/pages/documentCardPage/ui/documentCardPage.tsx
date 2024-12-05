@@ -22,7 +22,6 @@ import { DocumentVersionDrawer } from './documentVersionDrawer';
 
 const DocumentCardPage = observer((): ReactElement => {
   const id = useParams().documentId;
-  // const navigate = useNavigate();
   const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
@@ -125,10 +124,12 @@ const DocumentCardPage = observer((): ReactElement => {
 
   const handleDelete = async (): Promise<void> => {
     try {
-      await documentsStore.deleteDocumentById(Number(id)).catch((error) => {
-        alert(error);
-      });
-      // navigate('/documents');
+      await documentsStore
+        .deleteDocumentById(Number(id))
+        .then(() => documentsStore.checkDocumentStatus(Number(id)))
+        .catch((error) => {
+          alert(error);
+        });
     } catch (error) {
       alert(error);
     }
