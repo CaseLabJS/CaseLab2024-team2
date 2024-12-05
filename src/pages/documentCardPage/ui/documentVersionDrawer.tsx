@@ -2,6 +2,7 @@ import type { DocumentVersionResponse } from '@/entities/documents';
 import type { ReactElement } from 'react';
 
 import { documentsStore } from '@/entities/documents';
+import { documentVersionsStore } from '@/entities/documentVersions';
 import { Box, Divider, Drawer, List, ListItem, Typography } from '@mui/material';
 
 const DocumentVersionDrawer = ({
@@ -21,44 +22,27 @@ const DocumentVersionDrawer = ({
         Версии документа: {documentsStore.currentDocument?.document.name}
       </Typography>
       <List sx={{ width: '400px' }}>
-        {versionsList.map((version, index) =>
-          version.id === currentVersionId ? ( // Если это выбранная версия, то у неё другой фон. Сейчас подходят все версии, так как у нас нет функционала переключения и версия всегда последняя
-            <Box key={index}>
-              <Divider />
-              <ListItem
-                key={index}
-                sx={{
-                  cursor: 'pointer',
-                  backgroundColor: '#d9ebfa',
-                  ':hover': { backgroundColor: '#bbdefb' },
-                }}
-                onClick={() => alert(`Версия ${new Date(version.createdAt).toLocaleString()}`)} // TODO добавить функционал переключения версии при клике, то есть меняем в сторе currentVersion
-              >
-                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <Typography>{version.name}</Typography>
-                  <Typography>{new Date(version.createdAt).toLocaleString()}</Typography>
-                </Box>
-              </ListItem>
-            </Box>
-          ) : (
-            <Box key={index}>
-              <Divider />
-              <ListItem
-                key={index}
-                sx={{
-                  cursor: 'pointer',
-                  ':hover': { backgroundColor: '#bbdefb' },
-                }}
-                onClick={() => alert(`Версия ${new Date(version.createdAt).toLocaleString()}`)} // TODO добавить функционал переключения версии при клике
-              >
-                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <Typography>{version.name}</Typography>
-                  <Typography>{new Date(version.createdAt).toLocaleString()}</Typography>
-                </Box>
-              </ListItem>
-            </Box>
-          ),
-        )}
+        {versionsList.map((version, index) => (
+          <Box key={index}>
+            <Divider />
+            <ListItem
+              key={index}
+              sx={{
+                cursor: 'pointer',
+                backgroundColor: version.id === currentVersionId ? '#d9ebfa' : 'unset',
+                ':hover': { backgroundColor: '#bbdefb' },
+              }}
+              onClick={() => {
+                documentVersionsStore.setCurrentDocumentVersionById(version.id);
+              }}
+            >
+              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <Typography>{version.name}</Typography>
+                <Typography>{new Date(version.createdAt).toLocaleString()}</Typography>
+              </Box>
+            </ListItem>
+          </Box>
+        ))}
       </List>
     </Drawer>
   );
