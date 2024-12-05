@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 
+import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { userStore } from '@/entities/user';
 import { Inbox, LocationOn, Edit, VisibilityOff, Visibility } from '@mui/icons-material';
@@ -18,6 +19,7 @@ import {
 import { Formik, Field, Form } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import * as Yup from 'yup';
 
 const UserPageInfo = observer((): ReactElement => {
@@ -183,6 +185,21 @@ const UserPageInfo = observer((): ReactElement => {
                 </Icon>
               </>
             )}
+            <Button
+              component={NavLink}
+              to={ROUTE_CONSTANTS.USER_DOCUMENTS.path}
+              variant="outlined"
+              color="primary"
+              sx={{
+                position: 'absolute',
+                right: '16px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                textTransform: 'none', // чтобы сохранить оригинальный текст
+              }}
+            >
+              Документы
+            </Button>
           </Stack>
           <Stack direction="row" spacing={'16px'} sx={{ margin: '8px 0' }} alignItems="center">
             <Icon color="action">
