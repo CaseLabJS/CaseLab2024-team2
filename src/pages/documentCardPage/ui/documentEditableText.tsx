@@ -6,11 +6,10 @@ import { TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 interface EditableTextProps {
-  isCreator: boolean;
-  name: string;
+  isEditMode: boolean;
 }
 
-const EditableText: React.FC<EditableTextProps> = ({ isCreator }) => {
+const EditableText: React.FC<EditableTextProps> = ({ isEditMode }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { name: documentName, id } = documentsStore.currentDocument!.document;
   const [text, setText] = useState(documentName);
@@ -31,16 +30,23 @@ const EditableText: React.FC<EditableTextProps> = ({ isCreator }) => {
     }
   };
 
+  const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
+    if (event.key === 'Enter') {
+      await handleBlur();
+    }
+  };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setText(event.target.value);
   };
 
   return (
     <>
-      {isEditing && isCreator ? (
+      {isEditing && isEditMode ? (
         <TextField
           value={text}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           autoFocus
           variant="standard"
@@ -55,6 +61,7 @@ const EditableText: React.FC<EditableTextProps> = ({ isCreator }) => {
               padding: 0,
               letterSpacing: '0.5px',
               height: '40px',
+              backgroundColor: '#f5f5f5',
             },
             '& .MuiInput-underline:before, & .MuiInput-underline:after': {
               borderBottom: 'none',
@@ -75,11 +82,12 @@ const EditableText: React.FC<EditableTextProps> = ({ isCreator }) => {
               margin: '8px',
               height: '40px',
               maxWidth: '90%',
-              cursor: isCreator ? 'pointer' : 'default',
+              cursor: isEditMode ? 'pointer' : 'default',
+              backgroundColor: !isEditing && isEditMode ? '#f5f5f5' : 'inherit',
             }}
             onClick={handleClick}
           >
-            {text} {isCreator && !isEditing && <EditNote />}
+            {text} {!isEditing && isEditMode && <EditNote />}
           </Typography>
         </>
       )}

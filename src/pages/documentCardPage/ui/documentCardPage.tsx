@@ -52,7 +52,14 @@ const DocumentCardPage = observer((): ReactElement => {
     DocumentStatus.SIGNATURE_IN_PROGRESS,
     DocumentStatus.SIGNATURE_ACCEPTED,
   ];
+  const isEditStatuses = [
+    DocumentStatus.DRAFT,
+    DocumentStatus.SIGNATURE_REJECTED,
+    DocumentStatus.VOTING_REJECTED,
+    DocumentStatus.ARCHIVED,
+  ];
   const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
+  const isEditMode = isEditStatuses.includes(documentsStore.currentDocument?.document.status) && isCreator;
 
   // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
   const versionsList: DocumentVersionResponse[] = [
@@ -124,7 +131,7 @@ const DocumentCardPage = observer((): ReactElement => {
     <Layout>
       <Breadcrumbs pageTitle={name} />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <EditableText isCreator={isCreator} name={name} />
+        <EditableText isEditMode={isEditMode} />
         <Button
           sx={{ marginLeft: 'auto' }}
           startIcon={<ManageHistory />}
