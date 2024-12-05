@@ -18,6 +18,7 @@ import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useEffect } from 'react';
 import { useParams } from 'react-router';
 
+import EditableText from './documentEditableText';
 import { DocumentVersionDrawer } from './documentVersionDrawer';
 
 const DocumentCardPage = observer((): ReactElement => {
@@ -123,9 +124,10 @@ const DocumentCardPage = observer((): ReactElement => {
     <Layout>
       <Breadcrumbs pageTitle={name} />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
+        <EditableText isCreator={isCreator} name={name} />
+        {/* <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
           Документ: {name}
-        </Typography>
+        </Typography> */}
         <Button
           sx={{ marginLeft: 'auto' }}
           startIcon={<ManageHistory />}
