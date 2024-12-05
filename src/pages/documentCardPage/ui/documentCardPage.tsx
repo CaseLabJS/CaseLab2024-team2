@@ -16,13 +16,13 @@ import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { DocumentVersionDrawer } from './documentVersionDrawer';
 
 const DocumentCardPage = observer((): ReactElement => {
   const id = useParams().documentId;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
@@ -128,7 +128,7 @@ const DocumentCardPage = observer((): ReactElement => {
       await documentsStore.deleteDocumentById(Number(id)).catch((error) => {
         alert(error);
       });
-      navigate('/documents');
+      // navigate('/documents');
     } catch (error) {
       alert(error);
     }
