@@ -7,6 +7,7 @@ import {
   patchDocumentData,
   searchDocumentsData,
   downloadDocumentData,
+  grantAccess,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -184,6 +185,20 @@ class DocumentsStore {
     } catch (error) {
       console.error('Ошибка при загрузке документа:', error);
       throw error;
+    }
+  }
+
+  async grantAccess(id: number, email: string): Promise<void> {
+    try {
+      this.status = Status.LOADING;
+      const updatedDocument = await grantAccess(id, email);
+      runInAction(() => {
+        this.currentDocument = updatedDocument;
+        this.status = Status.SUCCESS;
+      });
+    } catch {
+      this.status = Status.ERROR;
+      alert('Не удалось предоставить доступ');
     }
   }
 }

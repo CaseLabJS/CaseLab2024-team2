@@ -46,7 +46,7 @@ export const createDocumentData = async (createDocument: CreateDocumentRequest):
 
   formData.append(
     'document_params',
-    new Blob([JSON.stringify(createDocument.document_params)], { type: 'application/json' })
+    new Blob([JSON.stringify(createDocument.document_params)], { type: 'application/json' }),
   );
   formData.append('content', createDocument.content);
 
@@ -87,5 +87,11 @@ export const downloadDocumentData = async (id: number): Promise<Blob> => {
   const response = await api.get<Blob>(`/versions/content/${id}`, {
     responseType: 'blob',
   });
+  return response.data;
+};
+
+// Добавляет разрешение для чтения документа для пользователя по его email
+export const grantAccess = async (id: number, email: string): Promise<DocumentFacadeResponse> => {
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}/grant-access-to/${email}`);
   return response.data;
 };
