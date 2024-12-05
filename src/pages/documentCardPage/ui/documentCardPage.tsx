@@ -8,6 +8,7 @@ import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { CreateVoting } from '@/widgets/createVotingWidget';
+import EditDocumentDialog from '@/widgets/editDocumentDialog/ui/EditDocumentDialog';
 import { SignatureDrawer } from '@/widgets/signatureDrawer';
 import { SignDocument } from '@/widgets/signDocument';
 import { VoteModal } from '@/widgets/voteModal';
@@ -19,7 +20,6 @@ import { useState, type ReactElement, useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { DocumentVersionDrawer } from './documentVersionDrawer';
-import EditDocumentDialog from '@/widgets/editDocumentDialog/ui/EditDocumentDialog';
 
 const DocumentCardPage = observer((): ReactElement => {
   const id = useParams().documentId;

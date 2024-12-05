@@ -16,7 +16,7 @@ const DocumentsTableToolbar = ({
   setPage,
 }: DocumentTableToolbarProps): ReactElement => {
   const [isCreateDocumentDialogOpen, setCreateDocumentDialogState] = useState(false);
-  
+
   return (
     <Toolbar
       sx={{

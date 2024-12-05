@@ -1,5 +1,5 @@
 import type { CombinedAttribute } from '@/entities/attribute';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, SyntheticEvent } from 'react';
 
 import { attributesStore } from '@/entities/attribute';
 import { documentsStore } from '@/entities/documents';
@@ -76,9 +76,11 @@ const EditDocumentDialog = observer(({ open, onClose, id: documentId }: EditDocu
     }
   }, [documentTypeId]);
 
-  function handleDocumentTypeChange(_: ChangeEvent<{}>, value: { id: number; label: string } | null): void {
+  function handleDocumentTypeChange(_: SyntheticEvent, value: { id: number; label: string } | null): void {
     if (value) {
       setDocumentTypeId(value.id);
+    } else {
+      return;
     }
   }
 
