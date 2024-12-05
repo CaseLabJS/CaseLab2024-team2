@@ -46,7 +46,7 @@ export const createDocumentData = async (createDocument: CreateDocumentRequest):
 
   formData.append(
     'document_params',
-    new Blob([JSON.stringify(createDocument.document_params)], { type: 'application/json' })
+    new Blob([JSON.stringify(createDocument.document_params)], { type: 'application/json' }),
   );
   formData.append('content', createDocument.content);
 
@@ -63,7 +63,19 @@ export const updateDocumentData = async (
   id: number,
   updateDocument: UpdateDocumentRequest,
 ): Promise<DocumentFacadeResponse> => {
-  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument);
+  const formData = new FormData();
+
+  formData.append(
+    'document_params',
+    new Blob([JSON.stringify(updateDocument.document_params)], { type: 'application/json' }),
+  );
+  formData.append('content', updateDocument.content);
+
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 

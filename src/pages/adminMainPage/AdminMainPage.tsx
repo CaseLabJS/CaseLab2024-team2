@@ -7,7 +7,7 @@ import { Stack } from '@mui/material';
 
 const AdminMainPage = (): ReactElement => {
   return (
-    <Stack direction="row" columnGap="30px">
+    <Stack direction="row" alignItems="flex-start" columnGap="30px">
       <CreateUser />
       <AddAttribute />
       <NewDocumentTypeWidget />

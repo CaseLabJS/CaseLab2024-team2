@@ -19,11 +19,13 @@ import { useState, type ReactElement, useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { DocumentVersionDrawer } from './documentVersionDrawer';
+import EditDocumentDialog from '@/widgets/editDocumentDialog/ui/EditDocumentDialog';
 
 const DocumentCardPage = observer((): ReactElement => {
   const id = useParams().documentId;
   const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
+  const [isEditDocumentDialogEdit, setEditDocumentDialogState] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
 
   useEffect(() => {
@@ -151,7 +153,7 @@ const DocumentCardPage = observer((): ReactElement => {
         </Button>
         {isCreator && (
           <>
-            <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
+            <Button startIcon={<EditNote />} variant="outlined" onClick={() => setEditDocumentDialogState(true)}>
               Редактировать документ
             </Button>
             <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
@@ -213,6 +215,7 @@ const DocumentCardPage = observer((): ReactElement => {
         documentId={documentsStore.currentDocument?.document.id}
         signatures={signatures}
       />
+      <EditDocumentDialog open={isEditDocumentDialogEdit} onClose={() => setEditDocumentDialogState(false)} id={+id!} />
     </Layout>
   );
 });

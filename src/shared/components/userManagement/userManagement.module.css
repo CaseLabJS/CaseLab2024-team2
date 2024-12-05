@@ -7,11 +7,12 @@
 }
 
 .user_management_container {
-  padding: 3%;
+  padding: 20px 33px;
   background-color: #fff;
-  width: 80%;
+  width: 70%;
   margin: 0 auto;
   height: fit-content;
+  border-radius: 10px;
 }
 .button_add {
   flex: none;
