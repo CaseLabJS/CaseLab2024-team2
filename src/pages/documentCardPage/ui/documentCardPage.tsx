@@ -185,7 +185,9 @@ const DocumentCardPage = observer((): ReactElement => {
           disableColumnMenu
         />
         <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
-          <Typography sx={{ fontSize: '18px' }}>Статус документа: {getStatusTranslation(statusDocument)}</Typography>
+          <Typography sx={{ fontSize: '18px' }}>
+            Статус документа: {!isDeleteBtnShown ? 'Архив' : getStatusTranslation(statusDocument)}
+          </Typography>
         </Box>
         {isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
