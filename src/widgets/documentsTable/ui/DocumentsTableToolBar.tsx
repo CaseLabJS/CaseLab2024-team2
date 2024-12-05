@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 
 import { SearchForm } from '@/shared/components';
-import { Add, Delete } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { Toolbar, Button, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 interface DocumentTableToolbarProps {
@@ -24,9 +24,6 @@ const DocumentsTableToolbar = ({
     >
       <Button variant="text" startIcon={<Add />} sx={{ marginRight: 2 }}>
         Добавить
-      </Button>
-      <Button variant="text" startIcon={<Delete sx={{ color: 'grey.500' }} />} sx={{ color: 'grey.500' }}>
-        Удалить
       </Button>
       <FormControl
         size="small"
