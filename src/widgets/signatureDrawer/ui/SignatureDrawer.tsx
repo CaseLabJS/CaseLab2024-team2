@@ -4,7 +4,10 @@ import type { ReactElement } from 'react';
 
 import { signaturesStore } from '@/entities/signature';
 import { userStore } from '@/entities/user';
+import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
 import { Drawer, Typography, Button, Backdrop, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
 
@@ -20,6 +23,8 @@ const SignatureDrawer = observer(
   ({ isOpen, documentId, documentName, onClose, signatures }: SignatureDrawerProps): ReactElement => {
     const [selectedUser, setSelectedUser] = useState<UserResponse | null>(null);
 
+    const { showToast } = useToast();
+
     const userOptions = userStore.users;
     const notSignedUsers = userOptions.filter(
       (user) => !signatures.some((signature) => signature.email === user.email),
@@ -28,7 +33,7 @@ const SignatureDrawer = observer(
     const handleSubmit = (): void => {
       // TODO сделать валидацию
       if (!selectedUser) {
-        alert('Пожалуйста, выберите пользователя.');
+        showToast('warning', 'Пожалуйста, выберите пользователя.');
         return;
       }
 
@@ -47,6 +52,19 @@ const SignatureDrawer = observer(
         .catch(console.error);
       setSelectedUser(null);
     };
+
+    useEffect(() => {
+      const disposer = reaction(
+        () => signaturesStore.status,
+        (status) => {
+          if (status === Status.ERROR) {
+            void showToast('error', 'Не удалось отправить на подпись');
+          }
+        },
+      );
+
+      return (): void => disposer();
+    }, [showToast]);
 
     useEffect(() => {
       if (isOpen) {

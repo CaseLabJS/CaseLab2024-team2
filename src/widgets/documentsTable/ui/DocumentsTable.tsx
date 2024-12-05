@@ -1,5 +1,7 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
+import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import {
   TableContainer,
@@ -11,8 +13,9 @@ import {
   TableBody,
   TablePagination,
 } from '@mui/material';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState, type ReactElement } from 'react';
+import { useCallback, useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
@@ -23,13 +26,27 @@ const DocumentsTable = observer((): ReactElement => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isShowSignedOnly, setIsShowSignedOnly] = useState<boolean>(false);
 
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
   useEffect(() => {
     void documentsStore.getDocumentsPage();
   }, []);
-  const handleChangePage = (event: unknown, newPage: number): void => {
+  const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 
+  useEffect(() => {
+    const disposer = reaction(
+      () => documentsStore.status,
+      (status) => {
+        if (status === Status.ERROR) {
+          void stableShowToast('error', 'Ошибка загрузки документов');
+        }
+      },
+    );
+
+    return (): void => disposer();
+  }, [stableShowToast]);
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -73,7 +90,7 @@ const DocumentsTable = observer((): ReactElement => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={documentsStore.documents.length}
+        count={filteredDocuments.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

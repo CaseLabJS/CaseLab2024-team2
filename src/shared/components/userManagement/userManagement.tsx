@@ -1,5 +1,6 @@
 import type { UserResponse } from '@/entities/user';
 
+import { useToast } from '@/shared/hooks';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
@@ -29,6 +30,8 @@ const UserManagement = observer(() => {
   const [canShowForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const { showToast } = useToast();
+
   const filteredUsers = searchTerm
     ? userStore.users.filter((user: UserResponse) => {
         return (
@@ -45,16 +48,18 @@ const UserManagement = observer(() => {
       setEmail('');
       setPassword('');
       setShowForm(false);
-    } catch (error) {
-      console.error('Error creating user:', error);
+      showToast('success', 'Пользователь успешно зарегистрирован!');
+    } catch {
+      showToast('error', 'Ошибка регистрации пользователя. Попробуйте снова.');
     }
   };
 
   const handleRemoveUser = async (emailToRemove: string): Promise<void> => {
     try {
       await userStore.deleteUser({ email: emailToRemove });
-    } catch (error) {
-      console.error('Error removing user:', error);
+      showToast('success', 'Пользователь успешно удален!');
+    } catch {
+      showToast('error', 'Ошибка удаления пользователя. Попробуйте снова.');
     }
   };
 

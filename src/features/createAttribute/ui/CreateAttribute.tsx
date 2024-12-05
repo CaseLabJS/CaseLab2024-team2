@@ -1,4 +1,5 @@
 import { attributesStore } from '@/entities/attribute';
+import { useToast } from '@/shared/hooks';
 import { Button, TextField, Typography, Stack } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement } from 'react';
@@ -7,13 +8,16 @@ const CreateAttribute = observer((): ReactElement => {
   const [name, setName] = useState<string>('');
   const [type, setType] = useState<string>('');
 
+  const { showToast } = useToast();
+
   async function handleSubmit(): Promise<void> {
     try {
       await attributesStore.create({ name, type });
       setName('');
       setType('');
+      showToast('success', 'Атрибут создан');
     } catch {
-      alert('Что-то пошло не так. Ошибка создания атрибута');
+      showToast('error', 'Ошибка создания атрибута');
     }
   }
 

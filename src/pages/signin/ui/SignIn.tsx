@@ -4,6 +4,7 @@ import type React from 'react';
 
 import { authStore } from '@/entities/auth';
 import { AuthSchema } from '@/features/auth';
+import { useToast } from '@/shared/hooks';
 import { Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { useState, type ReactElement } from 'react';
@@ -17,6 +18,8 @@ const SignIn = (): ReactElement => {
   };
   const [isAgree, setIsAgree] = useState<boolean>(true);
 
+  const { showToast } = useToast();
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setIsAgree(event.target.checked);
   };
@@ -28,9 +31,9 @@ const SignIn = (): ReactElement => {
     try {
       const body: AuthenticationRequest = { ...values };
       await authStore.login(body);
-      alert('Пользователь успешно авторизирован!');
+      showToast('success', 'Добро пожаловать!');
     } catch (error) {
-      alert('Ошибка авторизации пользователя. Попробуйте снова.');
+      showToast('error', 'Ошибка авторизации пользователя.');
       throw error;
     } finally {
       setSubmitting(false);

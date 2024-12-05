@@ -24,12 +24,9 @@ class UserStore {
       });
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message) {
-          alert(error.message);
-        } else {
-          alert('Something went wrong');
-        }
+        console.error(error.message || 'Something went wrong');
       }
+      throw error;
     }
   }
 
@@ -39,13 +36,9 @@ class UserStore {
       return response;
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message) {
-          alert(error.message);
-        } else {
-          alert('Something went wrong');
-        }
+        console.error(error.message || 'Something went wrong');
       }
-      return null;
+      throw error;
     }
   }
 
@@ -58,12 +51,9 @@ class UserStore {
       });
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message) {
-          alert(error.message);
-        } else {
-          alert('Something went wrong');
-        }
+        console.error(error.message || 'Something went wrong');
       }
+      throw error;
     }
   }
 
@@ -78,12 +68,9 @@ class UserStore {
       });
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message) {
-          alert(error.message);
-        } else {
-          alert('Something went wrong');
-        }
+        console.error(error.message || 'Something went wrong');
       }
+      throw error;
     }
   }
 
@@ -95,12 +82,9 @@ class UserStore {
       });
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message) {
-          alert(error.message);
-        } else {
-          alert('Something went wrong');
-        }
+        console.error(error.message || 'Something went wrong');
       }
+      throw error;
     }
   }
 }

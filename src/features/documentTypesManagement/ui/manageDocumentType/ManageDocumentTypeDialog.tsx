@@ -4,6 +4,7 @@ import type { DialogProps } from '@mui/material';
 
 import { attributesStore } from '@/entities/attribute';
 import { documentTypesStore } from '@/entities/documentsType/model/store/documentTypesStore';
+import { useToast } from '@/shared/hooks';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -42,38 +43,54 @@ const ManageDocumentTypeDialog = observer(
       return { ...a, ...attributesStore.getById(a.attribute_id) } as CombinedAttribute;
     });
 
+    const { showToast } = useToast();
+
     const openAddAtributeDialog = (): void => setIsAddAtributeDialogOpen(true);
     const closeAddAtributeDialog = (): void => setIsAddAtributeDialogOpen(false);
 
-    const handleSaveButton = (): void => {
+    const handleSaveButton = async (): Promise<void> => {
       if (documentType) {
-        void documentTypesStore.updateById(documentType.id, {
-          name,
+        try {
+          await documentTypesStore.updateById(documentType.id, {
+            name,
+            attributes: attributes.map((a) => ({
+              attribute_id: a.attribute_id,
+              is_optional: a.is_optional,
+            })),
+          });
+          handleClose();
+          showToast('success', 'Тип документа успешно обновлен');
+        } catch {
+          showToast('error', 'Ошибка обновления типа документа');
+        }
+      }
+    };
+
+    const handleDeleteButton = async (): Promise<void> => {
+      if (documentType) {
+        try {
+          await documentTypesStore.deleteById(documentType.id);
+          handleClose();
+          showToast('success', 'Тип документа успешно удален');
+        } catch {
+          showToast('error', 'Ошибка удаления типа документа');
+        }
+      }
+    };
+
+    const handleCreateButton = async (): Promise<void> => {
+      try {
+        await documentTypesStore.create({
+          name: name,
           attributes: attributes.map((a) => ({
             attribute_id: a.attribute_id,
             is_optional: a.is_optional,
           })),
         });
-        handleClose();
+        showToast('success', 'Тип документа успешно создан');
+      } catch {
+        showToast('error', 'Ошибка создания типа документа');
       }
-    };
-
-    const handleDeleteButton = (): void => {
-      if (documentType) {
-        void documentTypesStore.deleteById(documentType.id);
-        handleClose();
-      }
-    };
-
-    const handleCreateButton = (): void => {
-      void documentTypesStore.create({
-        name: name,
-        attributes: attributes.map((a) => ({
-          attribute_id: a.attribute_id,
-          is_optional: a.is_optional,
-        })),
-      });
-      handleClose();
     };
 
     const handleAddAttribute = (newAttributes: DocumentTypeToAttributeRequest[]): void => {

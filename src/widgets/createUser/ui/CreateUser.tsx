@@ -6,6 +6,7 @@ import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { userStore } from '@/entities/user/model/store/userStore';
 import { SignupSchema } from '@/features/auth';
 import { WidgetToPageButton } from '@/shared/components';
+import { useToast } from '@/shared/hooks';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
@@ -13,6 +14,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import styles from './userForm.module.css';
 
 const CreateUser = (): ReactElement => {
+  const { showToast } = useToast();
   const initialValues: RegisterRequest = { display_name: '', email: '', password: '' };
 
   const submitFormHandler = async (
@@ -22,10 +24,9 @@ const CreateUser = (): ReactElement => {
     try {
       const body: RegisterRequest = { ...values };
       await userStore.createUser(body);
-      alert('Пользователь успешно зарегистрирован!');
-    } catch (error) {
-      alert('Ошибка регистрации пользователя. Попробуйте снова.');
-      console.log(error);
+      showToast('success', 'Пользователь успешно зарегистрирован!');
+    } catch {
+      showToast('error', 'Ошибка регистрации пользователя. Попробуйте снова.');
     } finally {
       setSubmitting(false);
       resetForm();

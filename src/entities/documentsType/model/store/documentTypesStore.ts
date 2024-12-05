@@ -48,7 +48,7 @@ class DocumentTypesStore {
     } catch (error) {
       this.status = Status.ERROR;
       console.error(error);
-      alert('Не удалось получить список типов документов');
+      throw error;
     }
   }
 
@@ -70,7 +70,7 @@ class DocumentTypesStore {
     } catch (error) {
       documentTypeToCreate.status = Status.ERROR;
       console.error(error);
-      alert('Не удалось создать тип документа');
+      throw error;
     }
   }
 
@@ -100,8 +100,8 @@ class DocumentTypesStore {
       });
     } catch (error) {
       documentTypeToUpdate.status = Status.ERROR;
-      alert('Не удалось обновить тип документа');
       console.error(error);
+      throw error;
     }
   }
 
@@ -118,8 +118,8 @@ class DocumentTypesStore {
       this.documentTypes.remove(documentTypeToDelete);
     } catch (error) {
       documentTypeToDelete.status = Status.ERROR;
-      alert('Не удалось удалить тип документа');
       console.error(error);
+      throw error;
     }
   }
 }

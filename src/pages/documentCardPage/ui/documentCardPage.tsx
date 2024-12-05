@@ -4,6 +4,7 @@ import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { signaturesStore } from '@/entities/signature';
 import { Layout } from '@/shared/components/layout';
+import { useToast } from '@/shared/hooks';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
@@ -25,6 +26,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (id) {
@@ -114,8 +116,8 @@ const DocumentCardPage = observer((): ReactElement => {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-    } catch (error) {
-      alert(error);
+    } catch {
+      showToast('error', 'Ошибка при загрузке документа:');
     }
   };
 

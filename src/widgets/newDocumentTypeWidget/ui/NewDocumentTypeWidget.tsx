@@ -7,10 +7,11 @@ import { documentTypesStore } from '@/entities/documentsType/model/store/documen
 import AddAttributesDialog from '@/features/documentTypesManagement/ui/manageDocumentType/AddAttributesDialog';
 import AttributesTable from '@/features/documentTypesManagement/ui/manageDocumentType/AttributesTable';
 import { WidgetToPageButton } from '@/shared/components';
+import { useToast } from '@/shared/hooks';
 import AddIcon from '@mui/icons-material/Add';
 import { Stack, Box, TextField, Button, Paper, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const NewDocumentTypeWidget = observer((): React.ReactElement => {
   const [name, setName] = useState<string>('');
@@ -21,22 +22,30 @@ export const NewDocumentTypeWidget = observer((): React.ReactElement => {
     return { ...a, ...attributesStore.getById(a.attribute_id) } as CombinedAttribute;
   });
 
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
+
   const openAddAtributeDialog = (): void => setIsAddAtributeDialogOpen(true);
   const closeAddAtributeDialog = (): void => setIsAddAtributeDialogOpen(false);
 
-  const handleCreateButton = (): void => {
-    void documentTypesStore.create({
-      name: name,
-      attributes: attributes.map((a) => ({
-        attribute_id: a.attribute_id,
-        is_optional: a.is_optional,
-      })),
-    });
+  const handleCreateButton = async (): Promise<void> => {
+    try {
+      await documentTypesStore.create({
+        name: name,
+        attributes: attributes.map((a) => ({
+          attribute_id: a.attribute_id,
+          is_optional: a.is_optional,
+        })),
+      });
+      showToast('success', 'Тип документа успешно создан');
+    } catch {
+      showToast('error', 'Ошибка создания типа документа');
+    }
   };
 
   useEffect(() => {
-    void attributesStore.load();
-  }, []);
+    attributesStore.load(true).catch(() => stableShowToast('error', 'Не удалось получить список атрибутов'));
+  }, [stableShowToast]);
 
   const handleAddAttribute = (newAttributes: DocumentTypeToAttributeRequest[]): void => {
     const newAttributesToCombined = newAttributes.map((a) => ({
