@@ -16,12 +16,13 @@ import { Box, Button, Typography } from '@mui/material';
 import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import { DocumentVersionDrawer } from './documentVersionDrawer';
 
 const DocumentCardPage = observer((): ReactElement => {
   const id = useParams().documentId;
+  const navigate = useNavigate();
   const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
@@ -119,6 +120,17 @@ const DocumentCardPage = observer((): ReactElement => {
     }
   };
 
+  const handleDelete = async (): Promise<void> => {
+    try {
+      await documentsStore.deleteDocumentById(Number(id)).catch((error) => {
+        alert(error);
+      });
+      navigate('/documents');
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return (
     <Layout>
       <Breadcrumbs pageTitle={name} />
@@ -154,7 +166,7 @@ const DocumentCardPage = observer((): ReactElement => {
             <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
               Редактировать документ
             </Button>
-            <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
+            <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => handleDelete()}>
               Отправить в архив
             </Button>
           </>
