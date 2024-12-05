@@ -176,7 +176,7 @@ const DocumentCardPage = observer((): ReactElement => {
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
             <VoteModal user={userMail} />
             {isSignBtnShown && (
-              <Button variant="outlined" onClick={() => alert('В разработке')}>
+              <Button variant="outlined" onClick={() => setSignatureDrawerOpen(true)}>
                 Отправить на подпись
               </Button>
             )}
