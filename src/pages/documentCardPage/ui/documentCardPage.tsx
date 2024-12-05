@@ -1,7 +1,6 @@
-import type { DocumentVersionResponse } from '@/entities/documents';
-
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
+import { documentVersionsStore } from '@/entities/documentVersions';
 import { signaturesStore } from '@/entities/signature';
 import { Layout } from '@/shared/components/layout';
 import { Status } from '@/shared/types/status.type';
@@ -29,8 +28,9 @@ const DocumentCardPage = observer((): ReactElement => {
   useEffect(() => {
     if (id) {
       void documentsStore.getDocumentById(Number(id));
+      void documentVersionsStore.getDocumentVersionsByDocumentId(Number(id), { pageNum: 0, pageSize: 100 });
     }
-  }, []);
+  }, [id]);
 
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
@@ -53,52 +53,23 @@ const DocumentCardPage = observer((): ReactElement => {
   ];
   const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
 
-  // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
-  const versionsList: DocumentVersionResponse[] = [
-    {
-      attributes: documentsStore.currentDocument.latest_version.attributes,
-      documentId: documentsStore.currentDocument.document.id,
-      id: documentsStore.currentDocument.latest_version.id,
-      name: documentsStore.currentDocument.latest_version.name,
-      createdAt: documentsStore.currentDocument.latest_version.createdAt,
-      signatureIds: documentsStore.currentDocument.latest_version.signatureIds,
-      votingProcessesId: documentsStore.currentDocument.latest_version.votingProcessesId,
-      contentName: documentsStore.currentDocument.latest_version.contentName,
-    },
-    {
-      attributes: documentsStore.currentDocument.latest_version.attributes,
-      documentId: documentsStore.currentDocument.document.id,
-      id: documentsStore.currentDocument.latest_version.id,
-      name: documentsStore.currentDocument.latest_version.name,
-      createdAt: documentsStore.currentDocument.latest_version.createdAt,
-      signatureIds: documentsStore.currentDocument.latest_version.signatureIds,
-      votingProcessesId: documentsStore.currentDocument.latest_version.votingProcessesId,
-      contentName: documentsStore.currentDocument.latest_version.contentName,
-    },
-    {
-      attributes: documentsStore.currentDocument.latest_version.attributes,
-      documentId: documentsStore.currentDocument.document.id,
-      id: documentsStore.currentDocument.latest_version.id,
-      name: documentsStore.currentDocument.latest_version.name,
-      createdAt: documentsStore.currentDocument.latest_version.createdAt,
-      signatureIds: documentsStore.currentDocument.latest_version.signatureIds,
-      votingProcessesId: documentsStore.currentDocument.latest_version.votingProcessesId,
-      contentName: documentsStore.currentDocument.latest_version.contentName,
-    },
-  ];
+  const attributes =
+    documentVersionsStore.currentVersion?.attributes || documentsStore.currentDocument.latest_version.attributes;
 
-  const rows = documentsStore.currentDocument.latest_version.attributes.map((attribute) => ({
-    id: attribute.id,
-    attributeName: attribute.name,
-    attributeType: attribute.type,
-    attributeValue: attribute.value,
+  const rows = attributes.map((a) => ({
+    id: a.id,
+    attributeName: a.name,
+    attributeType: a.type,
+    attributeValue: a.value,
   }));
+
+  const currentVersionId = documentVersionsStore.currentVersion?.id || documentsStore.currentDocument.latest_version.id;
 
   const columns = [
     { field: 'id', headerName: 'ID', maxWidth: 60 },
-    { field: 'attributeName', headerName: 'Атрибут' },
-    { field: 'attributeType', headerName: 'Тип атрибута' },
-    { field: 'attributeValue', headerName: 'Значение' },
+    { field: 'attributeName', headerName: 'Атрибут', flex: 1 },
+    { field: 'attributeType', headerName: 'Тип атрибута', flex: 1 },
+    { field: 'attributeValue', headerName: 'Значение', flex: 1 },
   ];
 
   const handleDownload = async (): Promise<void> => {
@@ -203,8 +174,8 @@ const DocumentCardPage = observer((): ReactElement => {
       <DocumentVersionDrawer
         isOpenDrawer={isVersionDrawerOpen}
         setIsOpenDrawer={setVersionDrawerOpen}
-        versionsList={versionsList}
-        currentVersionId={documentsStore.currentDocument?.latest_version.id} // По умолчанию выбираем последнюю версию, нужно брать из стора версий
+        versionsList={documentVersionsStore.versions}
+        currentVersionId={currentVersionId}
       />
       <SignatureDrawer
         isOpen={isSignatureDrawerOpen}
