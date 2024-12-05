@@ -164,9 +164,12 @@ const DocumentCardPage = observer((): ReactElement => {
         </Button>
         {isCreator && (
           <>
-            <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
-              Редактировать документ
-            </Button>
+            {documentsStore.currentDocument.document.status !== DocumentStatus.ARCHIVED && (
+              <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
+                Редактировать документ
+              </Button>
+            )}
+
             {isDeleteBtnShown && (
               <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => handleDelete()}>
                 Отправить в архив
