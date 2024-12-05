@@ -28,8 +28,24 @@ const DocumentCardPage = observer((): ReactElement => {
   useEffect(() => {
     if (id) {
       void documentsStore.getDocumentById(Number(id));
-      void documentVersionsStore.getDocumentVersionsByDocumentId(Number(id), { pageNum: 0, pageSize: 100 });
     }
+  }, [id]);
+
+  useEffect(() => {
+    documentsStore
+      .getDocumentById(Number(id))
+      .then(() => {
+        const userPermissions = documentsStore.currentDocument?.document.user_permissions.find(
+          (p) => p.email == authStore.email,
+        );
+        if (userPermissions) {
+          const creatorPermission = userPermissions.document_permissions.find((p) => p.name == 'CREATOR');
+          if (creatorPermission) {
+            void documentVersionsStore.getDocumentVersionsByDocumentId(Number(id), { pageNum: 0, pageSize: 100 });
+          }
+        }
+      })
+      .catch((_) => {});
   }, [id]);
 
   // Проверяем статус документа
@@ -97,14 +113,16 @@ const DocumentCardPage = observer((): ReactElement => {
         <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
           Документ: {name}
         </Typography>
-        <Button
-          sx={{ marginLeft: 'auto' }}
-          startIcon={<ManageHistory />}
-          variant="outlined"
-          onClick={() => setVersionDrawerOpen(true)}
-        >
-          Версии документа
-        </Button>
+        {isCreator && (
+          <Button
+            sx={{ marginLeft: 'auto' }}
+            startIcon={<ManageHistory />}
+            variant="outlined"
+            onClick={() => setVersionDrawerOpen(true)}
+          >
+            Версии документа
+          </Button>
+        )}
       </Box>
 
       <Box
