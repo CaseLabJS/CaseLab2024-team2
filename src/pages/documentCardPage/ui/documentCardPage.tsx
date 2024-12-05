@@ -176,14 +176,23 @@ const DocumentCardPage = observer((): ReactElement => {
         )}
       </Box>
       <Box sx={{ backgroundColor: 'white', padding: '20px', marginTop: '20px', borderRadius: '10px' }}>
-        <DataGrid
-          columns={columns}
-          rows={rows}
-          hideFooter
-          disableColumnResize={true}
-          disableColumnFilter
-          disableColumnMenu
-        />
+        {rows.length > 0 && (
+          <DataGrid
+            columns={columns}
+            rows={rows}
+            hideFooter
+            disableColumnResize={true}
+            disableColumnFilter
+            disableColumnMenu
+          />
+        )}
+
+        {rows.length === 0 && (
+          <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#e7f4ff', borderRadius: '10px' }}>
+            <Typography sx={{ fontSize: '18px' }}>Документ не содержит атрибутов</Typography>
+          </Box>
+        )}
+
         <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
           <Typography sx={{ fontSize: '18px' }}>
             Статус документа: {!isDeleteBtnShown ? 'Архив' : getStatusTranslation(statusDocument)}
