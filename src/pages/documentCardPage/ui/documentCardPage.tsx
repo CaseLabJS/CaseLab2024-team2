@@ -125,9 +125,6 @@ const DocumentCardPage = observer((): ReactElement => {
       <Breadcrumbs pageTitle={name} />
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <EditableText isCreator={isCreator} name={name} />
-        {/* <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
-          Документ: {name}
-        </Typography> */}
         <Button
           sx={{ marginLeft: 'auto' }}
           startIcon={<ManageHistory />}
