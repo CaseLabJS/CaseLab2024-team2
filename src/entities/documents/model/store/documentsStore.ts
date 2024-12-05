@@ -169,9 +169,7 @@ class DocumentsStore {
       this.status = Status.LOADING;
       await deleteDocumentData(id);
       runInAction(() => {
-        // this.documents = this.documents.filter((item) => item.document.id !== id);
         this.status = Status.SUCCESS;
-        // this.currentDocument = null;
         this.currentDocumentDelete = false;
       });
     } catch {
