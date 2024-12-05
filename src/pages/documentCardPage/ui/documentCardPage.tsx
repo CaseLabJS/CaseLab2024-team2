@@ -54,7 +54,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
 
   // Проверяем, что документ можно удалить
-  const isDeleteBtnShown = documentsStore.checkDocumentStatus(Number(id));
+  const isDeleteBtnShown = documentsStore.currentDocumentDelete;
 
   // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
   const versionsList: DocumentVersionResponse[] = [
@@ -124,12 +124,9 @@ const DocumentCardPage = observer((): ReactElement => {
 
   const handleDelete = async (): Promise<void> => {
     try {
-      await documentsStore
-        .deleteDocumentById(Number(id))
-        .then(() => documentsStore.checkDocumentStatus(Number(id)))
-        .catch((error) => {
-          alert(error);
-        });
+      await documentsStore.deleteDocumentById(Number(id)).catch((error) => {
+        alert(error);
+      });
     } catch (error) {
       alert(error);
     }
