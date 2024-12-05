@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import { userStore } from '@/entities/user';
-import { Inbox, LocationOn, Edit, VisibilityOff, Visibility } from '@mui/icons-material';
+import { Inbox, Edit, VisibilityOff, Visibility } from '@mui/icons-material';
 import {
   Icon,
   Stack,
@@ -203,10 +203,6 @@ const UserPageInfo = observer((): ReactElement => {
             </Button>
           </Stack>
           <Stack direction="row" spacing={'16px'} sx={{ margin: '8px 0' }} alignItems="center">
-            <Icon color="action">
-              <LocationOn />
-            </Icon>
-            <Typography variant="body1">Название организации(как идея)</Typography>
             <Icon color="action">
               <Inbox />
             </Icon>
