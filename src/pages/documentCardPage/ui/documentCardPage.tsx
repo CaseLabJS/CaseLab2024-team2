@@ -104,7 +104,8 @@ const DocumentCardPage = observer((): ReactElement => {
 
   const handleDownload = async (): Promise<void> => {
     try {
-      const url = await documentsStore.fetchDocumentBlob();
+      const blob = await documentsStore.fetchDocumentBlob();
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
       link.download = documentsStore.currentDocument?.latest_version.contentName || 'document';

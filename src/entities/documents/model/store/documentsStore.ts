@@ -180,15 +180,15 @@ class DocumentsStore {
     }
   }
 
-  async fetchDocumentBlob(): Promise<string> {
+  async fetchDocumentBlob(): Promise<Blob> {
     try {
       if (!this.currentDocument?.latest_version.contentName) {
         throw new Error('Отсутствует файл для загрузки');
       }
       const id = this.currentDocument.latest_version.id;
       const blob = await downloadDocumentData(id);
-      const url = URL.createObjectURL(blob);
-      return url;
+
+      return blob;
     } catch (error) {
       console.error('Ошибка при загрузке документа:', error);
       throw error;
