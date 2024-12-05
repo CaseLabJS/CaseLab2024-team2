@@ -9,6 +9,7 @@ import {
   downloadDocumentData,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
+import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import type {
@@ -172,6 +173,25 @@ class DocumentsStore {
       this.status = Status.ERROR;
       alert('Не удалось удалить документ');
     }
+  }
+
+  // проверка статуса документа для удаления
+  // Для удаления документа статус документа должен быть одним из DRAFT/SIGNATURE_REJECTED/SIGNATURE_ACCEPTED/VOTING_REJECTED/VOTING_ACCEPTED
+  checkDocumentStatus(id: number): boolean {
+    const document = this.documents.find((item) => item.document.id === id);
+    if (document) {
+      if (
+        document.document.status === DocumentStatus.DRAFT ||
+        document.document.status === DocumentStatus.SIGNATURE_REJECTED ||
+        document.document.status === DocumentStatus.SIGNATURE_ACCEPTED ||
+        document.document.status === DocumentStatus.VOTING_REJECTED ||
+        document.document.status === DocumentStatus.VOTING_ACCEPTED
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   async fetchDocumentBlob(): Promise<Blob> {
