@@ -22,6 +22,7 @@ import type {
 class DocumentsStore {
   documents: DocumentFacadeResponse[] = [];
   currentDocument: DocumentFacadeResponse | null = null;
+  currentDocumentDelete: boolean = false;
   status: Status = Status.UNSET;
   pageNumber: number = 0;
   searchQuery: string | null = null;
@@ -96,6 +97,7 @@ class DocumentsStore {
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
+        this.currentDocumentDelete = this.checkDocumentStatus(id);
       });
     } catch {
       this.status = Status.ERROR;
@@ -133,6 +135,7 @@ class DocumentsStore {
         runInAction(() => {
           this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
+          this.currentDocumentDelete = this.checkDocumentStatus(id);
         });
       } catch {
         this.status = Status.ERROR;
@@ -151,6 +154,7 @@ class DocumentsStore {
         runInAction(() => {
           this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
+          this.currentDocumentDelete = this.checkDocumentStatus(id);
         });
       } catch {
         this.status = Status.ERROR;
@@ -168,6 +172,7 @@ class DocumentsStore {
         this.documents = this.documents.filter((item) => item.document.id !== id);
         this.status = Status.SUCCESS;
         this.currentDocument = null;
+        this.currentDocumentDelete = false;
       });
     } catch {
       this.status = Status.ERROR;
@@ -187,10 +192,12 @@ class DocumentsStore {
         document.document.status === DocumentStatus.VOTING_REJECTED ||
         document.document.status === DocumentStatus.VOTING_ACCEPTED
       ) {
+        this.currentDocumentDelete = true;
         return true;
       }
     }
 
+    this.currentDocumentDelete = false;
     return false;
   }
 
