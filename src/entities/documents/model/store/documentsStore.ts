@@ -24,7 +24,6 @@ class DocumentsStore {
   status: Status = Status.UNSET;
   pageNumber: number = 0;
   searchQuery: string | null = null;
-  currentFileUrl: string = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -90,17 +89,13 @@ class DocumentsStore {
 
   //получить документ по id
   async getDocumentById(id: number): Promise<void> {
-    this.currentFileUrl = '';
     try {
       this.status = Status.LOADING;
       const data = await getDocumentData(id);
-      const blob = await downloadDocumentData(data.latest_version.id);
-      const url = URL.createObjectURL(blob);
 
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
-        this.currentFileUrl = url;
       });
     } catch {
       this.status = Status.ERROR;
