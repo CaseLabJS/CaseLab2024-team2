@@ -42,7 +42,19 @@ export const searchDocumentsData = async (searchRequest: SearchDocumentRequest):
 
 // создание документа
 export const createDocumentData = async (createDocument: CreateDocumentRequest): Promise<DocumentFacadeResponse> => {
-  const response = await api.post<DocumentFacadeResponse>('/documents-facade/', createDocument);
+  const formData = new FormData();
+
+  formData.append(
+    'document_params',
+    new Blob([JSON.stringify(createDocument.document_params)], { type: 'application/json' }),
+  );
+  formData.append('content', createDocument.content);
+
+  const response = await api.post<DocumentFacadeResponse>('/documents-facade/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 

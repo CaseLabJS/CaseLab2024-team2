@@ -17,7 +17,7 @@ const CreateUser = (): ReactElement => {
 
   const submitFormHandler = async (
     values: RegisterRequest,
-    { setSubmitting }: FormikHelpers<RegisterRequest>,
+    { setSubmitting, resetForm }: FormikHelpers<RegisterRequest>,
   ): Promise<void> => {
     try {
       const body: RegisterRequest = { ...values };
@@ -28,6 +28,7 @@ const CreateUser = (): ReactElement => {
       console.log(error);
     } finally {
       setSubmitting(false);
+      resetForm();
     }
   };
 

@@ -1,6 +1,7 @@
 import type { SignatureCreateRequest } from '@/entities/signature';
 import type { SignatureResponse } from '@/entities/signature';
 
+import { documentsStore } from '@/entities/documents';
 import { getSignatures, getDocumentSignatures, sendDocument, signDocument } from '@/entities/signature/api';
 import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
 import { useParams } from 'react-router-dom';
@@ -75,6 +76,7 @@ class SignaturesStore {
     runInAction(() => {
       this.signatures.push(newSignature);
       this.status = 'success';
+      documentsStore.checkDocumentStatus(Number(useParams().documentId));
     });
   });
 
@@ -83,6 +85,7 @@ class SignaturesStore {
     const updatedSignature = await signDocument(sign);
     runInAction(() => {
       this.selectedSignature = updatedSignature;
+      documentsStore.checkDocumentStatus(Number(useParams().documentId));
     });
   });
 }
