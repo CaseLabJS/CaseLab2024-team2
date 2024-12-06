@@ -167,9 +167,11 @@ const DocumentCardPage = observer((): ReactElement => {
               <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
                 Редактировать документ
               </Button>
-              <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
-                Отправить в архив
-              </Button>
+              {isDeleteBtnShown && (
+                <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => handleDelete()}>
+                  Отправить в архив
+                </Button>
+              )}
             </>
           )}
         </Box>

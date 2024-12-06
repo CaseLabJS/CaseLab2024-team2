@@ -105,6 +105,12 @@ const ManageDocumentTypeDialog = observer(
           onSubmit={() => handleDeleteButton()}
           children={<Typography>Вы действительно собираетесь тип документа {name}?</Typography>}
         />
+        <ConfirmationDialog
+          open={isConfirmationDialogOpen}
+          onClose={() => setConfirmationDialogOpen(false)}
+          onSubmit={() => handleDeleteButton()}
+          children={<Typography>Вы действительно собираетесь тип документа {name}?</Typography>}
+        />
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
           <DialogTitle sx={{ textAlign: 'center' }}>{documentType ? 'Изменить' : 'Создать'} тип документа</DialogTitle>
           <IconButton
