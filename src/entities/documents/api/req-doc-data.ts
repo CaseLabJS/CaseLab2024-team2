@@ -46,7 +46,7 @@ export const createDocumentData = async (createDocument: CreateDocumentRequest):
 
   formData.append(
     'document_params',
-    new Blob([JSON.stringify(createDocument.document_params)], { type: 'application/json' }),
+    new Blob([JSON.stringify(createDocument.document_params)], { type: 'application/json' })
   );
   formData.append('content', createDocument.content);
 

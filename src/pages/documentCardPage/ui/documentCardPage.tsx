@@ -53,9 +53,6 @@ const DocumentCardPage = observer((): ReactElement => {
   ];
   const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
 
-  // Проверяем, что документ можно удалить
-  const isDeleteBtnShown = documentsStore.currentDocumentDelete;
-
   // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
   const versionsList: DocumentVersionResponse[] = [
     {
@@ -122,16 +119,6 @@ const DocumentCardPage = observer((): ReactElement => {
     }
   };
 
-  const handleDelete = async (): Promise<void> => {
-    try {
-      await documentsStore.deleteDocumentById(Number(id)).catch((error) => {
-        alert(error);
-      });
-    } catch (error) {
-      alert(error);
-    }
-  };
-
   return (
     <Layout>
       <Breadcrumbs pageTitle={name} />
@@ -164,48 +151,32 @@ const DocumentCardPage = observer((): ReactElement => {
         </Button>
         {isCreator && (
           <>
-            {documentsStore.currentDocument.document.status !== DocumentStatus.ARCHIVED && (
-              <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
-                Редактировать документ
-              </Button>
-            )}
-
-            {isDeleteBtnShown && (
-              <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => handleDelete()}>
-                Отправить в архив
-              </Button>
-            )}
+            <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
+              Редактировать документ
+            </Button>
+            <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
+              Отправить в архив
+            </Button>
           </>
         )}
       </Box>
       <Box sx={{ backgroundColor: 'white', padding: '20px', marginTop: '20px', borderRadius: '10px' }}>
-        {rows.length > 0 && (
-          <DataGrid
-            columns={columns}
-            rows={rows}
-            hideFooter
-            disableColumnResize={true}
-            disableColumnFilter
-            disableColumnMenu
-          />
-        )}
-
-        {rows.length === 0 && (
-          <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#e7f4ff', borderRadius: '10px' }}>
-            <Typography sx={{ fontSize: '18px' }}>Документ не содержит атрибутов</Typography>
-          </Box>
-        )}
-
+        <DataGrid
+          columns={columns}
+          rows={rows}
+          hideFooter
+          disableColumnResize={true}
+          disableColumnFilter
+          disableColumnMenu
+        />
         <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
-          <Typography sx={{ fontSize: '18px' }}>
-            Статус документа: {!isDeleteBtnShown ? 'Архив' : getStatusTranslation(statusDocument)}
-          </Typography>
+          <Typography sx={{ fontSize: '18px' }}>Статус документа: {getStatusTranslation(statusDocument)}</Typography>
         </Box>
         {isCreator && (
           <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
             <VoteModal user={userMail} />
             {isSignBtnShown && (
-              <Button variant="outlined" onClick={() => setSignatureDrawerOpen(true)}>
+              <Button variant="outlined" onClick={() => alert('В разработке')}>
                 Отправить на подпись
               </Button>
             )}
