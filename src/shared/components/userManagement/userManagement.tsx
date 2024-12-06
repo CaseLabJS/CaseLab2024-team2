@@ -1,7 +1,9 @@
 import type { UserResponse } from '@/entities/user';
 
+import { ConfirmationDialog } from '@/widgets/confirmationDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -28,6 +30,7 @@ const UserManagement = observer(() => {
   const [password, setPassword] = useState('');
   const [canShowForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [userEmailToDelete, setUserEmailToDelete] = useState('');
 
   const filteredUsers = searchTerm
     ? userStore.users.filter((user: UserResponse) => {
@@ -63,6 +66,12 @@ const UserManagement = observer(() => {
   };
   return (
     <div className={styles.user_management_container}>
+      <ConfirmationDialog
+        open={userEmailToDelete !== ''}
+        onClose={() => setUserEmailToDelete('')}
+        onSubmit={() => handleRemoveUser(userEmailToDelete)}
+        children={<Typography>Вы действительно собираетесь пользователя?</Typography>}
+      />
       <div className={styles.data_grid_table}>
         <div className={styles.button_and_search}>
           <div className={styles.button_add}>
@@ -137,7 +146,7 @@ const UserManagement = observer(() => {
               {filteredUsers.map((user: UserResponse, index) => (
                 <TableRow key={index}>
                   <TableCell align="left">
-                    <DeleteIcon className={styles.delete_icon} onClick={() => handleRemoveUser(user.email)} />
+                    <DeleteIcon className={styles.delete_icon} onClick={() => setUserEmailToDelete(user.email)} />
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {user.display_name}

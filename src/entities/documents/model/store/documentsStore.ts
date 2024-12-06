@@ -9,6 +9,7 @@ import {
   downloadDocumentData,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
+import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import type {
@@ -21,6 +22,7 @@ import type {
 class DocumentsStore {
   documents: DocumentFacadeResponse[] = [];
   currentDocument: DocumentFacadeResponse | null = null;
+  currentDocumentDelete: boolean = false;
   status: Status = Status.UNSET;
   pageNumber: number = 0;
   searchQuery: string | null = null;
@@ -96,6 +98,7 @@ class DocumentsStore {
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
+        this.currentDocumentDelete = this.checkDocumentStatus(id);
       });
     } catch {
       this.status = Status.ERROR;
@@ -133,6 +136,7 @@ class DocumentsStore {
         runInAction(() => {
           this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
+          this.currentDocumentDelete = this.checkDocumentStatus(id);
         });
       } catch {
         this.status = Status.ERROR;
@@ -151,6 +155,7 @@ class DocumentsStore {
         runInAction(() => {
           this.currentDocument = updatedDocument;
           this.status = Status.SUCCESS;
+          this.currentDocumentDelete = this.checkDocumentStatus(id);
         });
       } catch {
         this.status = Status.ERROR;
@@ -165,14 +170,34 @@ class DocumentsStore {
       this.status = Status.LOADING;
       await deleteDocumentData(id);
       runInAction(() => {
-        this.documents = this.documents.filter((item) => item.document.id !== id);
         this.status = Status.SUCCESS;
-        this.currentDocument = null;
+        this.currentDocumentDelete = false;
       });
     } catch {
       this.status = Status.ERROR;
       alert('Не удалось удалить документ');
     }
+  }
+
+  // проверка статуса документа для удаления
+  // Для удаления документа статус документа должен быть одним из DRAFT/SIGNATURE_REJECTED/SIGNATURE_ACCEPTED/VOTING_REJECTED/VOTING_ACCEPTED
+  checkDocumentStatus(id: number): boolean {
+    const document = this.documents.find((item) => item.document.id === id);
+    if (document) {
+      if (
+        document.document.status === DocumentStatus.DRAFT ||
+        document.document.status === DocumentStatus.SIGNATURE_REJECTED ||
+        document.document.status === DocumentStatus.SIGNATURE_ACCEPTED ||
+        document.document.status === DocumentStatus.VOTING_REJECTED ||
+        document.document.status === DocumentStatus.VOTING_ACCEPTED
+      ) {
+        this.currentDocumentDelete = true;
+        return true;
+      }
+    }
+
+    this.currentDocumentDelete = false;
+    return false;
   }
 
   async fetchDocumentBlob(): Promise<Blob> {
