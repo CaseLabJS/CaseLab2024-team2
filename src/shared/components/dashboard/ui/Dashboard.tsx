@@ -1,3 +1,4 @@
+import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import Logout from '@/shared/components/logout/ui/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -20,7 +21,7 @@ export default function Dashboard(): React.ReactElement {
     // пункты меню в случае простого пользователя
     {
       name: 'Профиль',
-      link: `/profile`,
+      link: ROUTE_CONSTANTS.USER_PROFILE.path,
       icon: <AccountCircleIcon fontSize="small" />,
     },
   ];
@@ -95,30 +96,39 @@ export default function Dashboard(): React.ReactElement {
                 <Paper>
                   <ClickAwayListener onClickAway={handleClose}>
                     <div>
-                      <MenuItem>
-                        <ListItemIcon>
-                          <WorkIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>
-                          <ListItemText>{authStore.displayName}</ListItemText>
-                          <ListItemText>{authStore.email}</ListItemText>
-                        </ListItemText>
-                      </MenuItem>
                       <MenuList
                         autoFocusItem={isOpen}
                         id="composition-menu"
                         aria-labelledby="composition-button"
                         onKeyDown={handleListKeyDown}
                       >
+                        <MenuItem>
+                          <ListItemIcon>
+                            <WorkIcon fontSize="small" />
+                          </ListItemIcon>
+                          <ListItemText>
+                            <ListItemText>{authStore.displayName}</ListItemText>
+                            <ListItemText>{authStore.email}</ListItemText>
+                          </ListItemText>
+                        </MenuItem>
                         {itemsUser.map((item, i) => (
                           <MenuItem key={i}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
-                            <NavLink to={item.link}>{item.name}</NavLink>
+
+                            <NavLink
+                              style={{
+                                display: 'flex',
+                                paddingLeft: '4px',
+                                textDecoration: 'none',
+                              }}
+                              to={item.link}
+                              color="primary"
+                            >
+                              {item.name}
+                            </NavLink>
                           </MenuItem>
                         ))}
-                        <MenuItem>
-                          <Logout />
-                        </MenuItem>
+                        <Logout />
                       </MenuList>
                     </div>
                   </ClickAwayListener>

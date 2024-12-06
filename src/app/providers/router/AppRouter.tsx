@@ -11,6 +11,7 @@ import { ErrorPage } from '@/pages/errorPage';
 import { MainMenu } from '@/pages/mainMenu';
 import { SignIn } from '@/pages/signin';
 import { UserManagmentPage } from '@/pages/userManagmentPage';
+import { UserProfilePage } from '@/pages/userProfilePage';
 import { observer } from 'mobx-react-lite';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
@@ -46,6 +47,14 @@ const AppRouter = observer((): ReactElement => {
         element: (
           <ProtectedUserRoute>
             <DocumentsPage />
+          </ProtectedUserRoute>
+        ),
+      },
+      {
+        path: ROUTE_CONSTANTS.USER_PROFILE.path,
+        element: (
+          <ProtectedUserRoute>
+            <UserProfilePage />
           </ProtectedUserRoute>
         ),
       },
