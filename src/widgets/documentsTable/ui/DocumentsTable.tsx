@@ -26,7 +26,7 @@ const DocumentsTable = observer((): ReactElement => {
   useEffect(() => {
     void documentsStore.getDocumentsPage();
   }, []);
-  const handleChangePage = (event: unknown, newPage: number): void => {
+  const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 

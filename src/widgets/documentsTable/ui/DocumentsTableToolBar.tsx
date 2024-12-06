@@ -1,6 +1,6 @@
 import { SearchForm } from '@/shared/components';
 import { CreateDocumentDialog } from '@/widgets/createDocumentDialog';
-import { Add, Delete } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { Toolbar, Button, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { useState, type ReactElement } from 'react';
 
@@ -16,7 +16,7 @@ const DocumentsTableToolbar = ({
   setPage,
 }: DocumentTableToolbarProps): ReactElement => {
   const [isCreateDocumentDialogOpen, setCreateDocumentDialogState] = useState(false);
-  
+
   return (
     <Toolbar
       sx={{
@@ -32,9 +32,6 @@ const DocumentsTableToolbar = ({
         onClick={() => setCreateDocumentDialogState(true)}
       >
         Добавить
-      </Button>
-      <Button variant="text" startIcon={<Delete sx={{ color: 'grey.500' }} />} sx={{ color: 'grey.500' }}>
-        Удалить
       </Button>
       <FormControl
         size="small"
