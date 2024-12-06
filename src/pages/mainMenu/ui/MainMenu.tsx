@@ -1,5 +1,5 @@
 import { PlayArrow } from '@mui/icons-material';
-import { Grid, Icon, Paper, Typography } from '@mui/material';
+import { Box, Grid, Icon, Paper, Typography } from '@mui/material';
 import { useEffect, useState, type ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -90,7 +90,7 @@ const MainMenu = (): ReactElement => {
   return (
     <div className={styles.mainMenu}>
       <header className={styles.headerBlock}>
-        <img src={logo} alt="logo" style={{ width: '66px', height: '66px', margin: '8px auto' }} />
+        <Box src={logo} component="img" alt="logo" sx={{ width: '66px', height: '66px', margin: '8px auto' }} />
       </header>
       <main className={styles.mainBlock}>
         <img src={mainImage} alt="mainImage" className={styles.mainBlock__img} />
