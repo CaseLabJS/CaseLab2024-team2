@@ -1,39 +1,24 @@
 import { documentsStore } from '@/entities/documents';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Viewer } from '@react-pdf-viewer/core';
-import { useEffect, useState, type ReactElement } from 'react';
+import { observer } from 'mobx-react-lite';
 
 import '@react-pdf-viewer/core/lib/styles/index.css';
+
+import { useEffect, useState, type ReactElement } from 'react';
 import * as XLSX from 'xlsx';
 
 interface ExcelData {
   [key: string]: string | number | boolean | null;
 }
 
-const formatList = [
-  'jpeg',
-  'png',
-  'jpg',
-  'jpe',
-  'jif',
-  'jfif',
-  'jfi',
-  'apng',
-  'gif',
-  'webp',
-  'avif',
-  'xls',
-  'xlsx',
-  'pdf',
-  'txt',
-];
-
 const formatListImg = ['jpeg', 'png', 'jpg', 'jpe', 'jif', 'jfif', 'jfi', 'apng', 'gif', 'webp', 'avif'];
 
-const PreviewDoc = (): ReactElement => {
+const PreviewDoc = observer((): ReactElement => {
   const [data, setData] = useState<ExcelData[]>([]);
   const [url, setUrl] = useState('');
-  const [textFile, setTextFile] = useState<string>('<a>куда-то</a>');
+  const [textFile, setTextFile] = useState<string>('');
+  const [fileFormat, setFileFormat] = useState<string>('');
   const format = documentsStore.currentDocument?.latest_version.contentName.split('.').pop();
   const title = documentsStore.currentDocument?.latest_version.name;
   const text = 'Формат документа не поддерживается предварительным просмотром';
@@ -66,27 +51,36 @@ const PreviewDoc = (): ReactElement => {
     reader.readAsText(blob);
   };
 
-  useEffect(() => {
-    if (format !== undefined) {
+  const fetchAndProcessBlob = async (): Promise<void> => {
+    try {
+      const blob = await documentsStore.fetchDocumentBlob();
       if (format === 'xlsx' || format === 'xls') {
-        documentsStore
-          .fetchDocumentBlob()
-          .then((blob) => processExcelBlob(blob))
-          .catch(console.error);
+        setFileFormat('xlsx');
+        processExcelBlob(blob);
+      } else if (format !== undefined && formatListImg.includes(format)) {
+        setFileFormat('img');
+        setUrl(URL.createObjectURL(blob));
+        URL.revokeObjectURL(url);
+      } else if (format === 'txt') {
+        setFileFormat('txt');
+        processTextBlob(blob);
+      } else if (format === 'pdf') {
+        setFileFormat('pdf');
+        setUrl(URL.createObjectURL(blob));
+        URL.revokeObjectURL(url);
       }
-      if (formatListImg.includes(format)) {
-        documentsStore
-          .fetchDocumentBlob()
-          .then((blob) => setUrl(URL.createObjectURL(blob)))
-          .catch(console.error);
-      }
-      if (format === 'txt') {
-        documentsStore
-          .fetchDocumentBlob()
-          .then((blob) => processTextBlob(blob))
-          .catch(console.error);
-      }
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  useEffect(() => {
+    fetchAndProcessBlob().catch(console.error);
+
+    return (): void => {
+      setFileFormat('');
+      setUrl('');
+    };
   }, [format]);
 
   return (
@@ -94,10 +88,10 @@ const PreviewDoc = (): ReactElement => {
       <>
         {format !== undefined && (
           <>
-            {format === 'txt' && textFile !== '' && <div>{textFile}</div>}
-            {url !== '' && formatListImg.includes(format) && <img alt={title} src={url} />}
-            {url !== '' && format === 'pdf' && <Viewer fileUrl={url}></Viewer>}
-            {data && data.length > 0 && (format === 'xlsx' || format === 'xls') && (
+            {fileFormat === 'txt' && <div>{textFile}</div>}
+            {fileFormat === 'img' && <img alt={title} src={url} />}
+            {fileFormat === 'pdf' && <Viewer fileUrl={url}></Viewer>}
+            {fileFormat === 'xlsx' && (
               <TableContainer component={Paper} sx={{ maxHeight: '600px', overflow: 'auto' }}>
                 <Table aria-label={title}>
                   <TableHead>
@@ -123,12 +117,12 @@ const PreviewDoc = (): ReactElement => {
                 </Table>
               </TableContainer>
             )}
-            {!formatList.includes(format) && <div>{text}</div>}
+            {fileFormat === '' && <div>{text}</div>}
           </>
         )}
       </>
     </Box>
   );
-};
+});
 
 export default PreviewDoc;

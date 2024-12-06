@@ -47,6 +47,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const { status: statusDocument, name, user_permissions } = documentsStore.currentDocument.document;
   const permission = user_permissions.find((user) => user.email === userMail);
   const isCreator = permission?.document_permissions[0].name === 'CREATOR';
+
   const documentStatuses = [
     DocumentStatus.DRAFT,
     DocumentStatus.SIGNATURE_IN_PROGRESS,
@@ -121,82 +122,84 @@ const DocumentCardPage = observer((): ReactElement => {
   return (
     <Layout>
       <Breadcrumbs pageTitle={name} />
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
-          Документ: {name}
-        </Typography>
-        <Button
-          sx={{ marginLeft: 'auto' }}
-          startIcon={<ManageHistory />}
-          variant="outlined"
-          onClick={() => setVersionDrawerOpen(true)}
-        >
-          Версии документа
-        </Button>
-      </Box>
-
-      <Box
-        sx={{
-          backgroundColor: 'white',
-          padding: '20px',
-          borderRadius: '10px',
-          display: 'flex',
-          gap: '20px',
-        }}
-      >
-        <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
-          Скачать документ
-        </Button>
-        {isCreator && (
-          <>
-            <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
-              Редактировать документ
-            </Button>
-            <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
-              Отправить в архив
-            </Button>
-          </>
-        )}
-      </Box>
-      <PreviewDoc />
-      <Box sx={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
-        <DataGrid
-          columns={columns}
-          rows={rows}
-          hideFooter
-          disableColumnResize={true}
-          disableColumnFilter
-          disableColumnMenu
-        />
-        <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
-          <Typography sx={{ fontSize: '18px' }}>Статус документа: {getStatusTranslation(statusDocument)}</Typography>
-        </Box>
-        {isCreator && (
-          <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-            <VoteModal user={userMail} />
-            {isSignBtnShown && (
-              <Button variant="outlined" onClick={() => alert('В разработке')}>
-                Отправить на подпись
-              </Button>
-            )}
-            {statusDocument === DocumentStatus.DRAFT && <CreateVoting />}
-            {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
-              Дать доступ к документу
-            </Button>
-            {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
-          </Box>
-        )}
-        {!isCreator && (
-          <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-            {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
-            {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
-          </Box>
-        )}
-        <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
-          <Typography sx={{ fontSize: '18px' }}>
-            Этот документ доступен для: {user_permissions.map((user) => user.email).join(', ')}
+      <Box width="70%" margin={'0 auto'}>
+        {' '}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
+            Документ: {name}
           </Typography>
+          <Button
+            sx={{ marginLeft: 'auto' }}
+            startIcon={<ManageHistory />}
+            variant="outlined"
+            onClick={() => setVersionDrawerOpen(true)}
+          >
+            Версии документа
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: 'white',
+            padding: '20px',
+            borderRadius: '10px',
+            display: 'flex',
+            gap: '20px',
+          }}
+        >
+          <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
+            Скачать документ
+          </Button>
+          {isCreator && (
+            <>
+              <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
+                Редактировать документ
+              </Button>
+              <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
+                Отправить в архив
+              </Button>
+            </>
+          )}
+        </Box>
+        <PreviewDoc />
+        <Box sx={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
+          <DataGrid
+            columns={columns}
+            rows={rows}
+            hideFooter
+            disableColumnResize={true}
+            disableColumnFilter
+            disableColumnMenu
+          />
+          <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
+            <Typography sx={{ fontSize: '18px' }}>Статус документа: {getStatusTranslation(statusDocument)}</Typography>
+          </Box>
+          {isCreator && (
+            <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+              <VoteModal user={userMail} />
+              {isSignBtnShown && (
+                <Button variant="outlined" onClick={() => alert('В разработке')}>
+                  Отправить на подпись
+                </Button>
+              )}
+              {statusDocument === DocumentStatus.DRAFT && <CreateVoting />}
+              {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
+              <Button variant="outlined" onClick={() => alert('В разработке')}>
+                Дать доступ к документу
+              </Button>
+              {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
+            </Box>
+          )}
+          {!isCreator && (
+            <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+              {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
+              {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
+            </Box>
+          )}
+          <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
+            <Typography sx={{ fontSize: '18px' }}>
+              Этот документ доступен для: {user_permissions.map((user) => user.email).join(', ')}
+            </Typography>
+          </Box>
         </Box>
       </Box>
       <DocumentVersionDrawer

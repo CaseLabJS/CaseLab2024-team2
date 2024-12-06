@@ -16,7 +16,7 @@ import {
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useMemo, useEffect } from 'react';
 
-import EditAttributeDialog from './editAttributeDialog';
+import EditAttributeDialog from './EditAttributeDialog';
 
 import style from './attributeTable.module.css';
 
@@ -31,7 +31,6 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
   const closeEditAttributeDialog = (): void => setIsEditAttbuteDialogOpen(false);
 
   const handleChangePage = (_event: unknown, newPage: number): void => {
-    console.log(newPage);
     setPage(newPage);
   };
 

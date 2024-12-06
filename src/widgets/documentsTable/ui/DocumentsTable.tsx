@@ -26,7 +26,7 @@ const DocumentsTable = observer((): ReactElement => {
   useEffect(() => {
     void documentsStore.getDocumentsPage();
   }, []);
-  const handleChangePage = (event: unknown, newPage: number): void => {
+  const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 
@@ -46,7 +46,7 @@ const DocumentsTable = observer((): ReactElement => {
   };
 
   return (
-    <TableContainer component={Paper} sx={{ padding: 4 }}>
+    <TableContainer component={Paper} sx={{ padding: 4, width: '70%', margin: '0 auto', borderRadius: '10px' }}>
       <DocumentsTableToolbar
         isShowSignedOnly={isShowSignedOnly}
         setIsShowSignedOnly={setIsShowSignedOnly}
