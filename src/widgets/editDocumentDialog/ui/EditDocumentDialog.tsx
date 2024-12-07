@@ -1,5 +1,5 @@
 import type { CombinedAttribute } from '@/entities/attribute';
-import type { ChangeEvent, SyntheticEvent } from 'react';
+import type { ChangeEvent } from 'react';
 
 import { attributesStore } from '@/entities/attribute';
 import { documentsStore } from '@/entities/documents';
@@ -23,7 +23,8 @@ import { useFormik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState, type ReactElement } from 'react';
 
-import { getFormConfiguration, getInputComponent, getNewDocumentParameters } from '../../createDocumentDialog/lib';
+import { getInputComponent } from '../../createDocumentDialog/lib';
+import { getEditebleDocumentParameters, getFormConfiguration } from '../index';
 
 interface EditDocumentDialogProps {
   open: boolean;
@@ -34,12 +35,17 @@ interface EditDocumentDialogProps {
 const EditDocumentDialog = observer(({ open, onClose, id: documentId }: EditDocumentDialogProps): ReactElement => {
   const [documentTypeId, setDocumentTypeId] = useState<number | null>(null);
   const [attributes, setAttributes] = useState<CombinedAttribute[]>([]);
-  const [selectedDocumentType, setSelectedDocumentType] = useState<{ id: number; label: string } | null>(null);
 
   const formik = useFormik(
     getFormConfiguration(attributes, () => {
       documentsStore
-        .updateAllDocumentById(documentId, getNewDocumentParameters(documentTypeId as number, formik.values))
+        .updateAllDocumentById(
+          documentId,
+          getEditebleDocumentParameters(documentTypeId as number, {
+            ...formik.values,
+            name: documentsStore.currentDocument?.document.name || '',
+          }),
+        )
         .then(() => {
           alert('Документ сохранён');
           formik.resetForm();
@@ -49,40 +55,20 @@ const EditDocumentDialog = observer(({ open, onClose, id: documentId }: EditDocu
     }),
   );
 
-  // Загружаем текущий тип документа при открытии модального окна
   useEffect(() => {
-    if (open) {
-      const currentDocumentType = documentsStore.currentDocument?.document.document_type_id;
-      if (currentDocumentType) {
-        setDocumentTypeId(currentDocumentType);
+    documentTypesStore.load().catch(console.error);
 
-        const documentType = documentTypesStore.getById(currentDocumentType);
-        if (documentType) {
-          setSelectedDocumentType({ id: documentType.id, label: documentType.name });
-
-          attributesStore.getCombinedDocumentAttributes(documentType).then(setAttributes).catch(console.error);
-        }
-      }
-    }
-  }, [open]);
-
-  // Загружаем атрибуты при смене типа документа
-  useEffect(() => {
     if (!documentTypeId) return;
 
     const documentType = documentTypesStore.getById(documentTypeId);
-    if (documentType) {
-      attributesStore.getCombinedDocumentAttributes(documentType).then(setAttributes).catch(console.error);
-    }
-  }, [documentTypeId]);
 
-  function handleDocumentTypeChange(_: SyntheticEvent, value: { id: number; label: string } | null): void {
-    if (value) {
-      setDocumentTypeId(value.id);
-    } else {
-      return;
-    }
-  }
+    if (!documentType) return;
+
+    attributesStore
+      .getCombinedDocumentAttributes(documentType)
+      .then((combinedAttributes) => setAttributes(combinedAttributes))
+      .catch(console.error);
+  }, [documentTypeId]);
 
   function handleFileInput(event: ChangeEvent<HTMLInputElement>): void {
     if (!event.target.files || !event.target.files.length) return;
@@ -106,15 +92,16 @@ const EditDocumentDialog = observer(({ open, onClose, id: documentId }: EditDocu
           <Autocomplete
             sx={{ mt: 1 }}
             disablePortal
-            value={selectedDocumentType}
-            onChange={handleDocumentTypeChange}
+            onChange={(_, value) => setDocumentTypeId(value?.id || null)}
             options={
               documentTypesStore.status === Status.LOADING
                 ? [{ id: -1, label: 'Загрузка...' }]
-                : documentTypesStore.documentTypes.map((documentType) => ({
-                    id: documentType.id,
-                    label: documentType.name,
-                  }))
+                : documentTypesStore.documentTypes.map((documentType) => {
+                    return {
+                      id: documentType.id,
+                      label: documentType.name,
+                    };
+                  })
             }
             renderInput={(params) => <TextField {...params} label="Тип документа" />}
           />
@@ -154,7 +141,7 @@ const EditDocumentDialog = observer(({ open, onClose, id: documentId }: EditDocu
             variant="outlined"
             disabled={!formik.isValid || documentTypeId === null || !formik.values.file}
           >
-            Сохранить
+            Изменить
           </LoadingButton>
         </DialogActions>
       </form>

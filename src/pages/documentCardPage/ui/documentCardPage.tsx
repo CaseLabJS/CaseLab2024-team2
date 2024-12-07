@@ -53,8 +53,15 @@ const DocumentCardPage = observer((): ReactElement => {
     DocumentStatus.SIGNATURE_IN_PROGRESS,
     DocumentStatus.SIGNATURE_ACCEPTED,
   ];
-  const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
+  const isEditableDocStatuses = [
+    DocumentStatus.DRAFT,
+    DocumentStatus.ARCHIVED,
+    DocumentStatus.SIGNATURE_REJECTED,
+    DocumentStatus.VOTING_REJECTED,
+  ];
 
+  const isSignBtnShown = documentStatuses.includes(statusDocument);
+  const isEditBtnShown = isEditableDocStatuses.includes(statusDocument);
   // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
   const versionsList: DocumentVersionResponse[] = [
     {
@@ -148,14 +155,18 @@ const DocumentCardPage = observer((): ReactElement => {
           gap: '20px',
         }}
       >
-        <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
-          Скачать документ
-        </Button>
+        {documentsStore.currentDocument.latest_version.contentName && (
+          <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
+            Скачать документ
+          </Button>
+        )}
         {isCreator && (
           <>
-            <Button startIcon={<EditNote />} variant="outlined" onClick={() => setEditDocumentDialogState(true)}>
-              Редактировать документ
-            </Button>
+            {isEditBtnShown && (
+              <Button startIcon={<EditNote />} variant="outlined" onClick={() => setEditDocumentDialogState(true)}>
+                Редактировать документ
+              </Button>
+            )}
             <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => alert('В разработке')}>
               Отправить в архив
             </Button>
