@@ -90,7 +90,7 @@ class DocumentsStore {
   }
 
   //получить документ по id
-  async getDocumentById(id: number): Promise<void> {
+  async getDocumentById(id: number): Promise<DocumentFacadeResponse | undefined> {
     try {
       this.status = Status.LOADING;
       const data = await getDocumentData(id);
@@ -99,6 +99,7 @@ class DocumentsStore {
         this.currentDocument = data;
         this.currentDocumentDelete = this.checkDocumentStatus(id);
       });
+      return data;
     } catch {
       this.status = Status.ERROR;
       alert('Не удалось получить документ');
