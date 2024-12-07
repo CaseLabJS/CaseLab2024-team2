@@ -124,19 +124,16 @@ class DocumentsStore {
 
   //полное изменение документа
   async updateAllDocumentById(id: number, document: UpdateDocumentRequest): Promise<void> {
-    const documentToUpdate = this.documents.find((item) => item.document.id === id);
-    if (documentToUpdate) {
-      try {
-        this.status = Status.LOADING;
-        const updatedDocument = await updateDocumentData(id, document);
-        runInAction(() => {
-          this.currentDocument = updatedDocument;
-          this.status = Status.SUCCESS;
-        });
-      } catch {
-        this.status = Status.ERROR;
-        alert('Не удалось обновить документ');
-      }
+    try {
+      this.status = Status.LOADING;
+      const updatedDocument = await updateDocumentData(id, document);
+      runInAction(() => {
+        this.currentDocument = updatedDocument;
+        this.status = Status.SUCCESS;
+      });
+    } catch {
+      this.status = Status.ERROR;
+      alert('Не удалось обновить документ');
     }
   }
 

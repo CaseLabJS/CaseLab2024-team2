@@ -107,17 +107,6 @@ const EditDocumentDialog = observer(({ open, onClose, id: documentId }: EditDocu
           />
           {documentTypeId && (
             <>
-              <TextField
-                sx={{ mt: 2 }}
-                name="name"
-                label="Название документа"
-                value={(formik.values.name as string) || ''}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={Boolean(formik.touched.name) && Boolean(formik.errors.name)}
-                required
-                fullWidth
-              />
               {attributes.map((attribute) => getInputComponent(attribute, formik))}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
                 <input id="filePicker" name="file" style={{ display: 'none' }} type="file" onChange={handleFileInput} />
