@@ -68,6 +68,7 @@
     "tabWidth": 2
   },
   "optionalDependencies": {
-    "@esbuild/darwin-arm64": "^0.24.0"
+    "@esbuild/darwin-arm64": "^0.24.0",
+    "@rollup/rollup-darwin-arm64": "^4.28.1"
   }
 }
