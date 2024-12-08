@@ -27,6 +27,7 @@ class DocumentsStore {
   status: Status = Status.UNSET;
   pageNumber: number = 0;
   searchQuery: string | null = null;
+  currentBlob: Blob | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -91,16 +92,19 @@ class DocumentsStore {
   }
 
   //получить документ по id
-  async getDocumentById(id: number): Promise<DocumentFacadeResponse | undefined> {
+  async getDocumentById(id: number): Promise<Blob | undefined> {
+    this.currentBlob = null;
     try {
       this.status = Status.LOADING;
       const data = await getDocumentData(id);
+      const blob = await downloadDocumentData(data.latest_version.id);
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
         this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentBlob = blob;
       });
-      return data;
+      return blob;
     } catch {
       this.status = Status.ERROR;
       alert('Не удалось получить документ');
@@ -137,6 +141,7 @@ class DocumentsStore {
         this.currentDocument = updatedDocument;
         this.status = Status.SUCCESS;
         this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.getDocumentById(id).catch((err) => console.log(err));
       });
     } catch {
       this.status = Status.ERROR;

@@ -74,7 +74,7 @@ const PreviewDoc = observer(({ blob }: { blob: Blob }): ReactElement => {
       }
     };
     fetchAndProcessBlob(blob);
-  }, []);
+  }, [blob]);
 
   return (
     <Box padding="20px" display="flex" justifyContent="center" flexDirection="column" alignItems="center">
