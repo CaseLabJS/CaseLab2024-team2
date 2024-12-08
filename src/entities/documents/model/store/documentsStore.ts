@@ -9,6 +9,7 @@ import {
   downloadDocumentData,
   grantAccess,
 } from '@/entities/documents/api';
+import { votingStore } from '@/entities/vote';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -19,7 +20,6 @@ import type {
   PatchDocumentRequest,
   UpdateDocumentRequest,
 } from '../../index';
-import { votingStore } from '@/entities/vote';
 
 class DocumentsStore {
   documents: DocumentFacadeResponse[] = [];
