@@ -60,16 +60,16 @@ const DocumentsTable = observer((): ReactElement => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Тип</TableCell>
               <TableCell>Название</TableCell>
+              <TableCell>Тип</TableCell>
               <TableCell>Статус</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {displayedData.map(({ document }, index) => (
               <TableRow key={index} onClick={() => handleClickDocument(document.id)} sx={{ cursor: 'pointer' }}>
-                <TableCell>{typeDocument.find((type) => type.id === document.document_type_id)?.name}</TableCell>
                 <TableCell>{document.name}</TableCell>
+                <TableCell>{typeDocument.find((type) => type.id === document.document_type_id)?.name}</TableCell>
                 <TableCell>{getStatusTranslation(document.status)}</TableCell>
               </TableRow>
             ))}
