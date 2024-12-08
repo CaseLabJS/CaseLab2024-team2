@@ -101,3 +101,9 @@ export const downloadDocumentData = async (id: number): Promise<Blob> => {
   });
   return response.data;
 };
+
+// Добавляет разрешение для чтения документа для пользователя по его email
+export const grantAccess = async (id: number, email: string): Promise<DocumentFacadeResponse> => {
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}/grant-access-to/${email}`);
+  return response.data;
+};
