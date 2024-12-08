@@ -148,20 +148,17 @@ class DocumentsStore {
 
   //частичное изменение документа
   async updateDocumentById(id: number, document: PatchDocumentRequest): Promise<void> {
-    const documentToUpdate = this.documents.find((item) => item.document.id === id);
-    if (documentToUpdate) {
-      try {
-        this.status = Status.LOADING;
-        const updatedDocument = await patchDocumentData(id, document);
-        runInAction(() => {
-          this.currentDocument = updatedDocument;
-          this.status = Status.SUCCESS;
-          this.currentDocumentDelete = this.checkDocumentStatus(id);
-        });
-      } catch {
-        this.status = Status.ERROR;
-        alert('Не удалось обновить документ');
-      }
+    try {
+      this.status = Status.LOADING;
+      const updatedDocument = await patchDocumentData(id, document);
+      runInAction(() => {
+        this.currentDocument = updatedDocument;
+        this.status = Status.SUCCESS;
+        this.currentDocumentDelete = this.checkDocumentStatus(id);
+      });
+    } catch {
+      this.status = Status.ERROR;
+      alert('Не удалось обновить документ');
     }
   }
 

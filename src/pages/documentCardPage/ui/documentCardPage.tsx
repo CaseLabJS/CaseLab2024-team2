@@ -19,6 +19,7 @@ import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useEffect } from 'react';
 import { useParams } from 'react-router';
 
+import EditableText from './documentEditableText';
 import { DocumentVersionDrawer } from './documentVersionDrawer';
 
 const DocumentCardPage = observer((): ReactElement => {
@@ -54,7 +55,7 @@ const DocumentCardPage = observer((): ReactElement => {
 
   // Проверяем, что юзер является создателем документа
   const userMail = authStore.email;
-  const { status: statusDocument, name, user_permissions } = documentsStore.currentDocument.document;
+  const { status: statusDocument, user_permissions } = documentsStore.currentDocument.document;
   const permission = user_permissions.find((user) => user.email === userMail);
   const isCreator = permission?.document_permissions[0].name === 'CREATOR';
   const documentStatuses = [
@@ -62,7 +63,14 @@ const DocumentCardPage = observer((): ReactElement => {
     DocumentStatus.SIGNATURE_IN_PROGRESS,
     DocumentStatus.SIGNATURE_ACCEPTED,
   ];
+  const isEditStatuses = [
+    DocumentStatus.DRAFT,
+    DocumentStatus.SIGNATURE_REJECTED,
+    DocumentStatus.VOTING_REJECTED,
+    DocumentStatus.ARCHIVED,
+  ];
   const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
+  const isEditMode = isEditStatuses.includes(documentsStore.currentDocument?.document.status) && isCreator;
 
   // Проверяем, что документ можно удалить
   const isDeleteBtnShown = documentsStore.currentDocumentDelete;
@@ -147,9 +155,7 @@ const DocumentCardPage = observer((): ReactElement => {
     <>
       <Box width="70%" margin="0 auto">
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="h1" sx={{ fontSize: '34px', margin: '8px', maxWidth: '90%' }}>
-            Документ: {name}
-          </Typography>
+          <EditableText isEditMode={isEditMode} />
           <Button
             sx={{ marginLeft: 'auto' }}
             startIcon={<ManageHistory />}
