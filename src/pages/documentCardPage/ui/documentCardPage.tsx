@@ -2,7 +2,6 @@ import type { DocumentVersionResponse } from '@/entities/documents';
 
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
-import { downloadDocumentData } from '@/entities/documents/api';
 import { signaturesStore } from '@/entities/signature';
 import { PreviewDoc } from '@/shared/components';
 import { Status } from '@/shared/types/status.type';
@@ -29,22 +28,10 @@ const DocumentCardPage = observer((): ReactElement => {
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
   const [isEditDocumentDialogEdit, setEditDocumentDialogState] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
-  const [blob, setBlob] = useState<Blob>();
 
   useEffect(() => {
-    if (id) {
-      documentsStore
-        .getDocumentById(Number(id))
-        .then((res) => {
-          if (res !== undefined) {
-            downloadDocumentData(res.latest_version.id)
-              .then((blob) => setBlob(blob))
-              .catch((err) => console.log(err));
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
+    documentsStore.getDocumentById(Number(id)).catch((err) => console.log(err));
+  }, [id]);
 
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
@@ -75,6 +62,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const isEditMode = isEditStatuses.includes(statusDocument) && isCreator;
   // Проверяем, что документ можно удалить
   const isDeleteBtnShown = documentsStore.currentDocumentDelete;
+  const blobFile = documentsStore.currentBlob;
 
   // TODO Нужно делать запрос версий в сторе. Пока что вводим моковые данные
   const versionsList: DocumentVersionResponse[] = [
@@ -197,7 +185,7 @@ const DocumentCardPage = observer((): ReactElement => {
             </>
           )}
         </Box>
-        <Box>{blob !== undefined && <PreviewDoc blob={blob} />}</Box>
+        <Box>{blobFile && <PreviewDoc blob={blobFile} />}</Box>
         <Box sx={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
           {rows.length > 0 && (
             <DataGrid
