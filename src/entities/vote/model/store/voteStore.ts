@@ -1,5 +1,6 @@
 import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '@/entities/vote';
 
+import { authStore } from '@/entities/auth';
 import { addVote, createVotingProcess, getVotingProcess } from '@/entities/vote/api';
 import { makeAutoObservable, runInAction } from 'mobx';
 
@@ -8,16 +9,19 @@ type ISimpleState = 'error' | 'success' | 'loading';
 class VotingStore {
   state: ISimpleState = 'success';
   currentVoting: VotingProcessResponse | null = null;
+  isAvailableVote: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
   }
-
-  async isAvailibleVote(documentId: number, email: string): Promise<boolean> {
+  setIsAvailableVote(isOpen: boolean): void {
+    this.isAvailableVote = isOpen;
+  }
+  async getAvailableVote(documentId: number, email: string): Promise<void> {
     try {
       this.state = 'loading';
       const data = await getVotingProcess(documentId);
-      if (!data) return false;
+      if (!data) return;
       const findVote = data.votes.find(
         (item) =>
           data.status.includes('IN_PROGRESS') && item.applicationUser.email === email && item.status === 'NOT_VOTED',
@@ -27,13 +31,12 @@ class VotingStore {
         if (findVote) {
           this.currentVoting = data;
         }
+        this.isAvailableVote = !!findVote;
       });
-      return !!findVote;
     } catch {
       runInAction(() => {
         this.state = 'error';
       });
-      return false;
     }
   }
 
@@ -68,6 +71,10 @@ class VotingStore {
       }
       runInAction(() => {
         this.state = 'success';
+        this.currentVoting = data;
+        if (data.votes.find((vote) => vote.applicationUser.email === authStore.email)) {
+          this.isAvailableVote = true;
+        }
       });
     } catch {
       runInAction(() => {
@@ -86,6 +93,10 @@ class VotingStore {
       }
       runInAction(() => {
         this.state = 'success';
+        if (this.currentVoting?.votes.find((vote) => vote.applicationUser.email === authStore.email)) {
+          this.currentVoting = null;
+          this.isAvailableVote = false;
+        }
       });
     } catch {
       runInAction(() => {

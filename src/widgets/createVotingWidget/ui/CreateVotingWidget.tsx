@@ -1,8 +1,10 @@
 import type { Deadline } from '@/entities/vote/model/types/deadline.type';
 import type { SelectChangeEvent } from '@mui/material';
 
+import { documentsStore } from '@/entities/documents';
 import { userStore } from '@/entities/user';
 import { votingStore } from '@/entities/vote';
+import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, TextField, Typography, Box, Stack, Select, MenuItem, Chip, Modal } from '@mui/material';
 import { observer } from 'mobx-react-lite';
@@ -14,8 +16,13 @@ import style from './createVotingWidget.module.css';
 const threshold_values: number[] = [0.6, 0.7, 0.8, 0.9, 1];
 
 const CreateVoting = observer((): ReactElement => {
-  const users = userStore.users.map((user) => user.email);
+  const status = documentsStore.currentDocument?.document.status;
 
+  if (status !== DocumentStatus.DRAFT) {
+    return <></>;
+  }
+
+  const users = userStore.users.map((user) => user.email);
   const { documentId } = useParams();
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [name, setName] = useState<string>('');

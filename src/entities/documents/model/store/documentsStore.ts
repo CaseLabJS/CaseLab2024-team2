@@ -23,6 +23,7 @@ import type {
 class DocumentsStore {
   documents: DocumentFacadeResponse[] = [];
   signDocuments: DocumentFacadeResponse[] = [];
+  currentSignatureStatus: boolean = false;
   currentDocument: DocumentFacadeResponse | null = null;
   currentDocumentDelete: boolean = false;
   status: Status = Status.UNSET;
@@ -75,7 +76,9 @@ class DocumentsStore {
       this.pageNumber * this.rowsPerPage + this.rowsPerPage,
     );
   }
-
+  setCurrentSignatureStatus(status: boolean): void {
+    this.currentSignatureStatus = status;
+  }
   async setIsShowSignedOnly(isValue: boolean): Promise<void> {
     try {
       this.status = Status.LOADING;
@@ -282,7 +285,7 @@ class DocumentsStore {
     this.currentDocumentDelete = false;
     this.status = Status.UNSET;
     this.pageNumber = 0;
-    this.searchQuery = null;
+    this.searchQuery = '';
   }
 }
 

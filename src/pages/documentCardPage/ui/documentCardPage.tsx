@@ -4,6 +4,7 @@ import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { downloadDocumentData } from '@/entities/documents/api';
 import { signaturesStore } from '@/entities/signature';
+import { votingStore } from '@/entities/vote';
 import { PreviewDoc } from '@/shared/components';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
@@ -37,6 +38,13 @@ const DocumentCardPage = observer((): ReactElement => {
         .getDocumentById(Number(id))
         .then((res) => {
           if (res !== undefined) {
+            if (res.signature) {
+              documentsStore.setCurrentSignatureStatus(res?.signature.status === 'NOT_SIGNED' || false);
+            }
+            votingStore.setIsAvailableVote(
+              documentsStore.currentDocument?.document.status === DocumentStatus.VOTING_IN_PROGRESS,
+            );
+
             downloadDocumentData(res.latest_version.id)
               .then((blob) => setBlob(blob))
               .catch((err) => console.log(err));
@@ -45,7 +53,20 @@ const DocumentCardPage = observer((): ReactElement => {
         .catch((err) => console.log(err));
     }
   }, []);
-
+  useEffect(() => {
+    if (id) {
+      documentsStore
+        .getDocumentById(Number(id))
+        .then((res) => {
+          if (res !== undefined) {
+            votingStore.setIsAvailableVote(
+              documentsStore.currentDocument?.document.status === DocumentStatus.VOTING_IN_PROGRESS,
+            );
+          }
+        })
+        .catch(() => {});
+    }
+  }, [id]);
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
     return <Typography>Загрузка...</Typography>;
@@ -60,6 +81,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const { status: statusDocument, user_permissions } = documentsStore.currentDocument.document;
   const permission = user_permissions.find((user) => user.email === userMail);
   const isCreator = permission?.document_permissions[0].name === 'CREATOR';
+
   const documentStatuses = [
     DocumentStatus.DRAFT,
     DocumentStatus.SIGNATURE_IN_PROGRESS,
@@ -223,24 +245,19 @@ const DocumentCardPage = observer((): ReactElement => {
           </Box>
           {isCreator && (
             <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-              <VoteModal user={userMail} />
               {isSignBtnShown && (
                 <Button variant="outlined" onClick={() => setSignatureDrawerOpen(true)}>
                   Отправить на подпись
                 </Button>
               )}
-              {statusDocument === DocumentStatus.DRAFT && <CreateVoting />}
-              {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
+              <CreateVoting />
               <GrantAccess />
-              {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
             </Box>
           )}
-          {!isCreator && (
-            <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-              {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
-              {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
-            </Box>
-          )}
+          <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+            <SignDocument />
+            {votingStore.isAvailableVote && <VoteModal user={userMail} />}
+          </Box>
           <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
             <Typography sx={{ fontSize: '18px' }}>
               Этот документ доступен для: {user_permissions.map((user) => user.email).join(', ')}
@@ -257,7 +274,7 @@ const DocumentCardPage = observer((): ReactElement => {
       />
       <SignatureDrawer
         isOpen={isSignatureDrawerOpen}
-        onClose={() => setSignatureDrawerOpen(false)}
+        setIsOpen={setSignatureDrawerOpen}
         documentName={documentsStore.currentDocument?.document.name}
         documentId={documentsStore.currentDocument?.document.id}
         signatures={signatures}

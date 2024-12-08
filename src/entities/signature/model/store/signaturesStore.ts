@@ -3,7 +3,7 @@ import type { SignatureResponse } from '@/entities/signature';
 
 import { documentsStore } from '@/entities/documents';
 import { getSignatures, getDocumentSignatures, sendDocument, signDocument } from '@/entities/signature/api';
-import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { useParams } from 'react-router-dom';
 
 import type { SignDocumentRequest } from '../../api/req-signatures';
@@ -18,10 +18,6 @@ class SignaturesStore {
 
   constructor() {
     makeAutoObservable(this);
-
-    onBecomeObserved(this, 'selectedDocumentSignatures', () => {
-      this.fetchDocumentSignatures(Number(useParams().documentId)).catch(console.error);
-    });
   }
 
   private readonly tryCatch =
@@ -53,32 +49,20 @@ class SignaturesStore {
     });
   });
 
-  async checkSignByEmail(email: string, documentId: number): Promise<boolean> {
-    try {
+  sendDocumentToSign = this.tryCatch(
+    async (signatureData: SignatureCreateRequest, isCurrentSign: boolean): Promise<void> => {
       this.status = 'loading';
-      const data = await getDocumentSignatures(documentId);
-      const currentSignature =
-        data.find((signature) => signature.email === email && signature.status === 'NOT_SIGNED') || null;
+      const newSignature = await sendDocument(signatureData);
       runInAction(() => {
-        this.selectedSignature = currentSignature;
+        this.signatures.push(newSignature);
+        this.status = 'success';
+        if (isCurrentSign) {
+          documentsStore.setCurrentSignatureStatus(isCurrentSign);
+        }
+        documentsStore.checkDocumentStatus(Number(useParams().documentId));
       });
-      return !!currentSignature;
-    } catch {
-      this.status = 'error';
-      this.selectedSignature = null;
-      return false;
-    }
-  }
-
-  sendDocumentToSign = this.tryCatch(async (signatureData: SignatureCreateRequest): Promise<void> => {
-    this.status = 'loading';
-    const newSignature = await sendDocument(signatureData);
-    runInAction(() => {
-      this.signatures.push(newSignature);
-      this.status = 'success';
-      documentsStore.checkDocumentStatus(Number(useParams().documentId));
-    });
-  });
+    },
+  );
 
   signDocumentById = this.tryCatch(async (sign: SignDocumentRequest): Promise<void> => {
     this.status = 'loading';
