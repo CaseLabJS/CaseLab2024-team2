@@ -55,7 +55,7 @@ const DocumentCardPage = observer((): ReactElement => {
 
   // Проверяем, что юзер является создателем документа
   const userMail = authStore.email;
-  const { status: statusDocument, name, user_permissions } = documentsStore.currentDocument.document;
+  const { status: statusDocument, user_permissions } = documentsStore.currentDocument.document;
   const permission = user_permissions.find((user) => user.email === userMail);
   const isCreator = permission?.document_permissions[0].name === 'CREATOR';
   const documentStatuses = [
