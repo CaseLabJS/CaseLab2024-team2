@@ -1,6 +1,7 @@
 import { documentsStore } from '@/entities/documents';
 import { SearchForm } from '@/shared/components';
 import { useDebounce } from '@/shared/hooks';
+import { CreateDocumentDialog } from '@/widgets/createDocumentDialog';
 import { Add } from '@mui/icons-material';
 import {
   Toolbar,
@@ -19,6 +20,7 @@ import DocumentsTable from './DocumentsTable';
 
 const DocumentsTableToolbar = observer((): ReactElement => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isCreateDocumentDialogOpen, setCreateDocumentDialogState] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     void documentsStore.setIsShowSignedOnly(false).catch();
     setSearchTerm(e.target.value);
@@ -34,7 +36,13 @@ const DocumentsTableToolbar = observer((): ReactElement => {
           paddingRight: { xs: 0, sm: 0 },
         }}
       >
-        <Button variant="text" startIcon={<Add />} sx={{ marginRight: 2 }}>
+        <CreateDocumentDialog open={isCreateDocumentDialogOpen} onClose={() => setCreateDocumentDialogState(false)} />
+        <Button
+          variant="text"
+          startIcon={<Add />}
+          sx={{ marginRight: 2 }}
+          onClick={() => setCreateDocumentDialogState(true)}
+        >
           Добавить
         </Button>
         <FormControl

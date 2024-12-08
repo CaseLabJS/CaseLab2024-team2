@@ -4,6 +4,7 @@ import type { DialogProps } from '@mui/material';
 
 import { attributesStore } from '@/entities/attribute';
 import { documentTypesStore } from '@/entities/documentsType/model/store/documentTypesStore';
+import { ConfirmationDialog } from '@/widgets/confirmationDialog';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,6 +18,7 @@ import {
   TextField,
   DialogActions,
   Button,
+  Typography,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
@@ -37,6 +39,7 @@ const ManageDocumentTypeDialog = observer(
     const [name, setName] = useState<string>('');
     const [attributes, setAttributes] = useState<DocumentTypeToAttributeRequest[]>([]);
     const [isAddAtributeDialogOpen, setIsAddAtributeDialogOpen] = useState(false);
+    const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
     const combinedAttributes = attributes.map((a) => {
       return { ...a, ...attributesStore.getById(a.attribute_id) } as CombinedAttribute;
@@ -96,6 +99,12 @@ const ManageDocumentTypeDialog = observer(
 
     return (
       <>
+        <ConfirmationDialog
+          open={isConfirmationDialogOpen}
+          onClose={() => setConfirmationDialogOpen(false)}
+          onSubmit={() => handleDeleteButton()}
+          children={<Typography>Вы действительно собираетесь тип документа {name}?</Typography>}
+        />
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
           <DialogTitle sx={{ textAlign: 'center' }}>{documentType ? 'Изменить' : 'Создать'} тип документа</DialogTitle>
           <IconButton
@@ -136,7 +145,12 @@ const ManageDocumentTypeDialog = observer(
                 <Button variant="contained" color="primary" onClick={handleSaveButton}>
                   Сохранить
                 </Button>
-                <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={handleDeleteButton}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => setConfirmationDialogOpen(true)}
+                >
                   Удалить
                 </Button>
               </>

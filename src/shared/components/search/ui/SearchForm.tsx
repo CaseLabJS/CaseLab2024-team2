@@ -15,7 +15,7 @@ const SearchForm = (props: TextFieldProps): ReactElement => {
       }}
       placeholder="Search..."
       variant="standard"
-      sx={{ width: '30%' }}
+      size="medium"
       autoComplete="off"
       {...props}
     />

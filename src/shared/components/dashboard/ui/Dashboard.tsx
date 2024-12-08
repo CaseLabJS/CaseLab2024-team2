@@ -1,9 +1,10 @@
+import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { authStore } from '@/entities/auth';
 import Logout from '@/shared/components/logout/ui/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import WorkIcon from '@mui/icons-material/Work';
-import { Link, ListItemIcon, ListItemText } from '@mui/material';
+import { ListItemIcon, ListItemText } from '@mui/material';
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -13,13 +14,14 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Stack from '@mui/material/Stack';
 import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function Dashboard(): React.ReactElement {
   const itemsUser = [
     // пункты меню в случае простого пользователя
     {
       name: 'Профиль',
-      link: `/profile`,
+      link: ROUTE_CONSTANTS.USER_PROFILE.path,
       icon: <AccountCircleIcon fontSize="small" />,
     },
   ];
@@ -94,32 +96,38 @@ export default function Dashboard(): React.ReactElement {
                 <Paper>
                   <ClickAwayListener onClickAway={handleClose}>
                     <div>
-                      <MenuItem>
-                        <ListItemIcon>
-                          <WorkIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>
-                          <ListItemText>{authStore.displayName}</ListItemText>
-                          <ListItemText>{authStore.email}</ListItemText>
-                        </ListItemText>
-                      </MenuItem>
                       <MenuList
                         autoFocusItem={isOpen}
                         id="composition-menu"
                         aria-labelledby="composition-button"
                         onKeyDown={handleListKeyDown}
                       >
+                        <MenuItem>
+                          <ListItemIcon>
+                            <WorkIcon fontSize="small" />
+                          </ListItemIcon>
+                          <ListItemText>
+                            <ListItemText>{authStore.displayName}</ListItemText>
+                            <ListItemText>{authStore.email}</ListItemText>
+                          </ListItemText>
+                        </MenuItem>
                         {itemsUser.map((item, i) => (
                           <MenuItem key={i}>
                             <ListItemIcon>{item.icon}</ListItemIcon>
-                            <Link href={item.link} underline="none">
+                            <NavLink
+                              style={{
+                                display: 'flex',
+                                paddingLeft: '4px',
+                                textDecoration: 'none',
+                              }}
+                              to={item.link}
+                              color="primary"
+                            >
                               {item.name}
-                            </Link>
+                            </NavLink>
                           </MenuItem>
                         ))}
-                        <MenuItem>
-                          <Logout />
-                        </MenuItem>
+                        <Logout />
                       </MenuList>
                     </div>
                   </ClickAwayListener>
