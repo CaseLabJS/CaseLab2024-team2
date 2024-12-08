@@ -8,7 +8,7 @@ import { PreviewDoc } from '@/shared/components';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { CreateVoting } from '@/widgets/createVotingWidget';
-import EditDocumentDialog from '@/widgets/editDocumentDialog/ui/EditDocumentDialog';
+import { EditDocumentDialog } from '@/widgets/editDocumentDialog/';
 import { GrantAccess } from '@/widgets/grantAccessWidget';
 import { SignatureDrawer } from '@/widgets/signatureDrawer';
 import { SignDocument } from '@/widgets/signDocument';
@@ -65,15 +65,14 @@ const DocumentCardPage = observer((): ReactElement => {
     DocumentStatus.SIGNATURE_IN_PROGRESS,
     DocumentStatus.SIGNATURE_ACCEPTED,
   ];
-  const isEditableDocStatuses = [
+  const isEditStatuses = [
     DocumentStatus.DRAFT,
-    DocumentStatus.ARCHIVED,
     DocumentStatus.SIGNATURE_REJECTED,
     DocumentStatus.VOTING_REJECTED,
+    DocumentStatus.ARCHIVED,
   ];
-  const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
-  const isEditBtnShown = isEditableDocStatuses.includes(statusDocument) && isCreator;
-
+  const isSignBtnShown = documentStatuses.includes(statusDocument);
+  const isEditMode = isEditStatuses.includes(statusDocument) && isCreator;
   // Проверяем, что документ можно удалить
   const isDeleteBtnShown = documentsStore.currentDocumentDelete;
 
@@ -157,7 +156,7 @@ const DocumentCardPage = observer((): ReactElement => {
     <>
       <Box width="70%" margin="0 auto">
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <EditableText isEditMode={isEditBtnShown} />
+          <EditableText isEditMode={isEditMode} />
           <Button
             sx={{ marginLeft: 'auto' }}
             startIcon={<ManageHistory />}
@@ -167,7 +166,6 @@ const DocumentCardPage = observer((): ReactElement => {
             Версии документа
           </Button>
         </Box>
-
         <Box
           sx={{
             backgroundColor: 'white',
@@ -178,12 +176,14 @@ const DocumentCardPage = observer((): ReactElement => {
             gap: '20px',
           }}
         >
-          <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
-            Скачать документ
-          </Button>
+          {documentsStore.currentDocument.latest_version.contentName && (
+            <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
+              Скачать документ
+            </Button>
+          )}
           {isCreator && (
             <>
-              {documentsStore.currentDocument.document.status !== DocumentStatus.ARCHIVED && (
+              {isEditMode && (
                 <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
                   Редактировать документ
                 </Button>
@@ -197,7 +197,8 @@ const DocumentCardPage = observer((): ReactElement => {
             </>
           )}
         </Box>
-        <Box sx={{ backgroundColor: 'white', padding: '20px', marginTop: '20px', borderRadius: '10px' }}>
+        <Box>{blob !== undefined && <PreviewDoc blob={blob} />}</Box>
+        <Box sx={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
           {rows.length > 0 && (
             <DataGrid
               columns={columns}
@@ -247,6 +248,7 @@ const DocumentCardPage = observer((): ReactElement => {
           </Box>
         </Box>
       </Box>
+
       <DocumentVersionDrawer
         isOpenDrawer={isVersionDrawerOpen}
         setIsOpenDrawer={setVersionDrawerOpen}
