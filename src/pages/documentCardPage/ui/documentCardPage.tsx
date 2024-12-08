@@ -8,6 +8,7 @@ import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { Breadcrumbs } from '@/widgets/breadcrumbs';
 import { CreateVoting } from '@/widgets/createVotingWidget';
+import { GrantAccess } from '@/widgets/grantAccessWidget';
 import { SignatureDrawer } from '@/widgets/signatureDrawer';
 import { SignDocument } from '@/widgets/signDocument';
 import { VoteModal } from '@/widgets/voteModal';
@@ -211,9 +212,7 @@ const DocumentCardPage = observer((): ReactElement => {
             )}
             {statusDocument === DocumentStatus.DRAFT && <CreateVoting />}
             {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
-            <Button variant="outlined" onClick={() => alert('В разработке')}>
-              Дать доступ к документу
-            </Button>
+            <GrantAccess />
             {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
           </Box>
         )}
