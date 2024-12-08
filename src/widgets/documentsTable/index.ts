@@ -1,1 +1,1 @@
-export { default as DocumentsTable } from './ui/DocumentsTable';
+export { default as DocumentsTable } from './ui/DocumentsTableToolBar';

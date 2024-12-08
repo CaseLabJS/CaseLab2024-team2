@@ -1,55 +1,66 @@
-import type { ReactElement } from 'react';
-
+import { documentsStore } from '@/entities/documents';
 import { SearchForm } from '@/shared/components';
-import { Add, Delete } from '@mui/icons-material';
-import { Toolbar, Button, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { useDebounce } from '@/shared/hooks';
+import { Add } from '@mui/icons-material';
+import {
+  Toolbar,
+  Button,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  TableContainer,
+  Paper,
+} from '@mui/material';
+import { observer } from 'mobx-react-lite';
+import { useState, type ReactElement } from 'react';
 
-interface DocumentTableToolbarProps {
-  isShowSignedOnly: boolean;
-  setIsShowSignedOnly: (value: boolean) => void;
-  setPage: (page: number) => void;
-}
+import DocumentsTable from './DocumentsTable';
 
-const DocumentsTableToolbar = ({
-  isShowSignedOnly,
-  setIsShowSignedOnly,
-  setPage,
-}: DocumentTableToolbarProps): ReactElement => {
+const DocumentsTableToolbar = observer((): ReactElement => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    void documentsStore.setIsShowSignedOnly(false).catch();
+    setSearchTerm(e.target.value);
+  };
+
+  const debounceValue = useDebounce(searchTerm, 400);
+
   return (
-    <Toolbar
-      sx={{
-        paddingLeft: { xs: 0, sm: 0 },
-        paddingRight: { xs: 0, sm: 0 },
-      }}
-    >
-      <Button variant="text" startIcon={<Add />} sx={{ marginRight: 2 }}>
-        Добавить
-      </Button>
-      <Button variant="text" startIcon={<Delete sx={{ color: 'grey.500' }} />} sx={{ color: 'grey.500' }}>
-        Удалить
-      </Button>
-      <FormControl
-        size="small"
+    <TableContainer component={Paper} sx={{ marginTop: '30px', padding: 4 }}>
+      <Toolbar
         sx={{
-          margin: '0 auto',
+          paddingLeft: { xs: 0, sm: 0 },
+          paddingRight: { xs: 0, sm: 0 },
         }}
       >
-        <RadioGroup
-          row
-          value={isShowSignedOnly}
-          onChange={(e) => {
-            const isValue = e.target.value === 'true' ? true : false;
-            setIsShowSignedOnly(isValue);
-            setPage(0);
+        <Button variant="text" startIcon={<Add />} sx={{ marginRight: 2 }}>
+          Добавить
+        </Button>
+        <FormControl
+          size="small"
+          sx={{
+            margin: '0 auto',
           }}
         >
-          <FormControlLabel value={false} control={<Radio size="small" />} label="Все" />
-          <FormControlLabel value={true} control={<Radio size="small" />} label="Подписанные" />
-        </RadioGroup>
-      </FormControl>
-      <SearchForm sx={{ marginLeft: 'auto', marginRight: 2 }} />
-    </Toolbar>
+          <RadioGroup
+            row
+            value={documentsStore.isShowSignedOnly}
+            onChange={(e) => {
+              const isValue = e.target.value === 'true';
+              setSearchTerm('');
+              void documentsStore.setIsShowSignedOnly(isValue);
+            }}
+          >
+            <FormControlLabel value={false} control={<Radio size="small" />} label="Все" />
+            <FormControlLabel value={true} control={<Radio size="small" />} label="Подписанные" />
+          </RadioGroup>
+        </FormControl>
+        <SearchForm sx={{ marginLeft: 'auto', marginRight: 2 }} value={searchTerm} onChange={handleChange} />
+      </Toolbar>
+      <DocumentsTable debounceValue={debounceValue} />
+    </TableContainer>
   );
-};
+});
 
 export default DocumentsTableToolbar;
