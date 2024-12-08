@@ -184,7 +184,7 @@ const DocumentCardPage = observer((): ReactElement => {
           {isCreator && (
             <>
               {isEditMode && (
-                <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
+                <Button startIcon={<EditNote />} variant="outlined" onClick={() => setEditDocumentDialogState(true)}>
                   Редактировать документ
                 </Button>
               )}
