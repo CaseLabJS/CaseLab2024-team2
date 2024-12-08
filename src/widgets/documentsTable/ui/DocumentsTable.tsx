@@ -10,6 +10,7 @@ import {
   TableCell,
   TableBody,
   TablePagination,
+  Box,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState, type ReactElement } from 'react';
@@ -24,9 +25,9 @@ const DocumentsTable = observer((): ReactElement => {
   const [isShowSignedOnly, setIsShowSignedOnly] = useState<boolean>(false);
 
   useEffect(() => {
-    void documentsStore.getDocumentsPage();
+    documentsStore.getDocumentsPage().catch((err) => console.log(err));
   }, []);
-  const handleChangePage = (event: unknown, newPage: number): void => {
+  const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 
@@ -46,41 +47,43 @@ const DocumentsTable = observer((): ReactElement => {
   };
 
   return (
-    <TableContainer component={Paper} sx={{ padding: 4 }}>
-      <DocumentsTableToolbar
-        isShowSignedOnly={isShowSignedOnly}
-        setIsShowSignedOnly={setIsShowSignedOnly}
-        setPage={setPage}
-      />
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Тип</TableCell>
-            <TableCell>Название</TableCell>
-            <TableCell>Статус</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {displayedData.map(({ document }, index) => (
-            <TableRow key={index} onClick={() => handleClickDocument(document.id)} sx={{ cursor: 'pointer' }}>
-              <TableCell>{document.document_type_id}</TableCell>
-              <TableCell>{document.name}</TableCell>
-              <TableCell>{getStatusTranslation(document.status)}</TableCell>
+    <Box width="70%" margin="0 auto">
+      <TableContainer component={Paper} sx={{ padding: 4, borderRadius: '10px' }}>
+        <DocumentsTableToolbar
+          isShowSignedOnly={isShowSignedOnly}
+          setIsShowSignedOnly={setIsShowSignedOnly}
+          setPage={setPage}
+        />
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Тип</TableCell>
+              <TableCell>Название</TableCell>
+              <TableCell>Статус</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={documentsStore.documents.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage={'Строк на странице:'}
-      />
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {displayedData.map(({ document }, index) => (
+              <TableRow key={index} onClick={() => handleClickDocument(document.id)} sx={{ cursor: 'pointer' }}>
+                <TableCell>{document.document_type_id}</TableCell>
+                <TableCell>{document.name}</TableCell>
+                <TableCell>{getStatusTranslation(document.status)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={documentsStore.documents.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage={'Строк на странице:'}
+        />
+      </TableContainer>
+    </Box>
   );
 });
 
