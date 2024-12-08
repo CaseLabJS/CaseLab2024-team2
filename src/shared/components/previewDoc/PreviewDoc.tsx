@@ -78,43 +78,37 @@ const PreviewDoc = observer(({ blob }: { blob: Blob }): ReactElement => {
 
   return (
     <Box padding="20px" display="flex" justifyContent="center" flexDirection="column" alignItems="center">
-      <>
-        {
-          <>
-            {fileFormat === 'txt' && <div>{textFile}</div>}
-            {fileFormat === 'img' && <img alt={title} src={url} />}
-            {fileFormat === 'pdf' && <Viewer fileUrl={url}></Viewer>}
-            {fileFormat === 'xlsx' && data.length !== 0 && (
-              <TableContainer component={Paper} sx={{ maxHeight: '600px', overflow: 'auto' }}>
-                <Table aria-label={title}>
-                  <TableHead>
-                    <TableRow>
-                      {Object.keys(data[0]).map((key) => (
-                        <TableCell key={key} size="small">
-                          {key}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data.map((row, index) => (
-                      <TableRow key={index}>
-                        {Object.values(row).map((value, i) => (
-                          <TableCell key={i} size="small">
-                            {String(value)}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-            {fileFormat === 'xlsx' && !data.length && <div>No data</div>}
-            {fileFormat === '' && <div>{text}</div>}
-          </>
-        }
-      </>
+      {fileFormat === 'txt' && <div>{textFile}</div>}
+      {fileFormat === 'img' && <img alt={title} src={url} />}
+      {fileFormat === 'pdf' && <Viewer fileUrl={url}></Viewer>}
+      {fileFormat === 'xlsx' && data.length !== 0 && (
+        <TableContainer component={Paper} sx={{ maxHeight: '600px', overflow: 'auto' }}>
+          <Table aria-label={title}>
+            <TableHead>
+              <TableRow>
+                {Object.keys(data[0]).map((key) => (
+                  <TableCell key={key} size="small">
+                    {key}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.map((row, index) => (
+                <TableRow key={index}>
+                  {Object.values(row).map((value, i) => (
+                    <TableCell key={i} size="small">
+                      {String(value)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+      {fileFormat === 'xlsx' && !data.length && <div>{text}</div>}
+      {fileFormat === '' && <div>{text}</div>}
     </Box>
   );
 });
