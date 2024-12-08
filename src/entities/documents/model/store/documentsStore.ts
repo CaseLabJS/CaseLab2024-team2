@@ -119,6 +119,7 @@ class DocumentsStore {
         runInAction(() => {
           this.status = Status.SUCCESS;
           this.currentDocument = createdDocument;
+          this.getDocumentsPage().catch((err) => console.log(err));
         });
       }
     } catch {
@@ -226,6 +227,15 @@ class DocumentsStore {
       this.status = Status.ERROR;
       alert('Не удалось предоставить доступ');
     }
+  }
+
+  clear(): void {
+    this.documents = [];
+    this.currentDocument = null;
+    this.currentDocumentDelete = false;
+    this.status = Status.UNSET;
+    this.pageNumber = 0;
+    this.searchQuery = null;
   }
 }
 
