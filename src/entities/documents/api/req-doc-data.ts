@@ -63,7 +63,19 @@ export const updateDocumentData = async (
   id: number,
   updateDocument: UpdateDocumentRequest,
 ): Promise<DocumentFacadeResponse> => {
-  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument);
+  const formData = new FormData();
+
+  formData.append(
+    'document_params',
+    new Blob([JSON.stringify(updateDocument.document_params)], { type: 'application/json' }),
+  );
+  formData.append('content', updateDocument.content);
+
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -72,7 +84,19 @@ export const patchDocumentData = async (
   id: number,
   updateDocument: PatchDocumentRequest,
 ): Promise<DocumentFacadeResponse> => {
-  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument);
+  const formData = new FormData();
+
+  formData.append(
+    'document_params',
+    new Blob([JSON.stringify(updateDocument.document_params)], { type: 'application/json' }),
+  );
+  if (updateDocument?.content) formData.append('content', updateDocument.content);
+
+  const response = await api.patch<DocumentFacadeResponse>(`/documents-facade/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
