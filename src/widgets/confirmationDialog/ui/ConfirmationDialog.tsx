@@ -23,7 +23,7 @@ const ConfirmationDialog = ({ open, onClose, onSubmit, children }: ConfirmationD
         <Button onClick={onClose} variant="text">
           Отменить
         </Button>
-        <Button onClick={submitAndClose} variant='contained'>
+        <Button onClick={submitAndClose} variant="contained">
           Подтвердить
         </Button>
       </DialogActions>
