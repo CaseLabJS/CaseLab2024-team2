@@ -1,0 +1,32 @@
+.boxCreate {
+  width: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 80px;
+}
+.stylelinkIcon {
+  margin: 0px 10px 10px auto;
+  cursor: pointer;
+}
+.titleCreate {
+  margin-top: 30px;
+  color: #0056b3;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 0.15000000596046448px;
+  text-align: center;
+}
+.btnCreate {
+  background-color: #0056b3;
+  padding: 5px 10px;
+  color: #ffffff;
+}
