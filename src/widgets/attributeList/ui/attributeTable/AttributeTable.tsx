@@ -33,7 +33,6 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
   const closeEditAttributeDialog = (): void => setIsEditAttributeDialogOpen(false);
 
   const handleChangePage = (_event: unknown, newPage: number): void => {
-    console.log(newPage);
     setPage(newPage);
   };
 

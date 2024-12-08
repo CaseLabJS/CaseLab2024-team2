@@ -8,6 +8,7 @@ import { PreviewDoc } from '@/shared/components';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { CreateVoting } from '@/widgets/createVotingWidget';
+import { EditDocumentDialog } from '@/widgets/editDocumentDialog/';
 import { GrantAccess } from '@/widgets/grantAccessWidget';
 import { SignatureDrawer } from '@/widgets/signatureDrawer';
 import { SignDocument } from '@/widgets/signDocument';
@@ -26,6 +27,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const id = useParams().documentId;
   const [isVersionDrawerOpen, setVersionDrawerOpen] = useState(false);
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
+  const [isEditDocumentDialogEdit, setEditDocumentDialogState] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
   const [blob, setBlob] = useState<Blob>();
 
@@ -69,9 +71,8 @@ const DocumentCardPage = observer((): ReactElement => {
     DocumentStatus.VOTING_REJECTED,
     DocumentStatus.ARCHIVED,
   ];
-  const isSignBtnShown = documentStatuses.includes(documentsStore.currentDocument?.document.status);
-  const isEditMode = isEditStatuses.includes(documentsStore.currentDocument?.document.status) && isCreator;
-
+  const isSignBtnShown = documentStatuses.includes(statusDocument);
+  const isEditMode = isEditStatuses.includes(statusDocument) && isCreator;
   // Проверяем, что документ можно удалить
   const isDeleteBtnShown = documentsStore.currentDocumentDelete;
 
@@ -175,13 +176,15 @@ const DocumentCardPage = observer((): ReactElement => {
             gap: '20px',
           }}
         >
-          <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
-            Скачать документ
-          </Button>
+          {documentsStore.currentDocument.latest_version.contentName && (
+            <Button startIcon={<GridArrowDownwardIcon />} variant="outlined" onClick={handleDownload}>
+              Скачать документ
+            </Button>
+          )}
           {isCreator && (
             <>
-              {documentsStore.currentDocument.document.status !== DocumentStatus.ARCHIVED && (
-                <Button startIcon={<EditNote />} variant="outlined" onClick={() => alert('В разработке')}>
+              {isEditMode && (
+                <Button startIcon={<EditNote />} variant="outlined" onClick={() => setEditDocumentDialogState(true)}>
                   Редактировать документ
                 </Button>
               )}
@@ -259,6 +262,7 @@ const DocumentCardPage = observer((): ReactElement => {
         documentId={documentsStore.currentDocument?.document.id}
         signatures={signatures}
       />
+      <EditDocumentDialog open={isEditDocumentDialogEdit} onClose={() => setEditDocumentDialogState(false)} id={+id!} />
     </>
   );
 });
