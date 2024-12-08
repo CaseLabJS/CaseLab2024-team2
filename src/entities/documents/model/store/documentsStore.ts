@@ -19,6 +19,7 @@ import type {
   PatchDocumentRequest,
   UpdateDocumentRequest,
 } from '../../index';
+import { votingStore } from '@/entities/vote';
 
 class DocumentsStore {
   documents: DocumentFacadeResponse[] = [];
@@ -28,9 +29,10 @@ class DocumentsStore {
   currentDocumentDelete: boolean = false;
   status: Status = Status.UNSET;
   pageNumber: number = 0;
+  searchQuery: string = '';
+  currentBlob: Blob | null = null;
   rowsPerPage: number = 10;
   count = 0;
-  searchQuery: string = '';
   isShowSignedOnly: boolean = false;
 
   constructor() {
@@ -147,16 +149,23 @@ class DocumentsStore {
   }
 
   //получить документ по id
-  async getDocumentById(id: number): Promise<DocumentFacadeResponse | undefined> {
+  async getDocumentById(id: number): Promise<Blob | undefined> {
+    this.currentBlob = null;
     try {
       this.status = Status.LOADING;
       const data = await getDocumentData(id);
+      const blob = await downloadDocumentData(data.latest_version.id);
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
         this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentBlob = blob;
+        if (data.signature) {
+          documentsStore.setCurrentSignatureStatus(data?.signature.status === 'NOT_SIGNED' || false);
+        }
+        votingStore.setIsAvailableVote(data?.document.status === DocumentStatus.VOTING_IN_PROGRESS);
       });
-      return data;
+      return blob;
     } catch {
       this.status = Status.ERROR;
       alert('Не удалось получить документ');
@@ -193,6 +202,7 @@ class DocumentsStore {
         this.currentDocument = updatedDocument;
         this.status = Status.SUCCESS;
         this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.getDocumentById(id).catch((err) => console.log(err));
       });
     } catch {
       this.status = Status.ERROR;
