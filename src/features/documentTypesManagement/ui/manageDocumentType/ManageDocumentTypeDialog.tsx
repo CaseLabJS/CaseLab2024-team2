@@ -145,7 +145,12 @@ const ManageDocumentTypeDialog = observer(
                 <Button variant="contained" color="primary" onClick={handleSaveButton}>
                   Сохранить
                 </Button>
-                <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={() => setConfirmationDialogOpen(true)}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => setConfirmationDialogOpen(true)}
+                >
                   Удалить
                 </Button>
               </>
