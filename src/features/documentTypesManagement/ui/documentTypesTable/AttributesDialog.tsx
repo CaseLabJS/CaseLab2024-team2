@@ -33,7 +33,10 @@ const AttributesDialog = observer(
   }): React.ReactElement => {
     const [combinedDocumentAttributes, setCombinedDocumentAttributes] = useState<CombinedAttribute[]>();
     useEffect(() => {
-      setCombinedDocumentAttributes(attributesStore.getCombinedDocumentAttributes(documentType));
+      attributesStore
+        .getCombinedDocumentAttributes(documentType)
+        .then((combinedAttributes) => setCombinedDocumentAttributes(combinedAttributes))
+        .catch(console.error);
     }, [documentType]);
 
     return (

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import ctrl from '../img/ctrl.svg';
 import git from '../img/git.svg';
 import int from '../img/int.svg';
-import logo from '../img/Logo.svg';
+import logo from '../img/logo.svg';
 import mainImage from '../img/mainimg.webp';
 import sec from '../img/sec.svg';
 import time from '../img/time.svg';
