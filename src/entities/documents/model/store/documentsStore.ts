@@ -169,7 +169,7 @@ class DocumentsStore {
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
-        this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentDocumentDelete = this.checkDocumentStatus();
         this.currentBlob = blob;
         if (data.signature) {
           this.setCurrentSignatureStatus(data.signature.status === 'NOT_SIGNED');
@@ -213,7 +213,7 @@ class DocumentsStore {
       runInAction(() => {
         this.currentDocument = updatedDocument;
         this.status = Status.SUCCESS;
-        this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentDocumentDelete = this.checkDocumentStatus();
         this.getDocumentById(id).catch((err) => console.log(err));
       });
     } catch (error) {
@@ -230,7 +230,7 @@ class DocumentsStore {
       runInAction(() => {
         this.currentDocument = updatedDocument;
         this.status = Status.SUCCESS;
-        this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentDocumentDelete = this.checkDocumentStatus();
       });
     } catch (error) {
       this.status = Status.ERROR;
@@ -255,8 +255,8 @@ class DocumentsStore {
 
   // проверка статуса документа для удаления
   // Для удаления документа статус документа должен быть одним из DRAFT/SIGNATURE_REJECTED/SIGNATURE_ACCEPTED/VOTING_REJECTED/VOTING_ACCEPTED
-  checkDocumentStatus(id: number): boolean {
-    const document = this.documents.find((item) => item.document.id === id);
+  checkDocumentStatus(): boolean {
+    const document = this.currentDocument;
     if (document) {
       if (
         document.document.status === DocumentStatus.DRAFT ||
