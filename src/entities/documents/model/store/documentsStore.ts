@@ -51,6 +51,13 @@ class DocumentsStore {
   setCurrentStatus(status: DocumentStatus): void {
     if (this.currentDocument) {
       this.currentDocument.document.status = status;
+      this.documents = this.documents.map((item) => {
+        if (item.document.id === this.currentDocument?.document.id) {
+          return this.currentDocument;
+        } else {
+          return item;
+        }
+      });
     }
   }
   setQuery(query: string): void {
