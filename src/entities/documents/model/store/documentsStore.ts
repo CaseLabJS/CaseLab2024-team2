@@ -48,6 +48,11 @@ class DocumentsStore {
   setCurrentSignatureStatus(status: boolean): void {
     this.currentSignatureStatus = status;
   }
+  setCurrentStatus(status: DocumentStatus): void {
+    if (this.currentDocument) {
+      this.currentDocument.document.status = status;
+    }
+  }
   setQuery(query: string): void {
     this.searchQuery = query;
     this.isShowSignedOnly = false;

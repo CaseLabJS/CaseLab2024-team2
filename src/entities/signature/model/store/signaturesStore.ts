@@ -3,7 +3,8 @@ import type { SignatureResponse } from '@/entities/signature';
 
 import { documentsStore } from '@/entities/documents';
 import { getSignatures, getDocumentSignatures, sendDocument, signDocument } from '@/entities/signature/api';
-import { makeAutoObservable, onBecomeObserved, runInAction } from 'mobx';
+import { DocumentStatus } from '@/shared/utils/statusTranslation';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { useParams } from 'react-router-dom';
 
 import type { SignDocumentRequest } from '../../api/req-signatures';
@@ -15,15 +16,9 @@ class SignaturesStore {
   selectedDocumentSignatures: SignatureResponse[] = [];
   selectedSignature: SignatureResponse | null = null;
   status: ISimpleState = 'idle';
-
   constructor() {
     makeAutoObservable(this);
-
-    onBecomeObserved(this, 'selectedDocumentSignatures', () => {
-      this.fetchDocumentSignatures(Number(useParams().documentId)).catch(console.error);
-    });
   }
-
   private readonly tryCatch =
     <T, A extends unknown[]>(fn: (...args: A) => Promise<T>) =>
     async (...args: A): Promise<T> => {
@@ -63,6 +58,7 @@ class SignaturesStore {
         if (isCurrentSign) {
           documentsStore.setCurrentSignatureStatus(isCurrentSign);
         }
+        documentsStore.setCurrentStatus(DocumentStatus.SIGNATURE_IN_PROGRESS);
         documentsStore.checkDocumentStatus(Number(useParams().documentId));
       });
     },
@@ -71,9 +67,13 @@ class SignaturesStore {
   signDocumentById = this.tryCatch(async (sign: SignDocumentRequest): Promise<void> => {
     this.status = 'loading';
     const updatedSignature = await signDocument(sign);
+    console.log(updatedSignature.status);
     runInAction(() => {
       this.selectedSignature = updatedSignature;
       documentsStore.setCurrentSignatureStatus(false);
+      if (sign.documentId) {
+        void documentsStore.getDocumentById(Number(sign.documentId));
+      }
       documentsStore.checkDocumentStatus(Number(useParams().documentId));
     });
   });

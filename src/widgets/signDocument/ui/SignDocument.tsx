@@ -8,9 +8,9 @@ import { useParams } from 'react-router-dom';
 const SignDocument = observer((): ReactElement => {
   const { documentId } = useParams();
 
-  async function handleSign(sign: boolean): Promise<void> {
+  function handleSign(sign: boolean): void {
     documentsStore.setCurrentSignatureStatus(false);
-    await signaturesStore.signDocumentById({ documentId: Number(documentId), status: sign });
+    void signaturesStore.signDocumentById({ documentId: Number(documentId), status: sign });
   }
   useEffect(() => {
     void documentsStore.getDocumentById(Number(documentId));
