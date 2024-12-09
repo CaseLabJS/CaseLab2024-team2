@@ -66,7 +66,17 @@ const DocumentCardPage = observer((): ReactElement => {
     DocumentStatus.SIGNATURE_IN_PROGRESS,
     DocumentStatus.SIGNATURE_ACCEPTED,
   ];
+  const isEditStatuses = [
+    DocumentStatus.DRAFT,
+    DocumentStatus.SIGNATURE_REJECTED,
+    DocumentStatus.VOTING_REJECTED,
+    DocumentStatus.ARCHIVED,
+  ];
   const isSignBtnShown = documentStatuses.includes(statusDocument);
+  const isEditMode = isEditStatuses.includes(statusDocument) && isCreator;
+  // Проверяем, что документ можно удалить
+  const isDeleteBtnShown = documentsStore.currentDocumentDelete;
+  const blobFile = documentsStore.currentBlob;
 
   const attributes =
     documentVersionsStore.currentVersion?.attributes || documentsStore.currentDocument.latest_version.attributes;
