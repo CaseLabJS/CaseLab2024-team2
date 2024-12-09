@@ -19,7 +19,7 @@ const CreateUser = (): ReactElement => {
 
   const submitFormHandler = async (
     values: RegisterRequest,
-    { setSubmitting }: FormikHelpers<RegisterRequest>,
+    { setSubmitting, resetForm }: FormikHelpers<RegisterRequest>,
   ): Promise<void> => {
     try {
       const body: RegisterRequest = { ...values };
@@ -29,6 +29,7 @@ const CreateUser = (): ReactElement => {
       showToast('error', 'Ошибка регистрации пользователя. Попробуйте снова.');
     } finally {
       setSubmitting(false);
+      resetForm();
     }
   };
 

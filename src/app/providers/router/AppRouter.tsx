@@ -11,6 +11,8 @@ import { ErrorPage } from '@/pages/errorPage';
 import { MainMenu } from '@/pages/mainMenu';
 import { SignIn } from '@/pages/signin';
 import { UserManagmentPage } from '@/pages/userManagmentPage';
+import { UserProfilePage } from '@/pages/userProfilePage';
+import { DocumentsTable } from '@/widgets/documentsTable';
 import { observer } from 'mobx-react-lite';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
@@ -48,12 +50,22 @@ const AppRouter = observer((): ReactElement => {
             <DocumentsPage />
           </ProtectedUserRoute>
         ),
+        children: [
+          {
+            path: `${ROUTE_CONSTANTS.USER_DOCUMENTS.path}`,
+            element: <DocumentsTable />,
+          },
+          {
+            path: `${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}`,
+            element: <DocumentCardPage />,
+          },
+        ],
       },
       {
-        path: `${ROUTE_CONSTANTS.USER_DOCUMENTS.path}${ROUTE_CONSTANTS.DOCUMENT_CARD.path}`,
+        path: ROUTE_CONSTANTS.USER_PROFILE.path,
         element: (
           <ProtectedUserRoute>
-            <DocumentCardPage />
+            <UserProfilePage />
           </ProtectedUserRoute>
         ),
       },

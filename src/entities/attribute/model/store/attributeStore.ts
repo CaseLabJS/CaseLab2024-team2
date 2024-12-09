@@ -6,6 +6,7 @@ import {
   addAttributeDoc,
   deleteAttributeDoc,
   getAllAttributeDocs,
+  getAttributeDoc,
   updateAttributeDoc,
 } from '@/entities/attribute/api/api-attribute';
 import { Status } from '@/shared/types/status.type';
@@ -131,13 +132,17 @@ class AttributesStore {
     }
   }
 
-  getCombinedDocumentAttributes(documentType: DocumentTypeResponse): CombinedAttribute[] {
-    return documentType.attributes.map((attribute) => {
-      return {
+  async getCombinedDocumentAttributes(documentType: DocumentTypeResponse): Promise<CombinedAttribute[]> {
+    const combinedAttributes: CombinedAttribute[] = [];
+
+    for (const attribute of documentType.attributes) {
+      combinedAttributes.push({
+        ...(await getAttributeDoc(attribute.attribute_id)),
         ...attribute,
-        ...this.getById(attribute.attribute_id),
-      } as CombinedAttribute;
-    });
+      });
+    }
+
+    return combinedAttributes;
   }
 }
 

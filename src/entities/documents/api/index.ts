@@ -7,6 +7,7 @@ export {
   searchDocumentsData,
   patchDocumentData,
   downloadDocumentData,
+  grantAccess,
 } from './req-doc-data';
 export {
   getAllDocTypes,
