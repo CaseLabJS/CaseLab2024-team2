@@ -43,6 +43,7 @@ api.interceptors.response.use(
       }
     }
     console.log('Error: ', error.response.data.detail);
+    throw new Error();
   },
 );
 

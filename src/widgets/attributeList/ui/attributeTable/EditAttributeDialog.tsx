@@ -1,6 +1,7 @@
 import type { DialogProps } from '@mui/material';
 
 import { attributesStore, type StatefulAttribute } from '@/entities/attribute';
+import { useToast } from '@/shared/hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogTitle, IconButton, DialogContent, Stack, TextField, DialogActions, Button } from '@mui/material';
 import { observer } from 'mobx-react-lite';
@@ -19,12 +20,19 @@ const EditAttributeDialog = observer(
     const [name, setName] = useState<string>('');
     const [type, setType] = useState<string>('');
 
-    const handleEdit = (): void => {
-      void attributesStore.updateById(attribute.id, {
-        name: name,
-        type: type,
-      });
-      handleClose();
+    const { showToast } = useToast();
+
+    const handleEdit = async (): Promise<void> => {
+      try {
+        await attributesStore.updateById(attribute.id, {
+          name: name,
+          type: type,
+        });
+        showToast('success', 'Атрибут обновлен');
+        handleClose();
+      } catch {
+        showToast('error', 'Ошибка обновления атрибута');
+      }
     };
 
     useEffect(() => {

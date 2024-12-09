@@ -1,6 +1,8 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
 import { documentTypesStore } from '@/entities/documentsType';
+import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import {
   TableContainer,
@@ -13,8 +15,9 @@ import {
   TablePagination,
   Box,
 } from '@mui/material';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState, type ReactElement } from 'react';
+import { useCallback, useEffect, useState, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 import DocumentsTableToolbar from './DocumentsTableToolBar';
@@ -25,6 +28,8 @@ const DocumentsTable = observer((): ReactElement => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isShowSignedOnly, setIsShowSignedOnly] = useState<boolean>(false);
 
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
   useEffect(() => {
     documentsStore.getDocumentsPage().catch((err) => console.log(err));
   }, []);
@@ -32,6 +37,18 @@ const DocumentsTable = observer((): ReactElement => {
     setPage(newPage);
   };
 
+  useEffect(() => {
+    const disposer = reaction(
+      () => documentsStore.status,
+      (status) => {
+        if (status === Status.ERROR) {
+          void stableShowToast('error', 'Ошибка загрузки документов');
+        }
+      },
+    );
+
+    return (): void => disposer();
+  }, [stableShowToast]);
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);

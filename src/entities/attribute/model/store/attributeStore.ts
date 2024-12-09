@@ -56,7 +56,7 @@ class AttributesStore {
     } catch (error) {
       this.status = Status.ERROR;
       console.error(error);
-      alert('Не удалось получить список атрибутов');
+      throw error;
     }
   }
 
@@ -78,7 +78,7 @@ class AttributesStore {
     } catch (error) {
       attributeToCreate.status = Status.ERROR;
       console.error(error);
-      alert('Не удалось создать атрибут');
+      throw error;
     }
   }
 
@@ -109,8 +109,8 @@ class AttributesStore {
       });
     } catch (error) {
       attributeToUpdate.status = Status.ERROR;
-      alert('Не удалось обновить атрибут');
       console.error(error);
+      throw error;
     }
   }
 
@@ -127,8 +127,8 @@ class AttributesStore {
       this.attributes.remove(attributeToDelete);
     } catch (error) {
       attributeToDelete.status = Status.ERROR;
-      alert('Не удалось удалить атрибут');
       console.error(error);
+      throw error;
     }
   }
 
