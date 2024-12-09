@@ -3,6 +3,7 @@ import type { SelectChangeEvent } from '@mui/material';
 
 import { userStore } from '@/entities/user';
 import { votingStore } from '@/entities/vote';
+import { useToast } from '@/shared/hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, TextField, Typography, Box, Stack, Select, MenuItem, Chip, Modal } from '@mui/material';
 import { observer } from 'mobx-react-lite';
@@ -38,6 +39,8 @@ const CreateVoting = observer((): ReactElement => {
     setIsOpen(false);
   };
 
+  const { showToast } = useToast();
+
   const handleChangeTeams = (event: SelectChangeEvent<string>): void => {
     setThreshold(event.target.value);
   };
@@ -58,8 +61,9 @@ const CreateVoting = observer((): ReactElement => {
       });
       handleClose();
       setIsAvailable(false);
+      showToast('success', 'Отправлен на голосование');
     } catch {
-      alert('Ошибка создания');
+      showToast('error', 'Ошибка создания голосования');
     }
   }
   if (!isAvailable) return <></>;

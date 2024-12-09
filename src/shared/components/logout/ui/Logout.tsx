@@ -1,19 +1,31 @@
 import type { ReactElement } from 'react';
 
 import { authStore } from '@/entities/auth';
+import { documentsStore } from '@/entities/documents';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Button } from '@mui/material';
+import { ListItemIcon, MenuItem } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function Logout(): ReactElement {
   return (
-    <Button
-      startIcon={<ExitToAppIcon htmlColor="rgba(0 0 0 / 54%)" />}
-      sx={{ display: 'flex', justifyContent: 'space-between', paddingLeft: '4px', width: '96px' }}
-      onClick={() => {
-        authStore.logout();
-      }}
-    >
-      Выход
-    </Button>
+    <MenuItem>
+      <ListItemIcon>
+        <ExitToAppIcon htmlColor="rgba(0 0 0 / 54%)" />
+      </ListItemIcon>
+      <Link
+        style={{
+          display: 'flex',
+          paddingLeft: '4px',
+          textDecoration: 'none',
+        }}
+        to="/"
+        onClick={() => {
+          authStore.logout();
+          documentsStore.clear();
+        }}
+      >
+        Выход
+      </Link>
+    </MenuItem>
   );
 }

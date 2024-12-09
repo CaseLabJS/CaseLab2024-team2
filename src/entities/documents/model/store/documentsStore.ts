@@ -7,8 +7,10 @@ import {
   patchDocumentData,
   searchDocumentsData,
   downloadDocumentData,
+  grantAccess,
 } from '@/entities/documents/api';
 import { Status } from '@/shared/types/status.type';
+import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import type {
@@ -21,9 +23,11 @@ import type {
 class DocumentsStore {
   documents: DocumentFacadeResponse[] = [];
   currentDocument: DocumentFacadeResponse | null = null;
+  currentDocumentDelete: boolean = false;
   status: Status = Status.UNSET;
   pageNumber: number = 0;
   searchQuery: string | null = null;
+  currentBlob: Blob | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -65,9 +69,9 @@ class DocumentsStore {
         this.documents = documentPage;
         this.status = Status.SUCCESS;
       });
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось найти документы');
+      throw error;
     }
   }
 
@@ -81,24 +85,29 @@ class DocumentsStore {
         this.documents = documentPage;
         this.status = Status.SUCCESS;
       });
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось получить список документов');
+      throw error;
     }
   }
 
   //получить документ по id
-  async getDocumentById(id: number): Promise<void> {
+  async getDocumentById(id: number): Promise<Blob | undefined> {
+    this.currentBlob = null;
     try {
       this.status = Status.LOADING;
       const data = await getDocumentData(id);
+      const blob = await downloadDocumentData(data.latest_version.id);
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
+        this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentBlob = blob;
       });
-    } catch {
+      return blob;
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось получить документ');
+      throw error;
     }
   }
 
@@ -108,53 +117,53 @@ class DocumentsStore {
       this.status = Status.LOADING;
       const createdDocument = await createDocumentData(newDocument);
       if (!createdDocument) {
-        alert('Не удалось создать документ');
+        // Вызывать уведомление нужно из компонента создающего документ
+        // После создания компонента - удалить эту часть
+        console.log('Не удалось создать документ');
         return;
       } else {
         runInAction(() => {
           this.status = Status.SUCCESS;
           this.currentDocument = createdDocument;
+          this.getDocumentsPage().catch((err) => console.log(err));
         });
       }
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось создать документ');
+      throw error;
     }
   }
 
   //полное изменение документа
   async updateAllDocumentById(id: number, document: UpdateDocumentRequest): Promise<void> {
-    const documentToUpdate = this.documents.find((item) => item.document.id === id);
-    if (documentToUpdate) {
-      try {
-        this.status = Status.LOADING;
-        const updatedDocument = await updateDocumentData(id, document);
-        runInAction(() => {
-          this.currentDocument = updatedDocument;
-          this.status = Status.SUCCESS;
-        });
-      } catch {
-        this.status = Status.ERROR;
-        alert('Не удалось обновить документ');
-      }
+    try {
+      this.status = Status.LOADING;
+      const updatedDocument = await updateDocumentData(id, document);
+      runInAction(() => {
+        this.currentDocument = updatedDocument;
+        this.status = Status.SUCCESS;
+        this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.getDocumentById(id).catch((err) => console.log(err));
+      });
+    } catch (error) {
+      this.status = Status.ERROR;
+      throw error;
     }
   }
 
   //частичное изменение документа
   async updateDocumentById(id: number, document: PatchDocumentRequest): Promise<void> {
-    const documentToUpdate = this.documents.find((item) => item.document.id === id);
-    if (documentToUpdate) {
-      try {
-        this.status = Status.LOADING;
-        const updatedDocument = await patchDocumentData(id, document);
-        runInAction(() => {
-          this.currentDocument = updatedDocument;
-          this.status = Status.SUCCESS;
-        });
-      } catch {
-        this.status = Status.ERROR;
-        alert('Не удалось обновить документ');
-      }
+    try {
+      this.status = Status.LOADING;
+      const updatedDocument = await patchDocumentData(id, document);
+      runInAction(() => {
+        this.currentDocument = updatedDocument;
+        this.status = Status.SUCCESS;
+        this.currentDocumentDelete = this.checkDocumentStatus(id);
+      });
+    } catch (error) {
+      this.status = Status.ERROR;
+      throw error;
     }
   }
 
@@ -164,14 +173,34 @@ class DocumentsStore {
       this.status = Status.LOADING;
       await deleteDocumentData(id);
       runInAction(() => {
-        this.documents = this.documents.filter((item) => item.document.id !== id);
         this.status = Status.SUCCESS;
-        this.currentDocument = null;
+        this.currentDocumentDelete = false;
       });
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось удалить документ');
+      throw error;
     }
+  }
+
+  // проверка статуса документа для удаления
+  // Для удаления документа статус документа должен быть одним из DRAFT/SIGNATURE_REJECTED/SIGNATURE_ACCEPTED/VOTING_REJECTED/VOTING_ACCEPTED
+  checkDocumentStatus(id: number): boolean {
+    const document = this.documents.find((item) => item.document.id === id);
+    if (document) {
+      if (
+        document.document.status === DocumentStatus.DRAFT ||
+        document.document.status === DocumentStatus.SIGNATURE_REJECTED ||
+        document.document.status === DocumentStatus.SIGNATURE_ACCEPTED ||
+        document.document.status === DocumentStatus.VOTING_REJECTED ||
+        document.document.status === DocumentStatus.VOTING_ACCEPTED
+      ) {
+        this.currentDocumentDelete = true;
+        return true;
+      }
+    }
+
+    this.currentDocumentDelete = false;
+    return false;
   }
 
   async fetchDocumentBlob(): Promise<Blob> {
@@ -185,6 +214,29 @@ class DocumentsStore {
       console.error('Ошибка при загрузке документа:', error);
       throw error;
     }
+  }
+
+  async grantAccess(id: number, email: string): Promise<void> {
+    try {
+      this.status = Status.LOADING;
+      const updatedDocument = await grantAccess(id, email);
+      runInAction(() => {
+        this.currentDocument = updatedDocument;
+        this.status = Status.SUCCESS;
+      });
+    } catch (error) {
+      this.status = Status.ERROR;
+      throw error;
+    }
+  }
+
+  clear(): void {
+    this.documents = [];
+    this.currentDocument = null;
+    this.currentDocumentDelete = false;
+    this.status = Status.UNSET;
+    this.pageNumber = 0;
+    this.searchQuery = null;
   }
 }
 

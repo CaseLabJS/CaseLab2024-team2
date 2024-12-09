@@ -42,7 +42,19 @@ export const searchDocumentsData = async (searchRequest: SearchDocumentRequest):
 
 // создание документа
 export const createDocumentData = async (createDocument: CreateDocumentRequest): Promise<DocumentFacadeResponse> => {
-  const response = await api.post<DocumentFacadeResponse>('/documents-facade/', createDocument);
+  const formData = new FormData();
+
+  formData.append(
+    'document_params',
+    new Blob([JSON.stringify(createDocument.document_params)], { type: 'application/json' }),
+  );
+  formData.append('content', createDocument.content);
+
+  const response = await api.post<DocumentFacadeResponse>('/documents-facade/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -51,7 +63,19 @@ export const updateDocumentData = async (
   id: number,
   updateDocument: UpdateDocumentRequest,
 ): Promise<DocumentFacadeResponse> => {
-  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument);
+  const formData = new FormData();
+
+  formData.append(
+    'document_params',
+    new Blob([JSON.stringify(updateDocument.document_params)], { type: 'application/json' }),
+  );
+  formData.append('content', updateDocument.content);
+
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -60,7 +84,19 @@ export const patchDocumentData = async (
   id: number,
   updateDocument: PatchDocumentRequest,
 ): Promise<DocumentFacadeResponse> => {
-  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}`, updateDocument);
+  const formData = new FormData();
+
+  formData.append(
+    'document_params',
+    new Blob([JSON.stringify(updateDocument.document_params)], { type: 'application/json' }),
+  );
+  if (updateDocument?.content) formData.append('content', updateDocument.content);
+
+  const response = await api.patch<DocumentFacadeResponse>(`/documents-facade/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -75,5 +111,11 @@ export const downloadDocumentData = async (id: number): Promise<Blob> => {
   const response = await api.get<Blob>(`/versions/content/${id}`, {
     responseType: 'blob',
   });
+  return response.data;
+};
+
+// Добавляет разрешение для чтения документа для пользователя по его email
+export const grantAccess = async (id: number, email: string): Promise<DocumentFacadeResponse> => {
+  const response = await api.put<DocumentFacadeResponse>(`/documents-facade/${id}/grant-access-to/${email}`);
   return response.data;
 };
