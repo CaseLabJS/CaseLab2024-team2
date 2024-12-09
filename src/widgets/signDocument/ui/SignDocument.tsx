@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 
 import { documentsStore } from '@/entities/documents';
 import { signaturesStore } from '@/entities/signature';
@@ -13,7 +13,9 @@ const SignDocument = observer((): ReactElement => {
     documentsStore.setCurrentSignatureStatus(false);
     await signaturesStore.signDocumentById({ documentId: Number(documentId), status: sign });
   }
-
+  useEffect(() => {
+    void documentsStore.getDocumentById(Number(documentId));
+  }, [documentId]);
   if (!documentsStore.currentSignatureStatus) return <></>;
 
   return (
