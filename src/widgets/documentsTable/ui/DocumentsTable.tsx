@@ -1,8 +1,8 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
 import { documentTypesStore } from '@/entities/documentsType';
-import { getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { Table, TableHead, TableRow, TableCell, TableBody, TablePagination, Typography } from '@mui/material';
+import { getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { observer } from 'mobx-react-lite';
 import { useEffect, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
@@ -52,7 +52,7 @@ const DocumentsTable = observer(({ debounceValue }: { debounceValue: string }): 
         </TableBody>
       </Table>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 25, 50]}
         component="div"
         count={documentsStore.count}
         rowsPerPage={documentsStore.rowsPerPage}

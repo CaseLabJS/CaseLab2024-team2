@@ -3,7 +3,6 @@ import type { DocumentVersionResponse } from '@/entities/documents';
 import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { signaturesStore } from '@/entities/signature';
-import { votingStore } from '@/entities/vote';
 import { PreviewDoc } from '@/shared/components';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
@@ -48,7 +47,6 @@ const DocumentCardPage = observer((): ReactElement => {
   const { status: statusDocument, user_permissions } = documentsStore.currentDocument.document;
   const permission = user_permissions.find((user) => user.email === userMail);
   const isCreator = permission?.document_permissions[0].name === 'CREATOR';
-
   const documentStatuses = [
     DocumentStatus.DRAFT,
     DocumentStatus.SIGNATURE_IN_PROGRESS,
@@ -213,19 +211,22 @@ const DocumentCardPage = observer((): ReactElement => {
           </Box>
           {isCreator && (
             <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+              <VoteModal user={userMail} />
               {isSignBtnShown && (
                 <Button variant="outlined" onClick={() => setSignatureDrawerOpen(true)}>
                   Отправить на подпись
                 </Button>
               )}
-              <CreateVoting />
+              {statusDocument === DocumentStatus.DRAFT && <CreateVoting />}
               <GrantAccess />
             </Box>
           )}
-          <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-            <SignDocument />
-            {votingStore.isAvailableVote && <VoteModal user={userMail} />}
-          </Box>
+          {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
+          {!isCreator && (
+            <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+              {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
+            </Box>
+          )}
           <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
             <Typography sx={{ fontSize: '18px' }}>
               Этот документ доступен для: {user_permissions.map((user) => user.email).join(', ')}
@@ -242,7 +243,7 @@ const DocumentCardPage = observer((): ReactElement => {
       />
       <SignatureDrawer
         isOpen={isSignatureDrawerOpen}
-        setIsOpen={setSignatureDrawerOpen}
+        onClose={() => setSignatureDrawerOpen(false)}
         documentName={documentsStore.currentDocument?.document.name}
         documentId={documentsStore.currentDocument?.document.id}
         signatures={signatures}

@@ -2,7 +2,6 @@ import type { SignatureResponse } from '@/entities/signature';
 import type { UserResponse } from '@/entities/user';
 import type { ReactElement } from 'react';
 
-import { authStore } from '@/entities/auth';
 import { signaturesStore } from '@/entities/signature';
 import { userStore } from '@/entities/user';
 import { Drawer, Typography, Button, Backdrop, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
@@ -13,22 +12,19 @@ interface SignatureDrawerProps {
   isOpen: boolean;
   documentId: number;
   documentName: string;
+  onClose: () => void;
   signatures: SignatureResponse[];
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SignatureDrawer = observer(
-  ({ isOpen, documentId, documentName, setIsOpen, signatures }: SignatureDrawerProps): ReactElement => {
+  ({ isOpen, documentId, documentName, onClose, signatures }: SignatureDrawerProps): ReactElement => {
     const [selectedUser, setSelectedUser] = useState<UserResponse | null>(null);
 
     const userOptions = userStore.users;
-    const notSignedUsers = userOptions
-      .filter((user) => !signatures.some((signature) => signature.email === user.email && user.email !== 'hjh@fg.tr'))
-      .filter((user) => user.email !== 'hjh@fg.tr');
+    const notSignedUsers = userOptions.filter(
+      (user) => !signatures.some((signature) => signature.email === user.email),
+    );
 
-    const onClose = (): void => {
-      setIsOpen(false);
-    };
     const handleSubmit = (): void => {
       // TODO сделать валидацию
       if (!selectedUser) {
@@ -43,13 +39,13 @@ const SignatureDrawer = observer(
       };
 
       signaturesStore
-        .sendDocumentToSign(requestData, selectedUser.email === authStore.email)
+        .sendDocumentToSign(requestData)
         .then(() => {
+          onClose();
           notSignedUsers.push(selectedUser); // TODO если успеем, то сделать хранение списка юзеров в сторе
         })
         .catch(console.error);
       setSelectedUser(null);
-      onClose();
     };
 
     useEffect(() => {

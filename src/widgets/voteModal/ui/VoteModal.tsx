@@ -1,4 +1,6 @@
+import { documentsStore } from '@/entities/documents';
 import { votingStore } from '@/entities/vote';
+import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Box, Modal, Typography, Stack } from '@mui/material';
 import { observer } from 'mobx-react-lite';
@@ -13,6 +15,8 @@ interface VoteModalProps {
 
 const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
   const { documentId } = useParams();
+
+  const [isAvailable, setIsAvailable] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleOpen = (): void => {
@@ -26,13 +30,21 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
   async function sendVoteUser(status: 'IN_FAVOUR' | 'AGAINST'): Promise<void> {
     await votingStore.addVoteDocument({ documentId: Number(documentId), status });
     setIsOpen(false);
+    setIsAvailable(false);
   }
 
   useEffect(() => {
-    void votingStore.getAvailableVote(Number(documentId), user);
-  }, []);
+    if (documentsStore.currentDocument?.document.status === DocumentStatus.VOTING_IN_PROGRESS) {
+      votingStore
+        .isAvailibleVote(Number(documentId), user)
+        .then((res) => {
+          setIsAvailable(res);
+        })
+        .catch(() => setIsAvailable(false));
+    }
+  }, [user, documentId]);
 
-  if (!votingStore.isAvailableVote) return <></>;
+  if (!isAvailable) return <></>;
 
   return (
     <Box>
