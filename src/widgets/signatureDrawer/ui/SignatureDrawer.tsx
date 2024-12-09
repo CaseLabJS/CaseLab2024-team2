@@ -2,6 +2,7 @@ import type { SignatureResponse } from '@/entities/signature';
 import type { UserResponse } from '@/entities/user';
 import type { ReactElement } from 'react';
 
+import { authStore } from '@/entities/auth';
 import { signaturesStore } from '@/entities/signature';
 import { userStore } from '@/entities/user';
 import { useToast } from '@/shared/hooks';
@@ -44,13 +45,13 @@ const SignatureDrawer = observer(
       };
 
       signaturesStore
-        .sendDocumentToSign(requestData)
+        .sendDocumentToSign(requestData, authStore.email === selectedUser.email)
         .then(() => {
-          onClose();
           notSignedUsers.push(selectedUser); // TODO если успеем, то сделать хранение списка юзеров в сторе
         })
         .catch(console.error);
       setSelectedUser(null);
+      onClose();
     };
 
     useEffect(() => {

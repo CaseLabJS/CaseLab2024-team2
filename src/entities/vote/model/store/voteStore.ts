@@ -1,6 +1,8 @@
 import type { VotingProcessRequest, VotingProcessResponse, VoteRequest } from '@/entities/vote';
 
+import { documentsStore } from '@/entities/documents';
 import { addVote, createVotingProcess, getVotingProcess } from '@/entities/vote/api';
+import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 type ISimpleState = 'error' | 'success' | 'loading';
@@ -62,6 +64,7 @@ class VotingStore {
       this.state = 'loading';
       await createVotingProcess(newVoting);
       runInAction(() => {
+        documentsStore.setCurrentStatus(DocumentStatus.VOTING_IN_PROGRESS);
         this.state = 'success';
       });
     } catch (error) {

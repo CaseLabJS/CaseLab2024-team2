@@ -1,6 +1,7 @@
 import type { Deadline } from '@/entities/vote/model/types/deadline.type';
 import type { SelectChangeEvent } from '@mui/material';
 
+import { authStore } from '@/entities/auth';
 import { userStore } from '@/entities/user';
 import { votingStore } from '@/entities/vote';
 import { useToast } from '@/shared/hooks';
@@ -15,7 +16,8 @@ import style from './createVotingWidget.module.css';
 const threshold_values: number[] = [0.6, 0.7, 0.8, 0.9, 1];
 
 const CreateVoting = observer((): ReactElement => {
-  const users = userStore.users.map((user) => user.email);
+  const usersPrev = userStore.users.filter((user) => user.email !== authStore.email);
+  const users = usersPrev.map((user) => user.email);
 
   const { documentId } = useParams();
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
