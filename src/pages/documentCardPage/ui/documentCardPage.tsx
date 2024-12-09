@@ -33,6 +33,7 @@ const DocumentCardPage = observer((): ReactElement => {
 
   useEffect(() => {
     documentsStore.getDocumentById(Number(id)).catch((err) => console.log(err));
+    documentsStore.checkDocumentStatus();
   }, [id]);
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
