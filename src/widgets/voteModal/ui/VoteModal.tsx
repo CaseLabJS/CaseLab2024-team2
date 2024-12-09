@@ -46,7 +46,7 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
             .catch(() => setIsAvailable(false));
         }
       })
-      .catch();
+      .catch(() => {});
   }, [user, documentId]);
 
   if (!isAvailable) return <></>;
