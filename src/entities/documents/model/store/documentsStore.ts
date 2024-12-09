@@ -224,9 +224,9 @@ class DocumentsStore {
         this.currentDocument = updatedDocument;
         this.status = Status.SUCCESS;
       });
-    } catch {
+    } catch (error) {
       this.status = Status.ERROR;
-      alert('Не удалось предоставить доступ');
+      throw error;
     }
   }
 

@@ -4,6 +4,7 @@ import type { ChangeEvent } from 'react';
 import { attributesStore } from '@/entities/attribute';
 import { documentsStore } from '@/entities/documents';
 import { documentTypesStore } from '@/entities/documentsType';
+import { useToast } from '@/shared/hooks';
 import { Status } from '@/shared/types/status.type';
 import { Delete, FileOpen } from '@mui/icons-material';
 import Close from '@mui/icons-material/Close';
@@ -37,6 +38,8 @@ export const EditDocumentDialog = observer(
     const [documentTypeId, setDocumentTypeId] = useState<number | null>(null);
     const [attributes, setAttributes] = useState<CombinedAttribute[]>([]);
 
+    const { showToast } = useToast();
+
     const formik = useFormik(
       getFormConfiguration(attributes, () => {
         documentsStore
@@ -48,11 +51,11 @@ export const EditDocumentDialog = observer(
             }),
           )
           .then(() => {
-            alert('Документ сохранён');
+            showToast('success', 'Документ изменён');
             formik.resetForm();
             onClose();
           })
-          .catch(console.error);
+          .catch(() => showToast('error', 'Ошибка изменения документа'));
       }),
     );
 
@@ -76,7 +79,7 @@ export const EditDocumentDialog = observer(
 
       formik.setFieldValue('file', event.target.files[0]).catch((error) => {
         console.error(error);
-        alert('Не удалось выбрать файл');
+        showToast('warning', 'Не удалось выбрать файл');
       });
     }
 
