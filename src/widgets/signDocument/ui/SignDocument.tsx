@@ -1,9 +1,8 @@
-import { useEffect, type ReactElement } from 'react';
-
 import { documentsStore } from '@/entities/documents';
 import { signaturesStore } from '@/entities/signature';
 import { Button } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { useEffect, type ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 
 const SignDocument = observer((): ReactElement => {
