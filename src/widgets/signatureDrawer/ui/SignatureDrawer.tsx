@@ -59,7 +59,7 @@ const SignatureDrawer = observer(
         () => signaturesStore.status,
         (status) => {
           if (status === Status.ERROR) {
-            void showToast('error', 'Не удалось отправить на подпись');
+            console.log('Ошибка отправки на подпись');
           }
         },
       );
