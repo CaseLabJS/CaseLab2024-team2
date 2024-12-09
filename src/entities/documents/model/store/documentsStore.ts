@@ -9,7 +9,6 @@ import {
   downloadDocumentData,
   grantAccess,
 } from '@/entities/documents/api';
-import { votingStore } from '@/entities/vote';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -157,10 +156,6 @@ class DocumentsStore {
         this.currentDocument = data;
         this.currentDocumentDelete = this.checkDocumentStatus(id);
         this.currentBlob = blob;
-        if (data.signature) {
-          documentsStore.setCurrentSignatureStatus(data?.signature.status === 'NOT_SIGNED' || false);
-        }
-        votingStore.setIsAvailableVote(data?.document.status === DocumentStatus.VOTING_IN_PROGRESS);
       });
       return blob;
     } catch {
@@ -292,7 +287,7 @@ class DocumentsStore {
     this.currentDocumentDelete = false;
     this.status = Status.UNSET;
     this.pageNumber = 0;
-    this.searchQuery = null;
+    this.searchQuery = '';
   }
 }
 
