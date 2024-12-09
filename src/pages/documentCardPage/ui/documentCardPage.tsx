@@ -32,7 +32,6 @@ const DocumentCardPage = observer((): ReactElement => {
   useEffect(() => {
     documentsStore.getDocumentById(Number(id)).catch((err) => console.log(err));
   }, [id]);
-
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
     return <Typography>Загрузка...</Typography>;
@@ -221,12 +220,10 @@ const DocumentCardPage = observer((): ReactElement => {
               <GrantAccess />
             </Box>
           )}
-          {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
-          {!isCreator && (
-            <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-              {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
-            </Box>
-          )}
+          <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+            <SignDocument />
+            {!isCreator && statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
+          </Box>
           <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
             <Typography sx={{ fontSize: '18px' }}>
               Этот документ доступен для: {user_permissions.map((user) => user.email).join(', ')}

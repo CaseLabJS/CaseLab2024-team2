@@ -53,38 +53,27 @@ class SignaturesStore {
     });
   });
 
-  async checkSignByEmail(email: string, documentId: number): Promise<boolean> {
-    try {
+  sendDocumentToSign = this.tryCatch(
+    async (signatureData: SignatureCreateRequest, isCurrentSign: boolean): Promise<void> => {
       this.status = 'loading';
-      const data = await getDocumentSignatures(documentId);
-      const currentSignature =
-        data.find((signature) => signature.email === email && signature.status === 'NOT_SIGNED') || null;
+      const newSignature = await sendDocument(signatureData);
       runInAction(() => {
-        this.selectedSignature = currentSignature;
+        this.signatures.push(newSignature);
+        this.status = 'success';
+        if (isCurrentSign) {
+          documentsStore.setCurrentSignatureStatus(isCurrentSign);
+        }
+        documentsStore.checkDocumentStatus(Number(useParams().documentId));
       });
-      return !!currentSignature;
-    } catch {
-      this.status = 'error';
-      this.selectedSignature = null;
-      return false;
-    }
-  }
-
-  sendDocumentToSign = this.tryCatch(async (signatureData: SignatureCreateRequest): Promise<void> => {
-    this.status = 'loading';
-    const newSignature = await sendDocument(signatureData);
-    runInAction(() => {
-      this.signatures.push(newSignature);
-      this.status = 'success';
-      documentsStore.checkDocumentStatus(Number(useParams().documentId));
-    });
-  });
+    },
+  );
 
   signDocumentById = this.tryCatch(async (sign: SignDocumentRequest): Promise<void> => {
     this.status = 'loading';
     const updatedSignature = await signDocument(sign);
     runInAction(() => {
       this.selectedSignature = updatedSignature;
+      documentsStore.setCurrentSignatureStatus(false);
       documentsStore.checkDocumentStatus(Number(useParams().documentId));
     });
   });

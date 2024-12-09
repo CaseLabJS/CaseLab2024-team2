@@ -34,14 +34,19 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
   }
 
   useEffect(() => {
-    if (documentsStore.currentDocument?.document.status === DocumentStatus.VOTING_IN_PROGRESS) {
-      votingStore
-        .isAvailibleVote(Number(documentId), user)
-        .then((res) => {
-          setIsAvailable(res);
-        })
-        .catch(() => setIsAvailable(false));
-    }
+    documentsStore
+      .getDocumentById(Number(documentId))
+      .then(() => {
+        if (documentsStore.currentDocument?.document.status === DocumentStatus.VOTING_IN_PROGRESS) {
+          votingStore
+            .isAvailibleVote(Number(documentId), user)
+            .then((res) => {
+              setIsAvailable(res);
+            })
+            .catch(() => setIsAvailable(false));
+        }
+      })
+      .catch();
   }, [user, documentId]);
 
   if (!isAvailable) return <></>;

@@ -25,6 +25,7 @@ class DocumentsStore {
   signDocuments: DocumentFacadeResponse[] = [];
   currentDocument: DocumentFacadeResponse | null = null;
   currentDocumentDelete: boolean = false;
+  currentSignatureStatus: boolean = false;
   status: Status = Status.UNSET;
   pageNumber: number = 0;
   searchQuery: string = '';
@@ -44,7 +45,9 @@ class DocumentsStore {
       void this.getDocumentsPage();
     }
   }
-
+  setCurrentSignatureStatus(status: boolean): void {
+    this.currentSignatureStatus = status;
+  }
   setQuery(query: string): void {
     this.searchQuery = query;
     this.isShowSignedOnly = false;
@@ -156,6 +159,9 @@ class DocumentsStore {
         this.currentDocument = data;
         this.currentDocumentDelete = this.checkDocumentStatus(id);
         this.currentBlob = blob;
+        if (data.signature) {
+          this.setCurrentSignatureStatus(true);
+        }
       });
       return blob;
     } catch {
