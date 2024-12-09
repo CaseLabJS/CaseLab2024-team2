@@ -1,15 +1,20 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
 import { documentTypesStore } from '@/entities/documentsType';
+import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
 import { getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { Table, TableHead, TableRow, TableCell, TableBody, TablePagination, Typography } from '@mui/material';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useEffect, type ReactElement } from 'react';
+import { useEffect, useCallback, type ReactElement } from 'react';
 import { useNavigate } from 'react-router';
 
 const DocumentsTable = observer(({ debounceValue }: { debounceValue: string }): ReactElement => {
   const navigate = useNavigate();
 
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
   useEffect(() => {
     documentsStore.setQuery(debounceValue);
   }, [debounceValue]);
@@ -18,6 +23,18 @@ const DocumentsTable = observer(({ debounceValue }: { debounceValue: string }): 
     documentsStore.setPage(newPage);
   };
 
+  useEffect(() => {
+    const disposer = reaction(
+      () => documentsStore.status,
+      (status) => {
+        if (status === Status.ERROR) {
+          void stableShowToast('error', 'Ошибка загрузки документов');
+        }
+      },
+    );
+
+    return (): void => disposer();
+  }, [stableShowToast]);
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
     documentsStore.setRowsPerPage(parseInt(event.target.value, 10));
   };

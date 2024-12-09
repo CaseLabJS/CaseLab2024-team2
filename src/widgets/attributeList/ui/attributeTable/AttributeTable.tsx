@@ -1,6 +1,8 @@
 import type { AttributeResponse, StatefulAttribute } from '@/entities/attribute';
 
 import { attributesStore } from '@/entities/attribute';
+import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
 import { ConfirmationDialog } from '@/widgets/confirmationDialog/';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,8 +16,9 @@ import {
   TablePagination,
   Typography,
 } from '@mui/material';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useState, type ReactElement, useMemo, useEffect } from 'react';
+import { useState, type ReactElement, useMemo, useEffect, useCallback } from 'react';
 
 import EditAttributeDialog from './EditAttributeDialog';
 
@@ -32,6 +35,9 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
   const openEditAttributeDialog = (): void => setIsEditAttributeDialogOpen(true);
   const closeEditAttributeDialog = (): void => setIsEditAttributeDialogOpen(false);
 
+  const { showToast } = useToast();
+  const stableShowToast = useCallback(showToast, [showToast]);
+
   const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
   };
@@ -42,11 +48,21 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
   };
 
   useEffect(() => {
-    attributesStore
-      .load(true)
-      .then(() => setRowsPerPage(5))
-      .catch(() => alert('Ошибка'));
+    void attributesStore.load(true).then(() => setRowsPerPage(5));
   }, []);
+
+  useEffect(() => {
+    const disposer = reaction(
+      () => attributesStore.status,
+      (status) => {
+        if (status === Status.ERROR) {
+          void stableShowToast('error', 'Ошибка загрузки атрибутов');
+        }
+      },
+    );
+
+    return (): void => disposer();
+  }, [stableShowToast]);
 
   const { filtered, count } = useMemo(() => {
     const init = debounceValue
@@ -69,7 +85,7 @@ const AttributeTable = observer(({ debounceValue }: { debounceValue: string }): 
     try {
       await attributesStore.deleteById(id);
     } catch {
-      alert('Ошибка удаления');
+      showToast('error', 'Ошибка удаления атрибута');
     }
   };
 

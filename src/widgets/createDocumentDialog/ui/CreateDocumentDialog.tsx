@@ -4,6 +4,7 @@ import type { ChangeEvent } from 'react';
 import { attributesStore } from '@/entities/attribute';
 import { documentsStore } from '@/entities/documents';
 import { documentTypesStore } from '@/entities/documentsType';
+import { useToast } from '@/shared/hooks';
 import { Status } from '@/shared/types/status.type';
 import { Delete, FileOpen } from '@mui/icons-material';
 import Close from '@mui/icons-material/Close';
@@ -33,16 +34,19 @@ interface CreateDocumentDialogProps {
 const CreateDocumentDialog = observer(({ open, onClose }: CreateDocumentDialogProps): ReactElement => {
   const [documentTypeId, setDocumentTypeId] = useState<number | null>(null);
   const [attributes, setAttributes] = useState<CombinedAttribute[]>([]);
+
+  const { showToast } = useToast();
+
   const formik = useFormik(
     getFormConfiguration(attributes, () => {
       documentsStore
         .createDocument(getNewDocumentParameters(documentTypeId as number, formik.values))
         .then(() => {
-          alert('Документ создан');
+          showToast('success', 'Документ создан');
           formik.resetForm();
           onClose();
         })
-        .catch(console.error);
+        .catch(() => showToast('error', 'Ошибка создания документа'));
     }),
   );
 
@@ -66,7 +70,7 @@ const CreateDocumentDialog = observer(({ open, onClose }: CreateDocumentDialogPr
 
     formik.setFieldValue('file', event.target.files[0]).catch((error) => {
       console.error(error);
-      alert('Не удалось выбрать файл');
+      showToast('warning', 'Не удалось выбрать файл');
     });
   }
 

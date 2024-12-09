@@ -2,6 +2,7 @@ import type { SelectChangeEvent } from '@mui/material';
 
 import { documentsStore } from '@/entities/documents';
 import { userStore } from '@/entities/user';
+import { useToast } from '@/shared/hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Typography, Box, Stack, Select, MenuItem, Modal } from '@mui/material';
 import { observer } from 'mobx-react-lite';
@@ -16,6 +17,8 @@ const GrantAccess = observer((): ReactElement => {
     .filter(
       (item) => !documentsStore.currentDocument?.document.user_permissions.map((item) => item.email).includes(item),
     );
+
+  const { showToast } = useToast();
 
   const { documentId } = useParams();
   const [selectedUser, setSelectedUser] = useState<string>('');
@@ -41,7 +44,7 @@ const GrantAccess = observer((): ReactElement => {
         handleClose();
       }
     } catch {
-      alert('Ошибка предоставления доступа');
+      showToast('error', 'Ошибка предоставления доступа');
     }
   }
 

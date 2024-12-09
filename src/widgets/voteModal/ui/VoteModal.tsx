@@ -1,8 +1,11 @@
 import { documentsStore } from '@/entities/documents';
 import { votingStore } from '@/entities/vote';
+import { useToast } from '@/shared/hooks';
+import { Status } from '@/shared/types/status.type';
 import { DocumentStatus } from '@/shared/utils/statusTranslation';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Box, Modal, Typography, Stack } from '@mui/material';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -19,6 +22,8 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
   const [isAvailable, setIsAvailable] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const { showToast } = useToast();
+
   const handleOpen = (): void => {
     setIsOpen(true);
   };
@@ -32,6 +37,19 @@ const VoteModal = observer(({ user }: VoteModalProps): ReactElement => {
     setIsOpen(false);
     setIsAvailable(false);
   }
+
+  useEffect(() => {
+    const disposer = reaction(
+      () => votingStore.state,
+      (status) => {
+        if (status === Status.ERROR) {
+          void showToast('error', 'Ошибка загрузки атрибутов');
+        }
+      },
+    );
+
+    return (): void => disposer();
+  }, [showToast]);
 
   useEffect(() => {
     documentsStore

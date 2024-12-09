@@ -4,6 +4,7 @@ import { authStore } from '@/entities/auth';
 import { documentsStore } from '@/entities/documents';
 import { signaturesStore } from '@/entities/signature';
 import { PreviewDoc } from '@/shared/components';
+import { useToast } from '@/shared/hooks';
 import { Status } from '@/shared/types/status.type';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import { CreateVoting } from '@/widgets/createVotingWidget';
@@ -28,6 +29,7 @@ const DocumentCardPage = observer((): ReactElement => {
   const [isSignatureDrawerOpen, setSignatureDrawerOpen] = useState(false);
   const [isEditDocumentDialogEdit, setEditDocumentDialogState] = useState(false);
   const signatures = signaturesStore.selectedDocumentSignatures;
+  const { showToast } = useToast();
 
   useEffect(() => {
     documentsStore.getDocumentById(Number(id)).catch((err) => console.log(err));
@@ -124,18 +126,16 @@ const DocumentCardPage = observer((): ReactElement => {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-    } catch (error) {
-      alert(error);
+    } catch {
+      showToast('error', 'Ошибка при загрузке документа:');
     }
   };
 
   const handleDelete = async (): Promise<void> => {
     try {
-      await documentsStore.deleteDocumentById(Number(id)).catch((error) => {
-        alert(error);
-      });
-    } catch (error) {
-      alert(error);
+      await documentsStore.deleteDocumentById(Number(id)).then(() => showToast('success', 'Документ удален'));
+    } catch {
+      showToast('error', 'Ошибка при загрузке документа:');
     }
   };
 
