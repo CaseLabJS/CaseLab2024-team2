@@ -160,7 +160,7 @@ class DocumentsStore {
         this.currentDocumentDelete = this.checkDocumentStatus(id);
         this.currentBlob = blob;
         if (data.signature) {
-          this.setCurrentSignatureStatus(true);
+          this.setCurrentSignatureStatus(data.signature.status === 'NOT_SIGNED');
         }
       });
       return blob;
