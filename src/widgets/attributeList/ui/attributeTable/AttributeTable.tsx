@@ -1,9 +1,9 @@
 import type { AttributeResponse, StatefulAttribute } from '@/entities/attribute';
 
 import { attributesStore } from '@/entities/attribute';
-import { ConfirmationDialog } from '@/widgets/confirmationDialog/';
 import { useToast } from '@/shared/hooks';
 import { Status } from '@/shared/types/status.type';
+import { ConfirmationDialog } from '@/widgets/confirmationDialog/';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {

@@ -134,10 +134,8 @@ const DocumentCardPage = observer((): ReactElement => {
 
   const handleDelete = async (): Promise<void> => {
     try {
-      await documentsStore.deleteDocumentById(Number(id)).catch((error) => {
-        alert(error);
-      });
-    } catch (error) {
+      await documentsStore.deleteDocumentById(Number(id)).then(() => showToast('success', 'Документ удален'));
+    } catch {
       showToast('error', 'Ошибка при загрузке документа:');
     }
   };

@@ -1,8 +1,8 @@
 import { ROUTE_CONSTANTS } from '@/app/providers/router/config/constants';
 import { documentsStore } from '@/entities/documents';
+import { documentTypesStore } from '@/entities/documentsType';
 import { useToast } from '@/shared/hooks';
 import { Status } from '@/shared/types/status.type';
-import { documentTypesStore } from '@/entities/documentsType';
 import { DocumentStatus, getStatusTranslation } from '@/shared/utils/statusTranslation';
 import {
   TableContainer,

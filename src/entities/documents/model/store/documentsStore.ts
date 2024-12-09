@@ -182,6 +182,27 @@ class DocumentsStore {
     }
   }
 
+  // проверка статуса документа для удаления
+  // Для удаления документа статус документа должен быть одним из DRAFT/SIGNATURE_REJECTED/SIGNATURE_ACCEPTED/VOTING_REJECTED/VOTING_ACCEPTED
+  checkDocumentStatus(id: number): boolean {
+    const document = this.documents.find((item) => item.document.id === id);
+    if (document) {
+      if (
+        document.document.status === DocumentStatus.DRAFT ||
+        document.document.status === DocumentStatus.SIGNATURE_REJECTED ||
+        document.document.status === DocumentStatus.SIGNATURE_ACCEPTED ||
+        document.document.status === DocumentStatus.VOTING_REJECTED ||
+        document.document.status === DocumentStatus.VOTING_ACCEPTED
+      ) {
+        this.currentDocumentDelete = true;
+        return true;
+      }
+    }
+
+    this.currentDocumentDelete = false;
+    return false;
+  }
+
   async fetchDocumentBlob(): Promise<Blob> {
     try {
       if (!this.currentDocument?.latest_version.contentName) {

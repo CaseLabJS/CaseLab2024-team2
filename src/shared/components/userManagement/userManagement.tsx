@@ -1,7 +1,7 @@
 import type { UserResponse } from '@/entities/user';
 
-import { ConfirmationDialog } from '@/widgets/confirmationDialog';
 import { useToast } from '@/shared/hooks';
+import { ConfirmationDialog } from '@/widgets/confirmationDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import { Typography } from '@mui/material';
