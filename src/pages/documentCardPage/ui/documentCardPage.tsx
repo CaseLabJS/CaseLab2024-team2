@@ -11,9 +11,9 @@ import { CreateVoting } from '@/widgets/createVotingWidget';
 import { SignatureDrawer } from '@/widgets/signatureDrawer';
 import { SignDocument } from '@/widgets/signDocument';
 import { VoteModal } from '@/widgets/voteModal';
-import { EditNote, ManageHistory } from '@mui/icons-material';
+import { EditNote, ManageHistory, UploadFile } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
-import { DataGrid, GridArrowDownwardIcon, GridDeleteIcon } from '@mui/x-data-grid';
+import { DataGrid, GridArrowDownwardIcon } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 import { useState, type ReactElement, useEffect } from 'react';
 import { useParams } from 'react-router';
@@ -171,7 +171,7 @@ const DocumentCardPage = observer((): ReactElement => {
             )}
 
             {isDeleteBtnShown && (
-              <Button startIcon={<GridDeleteIcon />} variant="outlined" onClick={() => handleDelete()}>
+              <Button startIcon={<UploadFile />} variant="outlined" onClick={() => handleDelete()}>
                 Отправить в архив
               </Button>
             )}
