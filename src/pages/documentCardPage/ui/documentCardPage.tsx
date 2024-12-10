@@ -45,8 +45,8 @@ const DocumentCardPage = observer((): ReactElement => {
         }
       })
       .catch((_) => {});
+    documentsStore.checkDocumentStatus();
   }, [id]);
-
   // Проверяем статус документа
   if (documentsStore.currentDocument === null) {
     return <Typography>Загрузка...</Typography>;
@@ -190,9 +190,7 @@ const DocumentCardPage = observer((): ReactElement => {
           )}
 
           <Box sx={{ margin: '20px auto', padding: '20px', backgroundColor: '#bbdefb', borderRadius: '10px' }}>
-            <Typography sx={{ fontSize: '18px' }}>
-              Статус документа: {!isDeleteBtnShown ? 'Архив' : getStatusTranslation(statusDocument)}
-            </Typography>
+            <Typography sx={{ fontSize: '18px' }}>Статус документа: {getStatusTranslation(statusDocument)}</Typography>
           </Box>
           {isCreator && (
             <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
@@ -203,17 +201,13 @@ const DocumentCardPage = observer((): ReactElement => {
                 </Button>
               )}
               {statusDocument === DocumentStatus.DRAFT && <CreateVoting />}
-              {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
               <GrantAccess />
-              {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
             </Box>
           )}
-          {!isCreator && (
-            <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
-              {statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
-              {statusDocument === DocumentStatus.SIGNATURE_IN_PROGRESS && <SignDocument email={userMail} />}
-            </Box>
-          )}
+          <Box sx={{ margin: '20px auto', gap: '20px', display: 'flex' }}>
+            <SignDocument />
+            {!isCreator && statusDocument === DocumentStatus.VOTING_IN_PROGRESS && <VoteModal user={userMail} />}
+          </Box>
           <Box sx={{ backgroundColor: 'white', marginTop: '20px', borderRadius: '10px' }}>
             <Typography sx={{ fontSize: '18px' }}>
               Этот документ доступен для: {user_permissions.map((user) => user.email).join(', ')}

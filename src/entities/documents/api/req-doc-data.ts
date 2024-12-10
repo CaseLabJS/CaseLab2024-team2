@@ -15,8 +15,10 @@ export interface DocumentPageResponse {
   totalPages: number;
 }
 
-export interface SearchDocumentRequest extends PaginationRequest {
+export interface SearchDocumentRequest {
   query: string;
+  page: number;
+  size: number;
 }
 // получение документа по id
 export const getDocumentData = async (id: number): Promise<DocumentFacadeResponse> => {
@@ -25,19 +27,23 @@ export const getDocumentData = async (id: number): Promise<DocumentFacadeRespons
 };
 
 // получение всех документов пользователя текущего
-export const getAllDocumentsData = async (paginationRequest: PaginationRequest): Promise<DocumentFacadeResponse[]> => {
+export const getAllDocumentsData = async (
+  paginationRequest: PaginationRequest,
+): Promise<{ totalElements: number; content: DocumentFacadeResponse[] }> => {
   const response = await api.get<DocumentPageResponse>('/documents-facade/', {
     params: buildSearchParams(paginationRequest),
   });
-  return response.data.content;
+  return { content: response.data.content, totalElements: response.data.totalElements };
 };
 
 // получение всех документов по поиску
-export const searchDocumentsData = async (searchRequest: SearchDocumentRequest): Promise<DocumentFacadeResponse[]> => {
-  const response = await api.get<DocumentPageResponse>('/documents-facade/', {
-    params: buildSearchParams(searchRequest),
-  });
-  return response.data.content;
+export const searchDocumentsData = async (
+  searchRequest: SearchDocumentRequest,
+): Promise<{ totalElements: number; content: DocumentFacadeResponse[] }> => {
+  const response = await api.get<DocumentPageResponse>(
+    `/documents-facade/search?query=${searchRequest.query}&page=${searchRequest.page}&size=${searchRequest.size}`,
+  );
+  return { content: response.data.content, totalElements: response.data.totalElements };
 };
 
 // создание документа

@@ -1,23 +1,21 @@
+import { documentsStore } from '@/entities/documents';
 import { signaturesStore } from '@/entities/signature';
 import { Button } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useState, type ReactElement, useEffect } from 'react';
+import { useEffect, type ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 
-const SignDocument = observer(({ email }: { email: string }): ReactElement => {
+const SignDocument = observer((): ReactElement => {
   const { documentId } = useParams();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  async function handleSign(sign: boolean): Promise<void> {
-    await signaturesStore.signDocumentById({ documentId: Number(documentId), status: sign });
-    setIsOpen(false);
+  function handleSign(sign: boolean): void {
+    documentsStore.setCurrentSignatureStatus(false);
+    void signaturesStore.signDocumentById({ documentId: Number(documentId), status: sign });
   }
-
   useEffect(() => {
-    void signaturesStore.checkSignByEmail(email, Number(documentId)).then((res) => setIsOpen(res));
-  }, [email, documentId]);
-
-  if (!isOpen) return <></>;
+    void documentsStore.getDocumentById(Number(documentId));
+  }, [documentId]);
+  if (!documentsStore.currentSignatureStatus) return <></>;
 
   return (
     <>

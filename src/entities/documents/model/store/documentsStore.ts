@@ -22,51 +22,109 @@ import type {
 
 class DocumentsStore {
   documents: DocumentFacadeResponse[] = [];
+  signDocuments: DocumentFacadeResponse[] = [];
   currentDocument: DocumentFacadeResponse | null = null;
   currentDocumentDelete: boolean = false;
+  currentSignatureStatus: boolean = false;
   status: Status = Status.UNSET;
   pageNumber: number = 0;
-  searchQuery: string | null = null;
+  searchQuery: string = '';
   currentBlob: Blob | null = null;
+  rowsPerPage: number = 10;
+  count = 0;
+  isShowSignedOnly: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async setQuery(query: string): Promise<void> {
+  getVisibleDocuments(): void {
+    if (this.searchQuery.length > 0) {
+      void this.searchDocuments();
+    } else {
+      void this.getDocumentsPage();
+    }
+  }
+  setCurrentSignatureStatus(status: boolean): void {
+    this.currentSignatureStatus = status;
+  }
+  setCurrentStatus(status: DocumentStatus): void {
+    if (this.currentDocument) {
+      this.currentDocument.document.status = status;
+      this.documents = this.documents.map((item) => {
+        if (item.document.id === this.currentDocument?.document.id) {
+          return this.currentDocument;
+        } else {
+          return item;
+        }
+      });
+    }
+  }
+  setQuery(query: string): void {
     this.searchQuery = query;
-    await this.searchDocuments();
+    this.isShowSignedOnly = false;
+    this.getVisibleDocuments();
   }
 
-  initPage(): void {
+  setPage(page: number): void {
+    this.pageNumber = page;
+    if (this.isShowSignedOnly) {
+      this.setSignDocuments();
+    } else {
+      this.getVisibleDocuments();
+    }
+  }
+
+  setRowsPerPage(rowsPage: number): void {
+    this.rowsPerPage = rowsPage;
     this.pageNumber = 0;
-  }
-
-  //на предыдущую страницу на пагинации
-  prevPage(): void {
-    if (this.pageNumber > 1) {
-      this.pageNumber--;
-    }
-  }
-  //на след страницу на пагинации (в идеале в ui добавить disabled кнопки при переключении с первой или последней страницы)
-  nextPage(): void {
-    if (this.pageNumber < 23) {
-      this.pageNumber++;
+    if (this.isShowSignedOnly) {
+      this.setSignDocuments();
+    } else {
+      this.getVisibleDocuments();
     }
   }
 
+  setSignDocuments(): void {
+    this.documents = this.signDocuments.slice(
+      this.pageNumber * this.rowsPerPage,
+      this.pageNumber * this.rowsPerPage + this.rowsPerPage,
+    );
+  }
+
+  async setIsShowSignedOnly(isValue: boolean): Promise<void> {
+    try {
+      this.status = Status.LOADING;
+      this.isShowSignedOnly = isValue;
+      this.pageNumber = 0;
+      if (isValue) {
+        await this.getDocumentsPage();
+        runInAction(() => {
+          this.setSignDocuments();
+          this.status = Status.SUCCESS;
+        });
+      } else {
+        void this.getDocumentsPage();
+        this.status = Status.SUCCESS;
+      }
+    } catch {
+      this.status = Status.ERROR;
+    }
+  }
   //поиск документов (эту функцию не вызываем, просто устанавливаем query через setQuery)
   async searchDocuments(): Promise<void> {
     try {
       this.status = Status.LOADING;
       if (!this.searchQuery) return;
       const documentPage = await searchDocumentsData({
-        pageNum: this.pageNumber,
-        pageSize: 32,
+        page: this.pageNumber,
+        size: this.rowsPerPage,
         query: this.searchQuery,
       });
+
       runInAction(() => {
-        this.documents = documentPage;
+        this.documents = documentPage.content;
+        this.count = documentPage.totalElements;
         this.status = Status.SUCCESS;
       });
     } catch (error) {
@@ -79,10 +137,20 @@ class DocumentsStore {
   async getDocumentsPage(): Promise<void> {
     try {
       this.status = Status.LOADING;
-      const documentPage = await getAllDocumentsData({ pageNum: this.pageNumber, pageSize: 32 });
+      const documentPage = await getAllDocumentsData({
+        pageNum: this.pageNumber,
+        pageSize: this.isShowSignedOnly ? this.count : this.rowsPerPage,
+      });
       runInAction(() => {
-        this.searchQuery = null;
-        this.documents = documentPage;
+        this.searchQuery = '';
+        this.documents = documentPage.content;
+        this.signDocuments = documentPage.content.filter(
+          (item) => item.document.status === DocumentStatus.SIGNATURE_ACCEPTED,
+        );
+        this.count = documentPage.totalElements;
+        if (this.isShowSignedOnly) {
+          this.count = this.signDocuments.length;
+        }
         this.status = Status.SUCCESS;
       });
     } catch (error) {
@@ -101,8 +169,11 @@ class DocumentsStore {
       runInAction(() => {
         this.status = Status.SUCCESS;
         this.currentDocument = data;
-        this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentDocumentDelete = this.checkDocumentStatus();
         this.currentBlob = blob;
+        if (data.signature) {
+          this.setCurrentSignatureStatus(data.signature.status === 'NOT_SIGNED');
+        }
       });
       return blob;
     } catch (error) {
@@ -142,7 +213,7 @@ class DocumentsStore {
       runInAction(() => {
         this.currentDocument = updatedDocument;
         this.status = Status.SUCCESS;
-        this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentDocumentDelete = this.checkDocumentStatus();
         this.getDocumentById(id).catch((err) => console.log(err));
       });
     } catch (error) {
@@ -159,7 +230,7 @@ class DocumentsStore {
       runInAction(() => {
         this.currentDocument = updatedDocument;
         this.status = Status.SUCCESS;
-        this.currentDocumentDelete = this.checkDocumentStatus(id);
+        this.currentDocumentDelete = this.checkDocumentStatus();
       });
     } catch (error) {
       this.status = Status.ERROR;
@@ -184,8 +255,8 @@ class DocumentsStore {
 
   // проверка статуса документа для удаления
   // Для удаления документа статус документа должен быть одним из DRAFT/SIGNATURE_REJECTED/SIGNATURE_ACCEPTED/VOTING_REJECTED/VOTING_ACCEPTED
-  checkDocumentStatus(id: number): boolean {
-    const document = this.documents.find((item) => item.document.id === id);
+  checkDocumentStatus(): boolean {
+    const document = this.currentDocument;
     if (document) {
       if (
         document.document.status === DocumentStatus.DRAFT ||
@@ -236,7 +307,7 @@ class DocumentsStore {
     this.currentDocumentDelete = false;
     this.status = Status.UNSET;
     this.pageNumber = 0;
-    this.searchQuery = null;
+    this.searchQuery = '';
   }
 }
 
